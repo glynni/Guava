@@ -1,0 +1,3 @@
+[submodule "Guava/vendor/spdlog"]
+	path = Guava/vendor/spdlog
+	url = https://github.com/gabime/spdlog
