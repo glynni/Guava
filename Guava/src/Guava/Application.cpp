@@ -15,9 +15,12 @@ namespace Guava
 
 	void Application::Run()
 	{
+		m_Window->EnableVSync(true);
+
 		while (m_Running)
 		{
-
+			m_Window->Update();
+			m_Window->PresentFrame();
 		}
 	}
 }

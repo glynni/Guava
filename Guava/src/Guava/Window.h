@@ -1,5 +1,5 @@
 #pragma once
-#include "Core.h"
+#include "Log.h"
 
 #include <string>
 
@@ -12,6 +12,10 @@ namespace Guava
 		static Window* Create(const std::string& title, unsigned int width, unsigned int height);
 
 		virtual ~Window() {};
+
+		virtual void Update() = 0;
+		virtual void PresentFrame() = 0;
+		virtual void EnableVSync(bool enabled) = 0;
 
 	protected:
 
