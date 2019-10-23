@@ -3,9 +3,10 @@
 
 namespace Guava
 {
-	Application::Application()
+	Application::Application() :
+		m_Window(Window::Create("Guava", 1280, 720)),
+		m_Running(true)
 	{
-		GUAVA_CORE_INFO("Success message from the engine! Success code: {0}", 110);
 	}
 
 	Application::~Application()
@@ -14,7 +15,7 @@ namespace Guava
 
 	void Application::Run()
 	{
-		while (true)
+		while (m_Running)
 		{
 
 		}

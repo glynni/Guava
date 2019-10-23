@@ -4,6 +4,12 @@
     <Filter Include="Guava">
       <UniqueIdentifier>{79A0450D-E5B4-6DBE-AE36-111E1A0A6AEF}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Guava\Platform">
+      <UniqueIdentifier>{ED7446EA-D942-3AF0-C2D6-AA16AE431655}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Guava\Platform\Windows">
+      <UniqueIdentifier>{27BCBC90-13B6-E5E2-FC22-7CF3E8BB4B4F}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Guava.h" />
@@ -19,6 +25,12 @@
     <ClInclude Include="src\Guava\Log.h">
       <Filter>Guava</Filter>
     </ClInclude>
+    <ClInclude Include="src\Guava\Platform\Windows\WindowsWindow.h">
+      <Filter>Guava\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Guava\Window.h">
+      <Filter>Guava</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Guava\Application.cpp">
@@ -26,6 +38,9 @@
     </ClCompile>
     <ClCompile Include="src\Guava\Log.cpp">
       <Filter>Guava</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Guava\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Guava\Platform\Windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

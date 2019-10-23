@@ -6,7 +6,6 @@ public:
 
 	Sandbox()
 	{
-		GUAVA_CLIENT_ERROR("Error message from the client! Error code: {0}", 1337);
 	}
 
 	~Sandbox()

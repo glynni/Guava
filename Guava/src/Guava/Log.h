@@ -38,16 +38,16 @@ namespace Guava
 
 // Client logger
 #if defined GUAVA_DEBUG && !defined GUAVA_BUILD_DLL
-#define GUAVA_CLIENT_ERROR(...) ::Guava::Log::GetClientLogger()->error(__VA_ARGS__)
-#define GUAVA_CLIENT_WARN(...)  ::Guava::Log::GetClientLogger()->warn(__VA_ARGS__)
-#define GUAVA_CLIENT_INFO(...)  ::Guava::Log::GetClientLogger()->info(__VA_ARGS__)
-#define GUAVA_CLIENT_TRACE(...) ::Guava::Log::GetClientLogger()->trace(__VA_ARGS__)
-#define GUAVA_CLIENT_FATAL(...) ::Guava::Log::GetClientLogger()->fatal(__VA_ARGS__)
+#define GUAVA_ERROR(...) ::Guava::Log::GetClientLogger()->error(__VA_ARGS__)
+#define GUAVA_WARN(...)  ::Guava::Log::GetClientLogger()->warn(__VA_ARGS__)
+#define GUAVA_INFO(...)  ::Guava::Log::GetClientLogger()->info(__VA_ARGS__)
+#define GUAVA_TRACE(...) ::Guava::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define GUAVA_FATAL(...) ::Guava::Log::GetClientLogger()->fatal(__VA_ARGS__)
 #elif !defined GUAVA_BUILD_DLL
-#define GUAVA_CLIENT_ERROR(...)
-#define GUAVA_CLIENT_WARN(...) 
-#define GUAVA_CLIENT_INFO(...) 
-#define GUAVA_CLIENT_TRACE(...)
-#define GUAVA_CLIENT_FATAL(...)
+#define GUAVA_ERROR(...)
+#define GUAVA_WARN(...) 
+#define GUAVA_INFO(...) 
+#define GUAVA_TRACE(...)
+#define GUAVA_FATAL(...)
 #endif
 
