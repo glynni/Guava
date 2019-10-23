@@ -1,5 +1,5 @@
 # Guava
-Guava is supposed to be an engine for any kind of graphics rendering. This repository is meant to teach me how to work with git repositories and get a better understanding of how things are done professionally. 
+Guava is a library for graphics rendering. This repository is meant to teach me how to work with git repositories and get a better understanding of how things are done professionally. 
 
 ## Motivation
 The repository was set up with the guidance of **The Cherno**:
