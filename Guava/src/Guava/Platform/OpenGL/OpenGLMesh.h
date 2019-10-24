@@ -14,7 +14,8 @@ namespace Guava
 
 		~OpenGLMesh();
 
-		void Draw();
+		void Draw() override;
+		void DrawInstances(const std::vector<Instance3D>& instances) override;
 
 	private:
 
@@ -27,6 +28,7 @@ namespace Guava
 		void DeleteBuffers();
 		void SetVertexData(const std::vector<Vertex3D>& vertex_data);
 		void SetIndexData(const std::vector<unsigned int>& index_data);
+		void SetInstanceData(const std::vector<Instance3D>& instances);
 		void SetupBufferLayouts();
 	};
 }

@@ -11,6 +11,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "%{prj.name}/vendor/glfw/include"
 IncludeDir["GLAD"] = "%{prj.name}/vendor/GLAD/include"
+IncludeDir["GLM"] = "%{prj.name}/vendor/glm/glm"
 
 -- Include another premake5.lua file
 include "Guava/vendor/glfw"
@@ -34,7 +35,8 @@ project "Guava"
 	"%{prj.name}/src/",
 	"%{prj.name}/vendor/spdlog/include",
 	"%{IncludeDir.GLFW}",
-	"%{IncludeDir.GLAD}" }
+	"%{IncludeDir.GLAD}",
+	"%{IncludeDir.GLM}" }
 
 	links
 	{
@@ -50,7 +52,8 @@ project "Guava"
 
 		defines {
 		"GUAVA_PLATFORM_WINDOWS",
-		"GUAVA_BUILD_DLL" }
+		"GUAVA_BUILD_DLL",
+		"GLFW_INCLUDE_NONE" }
 
 		-- Copy DLL to Sandbox after building
 		postbuildcommands {

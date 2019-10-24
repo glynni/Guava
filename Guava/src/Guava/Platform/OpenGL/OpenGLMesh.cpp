@@ -35,7 +35,7 @@ namespace Guava
 	void OpenGLMesh::Draw()
 	{
 		glBindVertexArray(m_VertexArray);
-		glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+		//glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
 
 		if (m_NumIndices > 0)
 		{
@@ -44,6 +44,21 @@ namespace Guava
 		}
 		else
 			glDrawArrays(GL_TRIANGLES, 0, m_NumVertices);
+	}
+
+	void OpenGLMesh::DrawInstances(const std::vector<Instance3D>& instances)
+	{
+		glBindVertexArray(m_VertexArray);
+		//glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+		SetInstanceData(instances);
+
+		if (m_NumIndices > 0)
+		{
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
+			glDrawElementsInstanced(GL_TRIANGLES, m_NumIndices, GL_UNSIGNED_INT, nullptr, instances.size());
+		}
+		else
+			glDrawArraysInstanced(GL_TRIANGLES, 0, m_NumVertices, instances.size());
 	}
 
 	void OpenGLMesh::GenerateBuffers()
@@ -71,6 +86,13 @@ namespace Guava
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_NumIndices * sizeof(unsigned int), index_data.data(), GL_STATIC_DRAW);
 	}
+
+	void OpenGLMesh::SetInstanceData(const std::vector<Instance3D>& instances)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, m_InstanceBuffer);
+		glBufferData(GL_ARRAY_BUFFER, instances.size() * sizeof(Instance3D), instances.data(), GL_DYNAMIC_DRAW);
+	}
+
 	void OpenGLMesh::SetupBufferLayouts()
 	{
 		// Vertex Data (Vetex3D)
@@ -79,27 +101,27 @@ namespace Guava
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (void*)(0));
 		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (void*)(sizeof(vec3)));
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (void*)(sizeof(glm::vec3)));
 		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (void*)(sizeof(vec3) + sizeof(vec2)));
+		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (void*)(sizeof(glm::vec3) + sizeof(glm::vec2)));
 
 		// Instance data (matrix)
 		glBindBuffer(GL_ARRAY_BUFFER, m_InstanceBuffer);
 
 		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(vec4), (void*)(0 * sizeof(vec4)));
-		glVertexAttribDivisor(3, 1);
-
-		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(vec4), (void*)(1 * sizeof(vec4)));
-		glVertexAttribDivisor(4, 1);
-
-		glEnableVertexAttribArray(5);
-		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(vec4), (void*)(2 * sizeof(vec4)));
-		glVertexAttribDivisor(5, 1);
-
-		glEnableVertexAttribArray(6);
-		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(vec4), (void*)(3 * sizeof(vec4)));
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(0 * sizeof(glm::vec4)));
+		glVertexAttribDivisor(3, 1);				    	   
+													    	   
+		glEnableVertexAttribArray(4);				    	   
+		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(1 * sizeof(glm::vec4)));
+		glVertexAttribDivisor(4, 1);				    	   
+													    	   
+		glEnableVertexAttribArray(5);				    	   
+		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+		glVertexAttribDivisor(5, 1);				    	   
+													    	   
+		glEnableVertexAttribArray(6);				    	   
+		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
 		glVertexAttribDivisor(6, 1);
 	}
 }
