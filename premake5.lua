@@ -8,8 +8,13 @@ workspace "Guava"
 -- In this case it probably results in "Debug-Windows-x64"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDir = {}
+IncludeDir["GLFW"] = "%{prj.name}/vendor/glfw/include"
+IncludeDir["GLAD"] = "%{prj.name}/vendor/GLAD/include"
+
 -- Include another premake5.lua file
 include "Guava/vendor/glfw"
+include "Guava/vendor/GLAD"
 
 project "Guava"
 	location "Guava"	-- root/Guava/...
@@ -28,11 +33,13 @@ project "Guava"
 	includedirs { 
 	"%{prj.name}/src/",
 	"%{prj.name}/vendor/spdlog/include",
-	"%{prj.name}/vendor/glfw/include" }
+	"%{IncludeDir.GLFW}",
+	"%{IncludeDir.GLAD}" }
 
 	links
 	{
-		"GLFW"
+		"GLFW",
+		"GLAD"
 	}
 
 	-- Everything underneath this filter only applies to windows builds & all configurations

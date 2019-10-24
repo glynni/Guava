@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GUAVA_PLATFORM_WINDOWS;GUAVA_BUILD_DLL;GUAVA_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\GLAD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -99,7 +99,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GUAVA_PLATFORM_WINDOWS;GUAVA_BUILD_DLL;GUAVA_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\GLAD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -124,7 +124,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GUAVA_PLATFORM_WINDOWS;GUAVA_BUILD_DLL;GUAVA_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\GLAD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -148,18 +148,35 @@
     <ClInclude Include="src\Guava\Application.h" />
     <ClInclude Include="src\Guava\Core.h" />
     <ClInclude Include="src\Guava\Entrypoint.h" />
+    <ClInclude Include="src\Guava\File.h" />
     <ClInclude Include="src\Guava\Log.h" />
+    <ClInclude Include="src\Guava\Platform\OpenGL\OpenGLMesh.h" />
+    <ClInclude Include="src\Guava\Platform\OpenGL\OpenGLRenderer.h" />
+    <ClInclude Include="src\Guava\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Guava\Platform\Windows\WindowsWindow.h" />
+    <ClInclude Include="src\Guava\Renderer\Mesh.h" />
+    <ClInclude Include="src\Guava\Renderer\Renderer.h" />
+    <ClInclude Include="src\Guava\Renderer\Shader.h" />
     <ClInclude Include="src\Guava\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Guava\Application.cpp" />
+    <ClCompile Include="src\Guava\File.cpp" />
     <ClCompile Include="src\Guava\Log.cpp" />
+    <ClCompile Include="src\Guava\Platform\OpenGL\OpenGLMesh.cpp" />
+    <ClCompile Include="src\Guava\Platform\OpenGL\OpenGLRenderer.cpp" />
+    <ClCompile Include="src\Guava\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Guava\Platform\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\Guava\Renderer\Mesh.cpp" />
+    <ClCompile Include="src\Guava\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Guava\Renderer\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\glfw\GLFW.vcxproj">
       <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\GLAD\GLAD.vcxproj">
+      <Project>{5D4A857C-4981-860D-F26D-6C10DE83020F}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

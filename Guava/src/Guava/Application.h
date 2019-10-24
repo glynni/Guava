@@ -18,7 +18,6 @@ namespace Guava
 	private:
 
 		std::unique_ptr<Window> m_Window;
-		bool m_Running;
 	};
 
 	// To be defined in client

@@ -4,7 +4,7 @@
 
 extern Guava::Application* Guava::CreateApplication();
 
-int main(int argc, char** argv)
+int WINAPI main(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {
 	Guava::Log::Init();
 

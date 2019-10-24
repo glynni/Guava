@@ -17,9 +17,17 @@ namespace Guava
 		virtual void PresentFrame() = 0;
 		virtual void EnableVSync(bool enabled) = 0;
 
+		virtual bool AwaitsClosing() = 0;
+
+		unsigned int GetWidth() const { return m_Width; }
+		unsigned int GetHeight() const { return m_Height; }
+
+		const std::string& GetTitle() const { return m_Title; }
+
 	protected:
 
-		Window(const std::string& title, unsigned int width, unsigned int height) {};
+		Window(const std::string& title, unsigned int width, unsigned int height) : 
+		m_Title(title), m_Width(width), m_Height(height){};
 
 		std::string  m_Title;
 		unsigned int m_Width;

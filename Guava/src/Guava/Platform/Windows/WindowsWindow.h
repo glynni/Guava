@@ -1,7 +1,7 @@
 #pragma once
 #include "Guava/Window.h"
 
-class GLFWwindow;
+struct GLFWwindow;
 
 namespace Guava
 {
@@ -16,10 +16,14 @@ namespace Guava
 		void PresentFrame() override;
 		void EnableVSync(bool enabled) override;
 
+		bool AwaitsClosing() override;
+
 	private:
 
-		static bool s_GlfwInitialized;
-		GLFWwindow* m_Window;
+		GLFWwindow* m_GlfwWindow;
+
+		static bool			s_GlfwInitialized;
+		static unsigned int s_WindowCount;
 	};
 }
 
