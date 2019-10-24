@@ -1,8 +1,8 @@
 #include "Application.h"
 #include "Log.h"
-#include "Renderer/Mesh.h"
-#include "Renderer/Renderer.h"
-#include "Renderer/Shader.h"
+#include "Guava/Renderer/Mesh.h"
+#include "Guava/Renderer/Renderer.h"
+#include "Guava/Renderer/Shader.h"
 #include "File.h"
 
 namespace Guava

@@ -145,28 +145,30 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Guava.h" />
-    <ClInclude Include="src\Guava\Application.h" />
-    <ClInclude Include="src\Guava\Core.h" />
-    <ClInclude Include="src\Guava\Entrypoint.h" />
-    <ClInclude Include="src\Guava\File.h" />
-    <ClInclude Include="src\Guava\Log.h" />
+    <ClInclude Include="src\Guava\Core\Application.h" />
+    <ClInclude Include="src\Guava\Core\Core.h" />
+    <ClInclude Include="src\Guava\Core\Entrypoint.h" />
+    <ClInclude Include="src\Guava\Core\File.h" />
+    <ClInclude Include="src\Guava\Core\Log.h" />
     <ClInclude Include="src\Guava\Platform\OpenGL\OpenGLMesh.h" />
     <ClInclude Include="src\Guava\Platform\OpenGL\OpenGLRenderer.h" />
     <ClInclude Include="src\Guava\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Guava\Platform\Windows\WindowsWindow.h" />
+    <ClInclude Include="src\Guava\Renderer\Camera.h" />
     <ClInclude Include="src\Guava\Renderer\Mesh.h" />
     <ClInclude Include="src\Guava\Renderer\Renderer.h" />
     <ClInclude Include="src\Guava\Renderer\Shader.h" />
-    <ClInclude Include="src\Guava\Window.h" />
+    <ClInclude Include="src\Guava\Core\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Guava\Application.cpp" />
-    <ClCompile Include="src\Guava\File.cpp" />
-    <ClCompile Include="src\Guava\Log.cpp" />
+    <ClCompile Include="src\Guava\Core\Application.cpp" />
+    <ClCompile Include="src\Guava\Core\File.cpp" />
+    <ClCompile Include="src\Guava\Core\Log.cpp" />
     <ClCompile Include="src\Guava\Platform\OpenGL\OpenGLMesh.cpp" />
     <ClCompile Include="src\Guava\Platform\OpenGL\OpenGLRenderer.cpp" />
     <ClCompile Include="src\Guava\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Guava\Platform\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\Guava\Renderer\Camera.cpp" />
     <ClCompile Include="src\Guava\Renderer\Mesh.cpp" />
     <ClCompile Include="src\Guava\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Guava\Renderer\Shader.cpp" />

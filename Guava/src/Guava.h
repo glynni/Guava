@@ -1,8 +1,8 @@
 #pragma once
 
 // For use by Guava apps
-#include "Guava/Application.h"
-#include "Guava/Log.h"
+#include "Guava/Core/Application.h"
+#include "Guava/Core/Log.h"
 
 // Entry Point
-#include "Guava/Entrypoint.h"
+#include "Guava/Core/Entrypoint.h"

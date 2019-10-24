@@ -19,21 +19,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Guava.h" />
-    <ClInclude Include="src\Guava\Application.h">
-      <Filter>Guava</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Guava\Core.h">
-      <Filter>Guava</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Guava\Entrypoint.h">
-      <Filter>Guava</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Guava\File.h">
-      <Filter>Guava</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Guava\Log.h">
-      <Filter>Guava</Filter>
-    </ClInclude>
     <ClInclude Include="src\Guava\Platform\OpenGL\OpenGLMesh.h">
       <Filter>Guava\Platform\OpenGL</Filter>
     </ClInclude>
@@ -46,6 +31,9 @@
     <ClInclude Include="src\Guava\Platform\Windows\WindowsWindow.h">
       <Filter>Guava\Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\Guava\Renderer\Camera.h">
+      <Filter>Guava\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Guava\Renderer\Mesh.h">
       <Filter>Guava\Renderer</Filter>
     </ClInclude>
@@ -55,20 +43,26 @@
     <ClInclude Include="src\Guava\Renderer\Shader.h">
       <Filter>Guava\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Guava\Window.h">
+    <ClInclude Include="src\Guava\Core\Window.h">
+      <Filter>Guava</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Guava\Core\Application.h">
+      <Filter>Guava</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Guava\Core\Core.h">
+      <Filter>Guava</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Guava\Core\Entrypoint.h">
+      <Filter>Guava</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Guava\Core\File.h">
+      <Filter>Guava</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Guava\Core\Log.h">
       <Filter>Guava</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Guava\Application.cpp">
-      <Filter>Guava</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Guava\File.cpp">
-      <Filter>Guava</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Guava\Log.cpp">
-      <Filter>Guava</Filter>
-    </ClCompile>
     <ClCompile Include="src\Guava\Platform\OpenGL\OpenGLMesh.cpp">
       <Filter>Guava\Platform\OpenGL</Filter>
     </ClCompile>
@@ -81,6 +75,9 @@
     <ClCompile Include="src\Guava\Platform\Windows\WindowsWindow.cpp">
       <Filter>Guava\Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\Guava\Renderer\Camera.cpp">
+      <Filter>Guava\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Guava\Renderer\Mesh.cpp">
       <Filter>Guava\Renderer</Filter>
     </ClCompile>
@@ -89,6 +86,15 @@
     </ClCompile>
     <ClCompile Include="src\Guava\Renderer\Shader.cpp">
       <Filter>Guava\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Guava\Core\Application.cpp">
+      <Filter>Guava</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Guava\Core\File.cpp">
+      <Filter>Guava</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Guava\Core\Log.cpp">
+      <Filter>Guava</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

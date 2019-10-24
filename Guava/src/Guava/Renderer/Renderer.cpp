@@ -1,5 +1,5 @@
 #include "Guava/Platform/OpenGL/OpenGLRenderer.h"
-#include "Guava/Log.h"
+#include "Guava/Core/Log.h"
 
 namespace Guava
 {

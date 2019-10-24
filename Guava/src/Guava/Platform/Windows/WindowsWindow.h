@@ -1,5 +1,5 @@
 #pragma once
-#include "Guava/Window.h"
+#include "Guava/Core/Window.h"
 
 struct GLFWwindow;
 
