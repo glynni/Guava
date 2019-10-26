@@ -10,7 +10,7 @@ namespace Guava
 		OpenGLRenderer();
 		~OpenGLRenderer();
 
-		void Clear();
+		void ClearScreen_Impl();
 	};
 }
 

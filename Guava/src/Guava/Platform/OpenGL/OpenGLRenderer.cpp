@@ -1,8 +1,5 @@
+#include "pch.h"
 #include "OpenGLRenderer.h"
-#include "Guava/Log.h"
-
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
 Guava::OpenGLRenderer::OpenGLRenderer()
 {
@@ -39,7 +36,7 @@ Guava::OpenGLRenderer::OpenGLRenderer()
 
 	#endif
 
-	glClearColor(.2, .2, .5, 1);
+	glClearColor(.2f, .2f, .5f, 1.f);
 }
 
 Guava::OpenGLRenderer::~OpenGLRenderer()
@@ -47,7 +44,7 @@ Guava::OpenGLRenderer::~OpenGLRenderer()
 	GUAVA_CORE_INFO("Destroyed OpenGL renderer.");
 }
 
-void Guava::OpenGLRenderer::Clear()
+void Guava::OpenGLRenderer::ClearScreen_Impl()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 }

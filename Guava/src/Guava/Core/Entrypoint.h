@@ -12,6 +12,8 @@ int WINAPI main(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, in
 	app->Run();
 	delete app;
 
+	getchar();
+
 	return 0;
 }
 

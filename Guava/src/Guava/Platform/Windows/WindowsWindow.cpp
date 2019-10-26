@@ -1,6 +1,5 @@
+#include "pch.h"
 #include "WindowsWindow.h"
-
-#include <GLFW/glfw3.h>
 
 namespace Guava
 {
@@ -23,7 +22,7 @@ namespace Guava
 
 			glfwSetErrorCallback([](int code, const char* msg) 
 			{
-				GUAVA_CORE_ERROR("GLFW: Error ({0}) {1}", code, msg);
+				GUAVA_CORE_ERROR("GLFW error {0}: {1}", code, msg);
 			});
 		}
 

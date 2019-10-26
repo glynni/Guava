@@ -3,17 +3,17 @@
 
 namespace Guava
 {
-	struct ShaderInput
+	struct ShaderFiles
 	{
-		std::string VertexShaderCode;
-		std::string FragmentShaderCode;
+		std::string VertexShaderFile;
+		std::string FragmentShaderFile;
 	};
 
 	class Shader
 	{
 	public:
 
-		static Shader* Create(const ShaderInput& si);
+		static Shader* Create(const ShaderFiles& sf);
 
 		virtual ~Shader() {};
 

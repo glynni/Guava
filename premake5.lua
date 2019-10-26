@@ -25,6 +25,9 @@ project "Guava"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-intermediate/" .. outputdir .. "/%{prj.name}")
 
+	pchheader "pch.h"
+	pchsource "Guava/src/pch.cpp"
+
 	-- Use .h files and .cpp files inside the src directory
 	files { 
 	"%{prj.name}/src/**.h", 

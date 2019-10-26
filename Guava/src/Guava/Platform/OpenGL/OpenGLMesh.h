@@ -1,8 +1,6 @@
 #pragma once
 #include "Guava/Renderer/Mesh.h"
 
-#include <glad/glad.h>
-
 namespace Guava
 {
 	class OpenGLMesh : public Mesh
@@ -26,6 +24,7 @@ namespace Guava
 
 		void GenerateBuffers();
 		void DeleteBuffers();
+		void BindVertexArray();
 		void SetVertexData(const std::vector<Vertex3D>& vertex_data);
 		void SetIndexData(const std::vector<unsigned int>& index_data);
 		void SetInstanceData(const std::vector<Instance3D>& instances);

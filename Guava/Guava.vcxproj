@@ -76,7 +76,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GUAVA_PLATFORM_WINDOWS;GUAVA_BUILD_DLL;GLFW_INCLUDE_NONE;GUAVA_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\GLAD\include;vendor\glm\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -96,7 +97,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GUAVA_PLATFORM_WINDOWS;GUAVA_BUILD_DLL;GLFW_INCLUDE_NONE;GUAVA_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\GLAD\include;vendor\glm\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -121,7 +123,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GUAVA_PLATFORM_WINDOWS;GUAVA_BUILD_DLL;GLFW_INCLUDE_NONE;GUAVA_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\GLAD\include;vendor\glm\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -150,6 +153,7 @@
     <ClInclude Include="src\Guava\Core\Entrypoint.h" />
     <ClInclude Include="src\Guava\Core\File.h" />
     <ClInclude Include="src\Guava\Core\Log.h" />
+    <ClInclude Include="src\Guava\Core\Window.h" />
     <ClInclude Include="src\Guava\Platform\OpenGL\OpenGLMesh.h" />
     <ClInclude Include="src\Guava\Platform\OpenGL\OpenGLRenderer.h" />
     <ClInclude Include="src\Guava\Platform\OpenGL\OpenGLShader.h" />
@@ -158,7 +162,7 @@
     <ClInclude Include="src\Guava\Renderer\Mesh.h" />
     <ClInclude Include="src\Guava\Renderer\Renderer.h" />
     <ClInclude Include="src\Guava\Renderer\Shader.h" />
-    <ClInclude Include="src\Guava\Core\Window.h" />
+    <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Guava\Core\Application.cpp" />
@@ -172,6 +176,9 @@
     <ClCompile Include="src\Guava\Renderer\Mesh.cpp" />
     <ClCompile Include="src\Guava\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Guava\Renderer\Shader.cpp" />
+    <ClCompile Include="src\pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\glfw\GLFW.vcxproj">

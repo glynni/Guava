@@ -1,6 +1,5 @@
+#include "pch.h"
 #include "Camera.h"
-
-#include <gtc/matrix_transform.hpp>
 
 namespace Guava
 {

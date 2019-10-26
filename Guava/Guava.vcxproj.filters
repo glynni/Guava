@@ -4,6 +4,9 @@
     <Filter Include="Guava">
       <UniqueIdentifier>{79A0450D-E5B4-6DBE-AE36-111E1A0A6AEF}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Guava\Core">
+      <UniqueIdentifier>{71F88277-5DB0-C4C4-C6B7-9D20B28E5FB5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Guava\Platform">
       <UniqueIdentifier>{ED7446EA-D942-3AF0-C2D6-AA16AE431655}</UniqueIdentifier>
     </Filter>
@@ -19,6 +22,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Guava.h" />
+    <ClInclude Include="src\Guava\Core\Application.h">
+      <Filter>Guava\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Guava\Core\Core.h">
+      <Filter>Guava\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Guava\Core\Entrypoint.h">
+      <Filter>Guava\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Guava\Core\File.h">
+      <Filter>Guava\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Guava\Core\Log.h">
+      <Filter>Guava\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Guava\Core\Window.h">
+      <Filter>Guava\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Guava\Platform\OpenGL\OpenGLMesh.h">
       <Filter>Guava\Platform\OpenGL</Filter>
     </ClInclude>
@@ -43,26 +64,18 @@
     <ClInclude Include="src\Guava\Renderer\Shader.h">
       <Filter>Guava\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Guava\Core\Window.h">
-      <Filter>Guava</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Guava\Core\Application.h">
-      <Filter>Guava</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Guava\Core\Core.h">
-      <Filter>Guava</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Guava\Core\Entrypoint.h">
-      <Filter>Guava</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Guava\Core\File.h">
-      <Filter>Guava</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Guava\Core\Log.h">
-      <Filter>Guava</Filter>
-    </ClInclude>
+    <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Guava\Core\Application.cpp">
+      <Filter>Guava\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Guava\Core\File.cpp">
+      <Filter>Guava\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Guava\Core\Log.cpp">
+      <Filter>Guava\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Guava\Platform\OpenGL\OpenGLMesh.cpp">
       <Filter>Guava\Platform\OpenGL</Filter>
     </ClCompile>
@@ -87,14 +100,6 @@
     <ClCompile Include="src\Guava\Renderer\Shader.cpp">
       <Filter>Guava\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Guava\Core\Application.cpp">
-      <Filter>Guava</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Guava\Core\File.cpp">
-      <Filter>Guava</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Guava\Core\Log.cpp">
-      <Filter>Guava</Filter>
-    </ClCompile>
+    <ClCompile Include="src\pch.cpp" />
   </ItemGroup>
 </Project>

@@ -1,20 +1,28 @@
+#include "pch.h"
 #include "Guava/Platform/OpenGL/OpenGLShader.h"
 #include "Renderer.h"
-#include "Guava/Core/Log.h"
 
 namespace Guava
 {
-	Shader* Shader::Create(const ShaderInput& si)
+	Shader* Shader::Create(const ShaderFiles& sf)
 	{
+		Shader* shader = nullptr;
+
 		switch (Renderer::GetAPI())
 		{
-		case RenderAPI::OpenGL:
-			return new OpenGLShader(si);
+			case RenderAPI::OpenGL:
+			{
+				shader = new OpenGLShader(sf);
+			}
+			break;
 
-		default: 
-			GUAVA_INVALID_RENDER_API("Shader");
+			default: 
+				GUAVA_INVALID_RENDER_API("Shader");
 		}
 
-		return nullptr;
+		if (shader)
+			Renderer::AddShader(shader);
+
+		return shader;
 	}
 }

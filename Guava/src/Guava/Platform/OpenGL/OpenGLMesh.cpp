@@ -1,7 +1,10 @@
+#include "pch.h"
 #include "OpenGLMesh.h"
 
 namespace Guava
 {
+	static GLuint s_CurrentArray = -1;
+
 	OpenGLMesh::OpenGLMesh(const std::vector<Vertex3D>& mesh_data) : 
 		m_NumVertices(mesh_data.size()), m_NumIndices(0)
 	{																 
@@ -34,8 +37,7 @@ namespace Guava
 
 	void OpenGLMesh::Draw()
 	{
-		glBindVertexArray(m_VertexArray);
-		//glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+		BindVertexArray();
 
 		if (m_NumIndices > 0)
 		{
@@ -48,8 +50,7 @@ namespace Guava
 
 	void OpenGLMesh::DrawInstances(const std::vector<Instance3D>& instances)
 	{
-		glBindVertexArray(m_VertexArray);
-		//glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+		BindVertexArray();
 		SetInstanceData(instances);
 
 		if (m_NumIndices > 0)
@@ -68,6 +69,7 @@ namespace Guava
 		glGenBuffers(1, &m_IndexBuffer);
 		glGenBuffers(1, &m_InstanceBuffer);
 	}
+	
 	void OpenGLMesh::DeleteBuffers()
 	{
 		glDeleteVertexArrays(1, &m_VertexArray);
@@ -75,12 +77,23 @@ namespace Guava
 		glDeleteBuffers(1, &m_IndexBuffer);
 		glDeleteBuffers(1, &m_InstanceBuffer);
 	}
+
+	void OpenGLMesh::BindVertexArray()
+	{
+		if (s_CurrentArray != m_VertexArray)
+		{
+			glBindVertexArray(m_VertexArray);
+			s_CurrentArray = m_VertexArray;
+		}
+	}
+
 	void OpenGLMesh::SetVertexData(const std::vector<Vertex3D>& vertex_data)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
 		glBufferData(GL_ARRAY_BUFFER, m_NumVertices * sizeof(Vertex3D), vertex_data.data(), GL_STATIC_DRAW);
 		
 	}
+	
 	void OpenGLMesh::SetIndexData(const std::vector<unsigned int>& index_data)
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);

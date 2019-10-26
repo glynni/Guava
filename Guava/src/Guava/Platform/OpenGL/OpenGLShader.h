@@ -1,15 +1,13 @@
 #pragma once
 #include "Guava/Renderer/Shader.h"
 
-#include <glad/glad.h>
-
 namespace Guava 
 {
 	class OpenGLShader : public Shader
 	{
 	public:
 
-		OpenGLShader(const ShaderInput& si);
+		OpenGLShader(const ShaderFiles& si);
 		~OpenGLShader();
 
 		void Use() override;

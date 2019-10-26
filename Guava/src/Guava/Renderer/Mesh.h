@@ -1,5 +1,6 @@
 #pragma once
-#include <vector>
+#include "Guava/Core/Log.h"
+
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 
@@ -27,8 +28,7 @@ namespace Guava
 	{
 	public:
 
-		static Mesh* Create(const std::vector<Vertex3D>& mesh_data);
-		static Mesh* Create(const std::vector<Vertex3D>& mesh_data, const std::vector<unsigned int>& index_data);
+		static Mesh* Create(const std::vector<Vertex3D>& mesh_data, const std::vector<unsigned int>& index_data = {});
 		//static Mesh* Create(const aiMesh* ai_mesh);
 
 		virtual ~Mesh() {};

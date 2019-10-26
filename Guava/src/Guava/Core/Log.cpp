@@ -1,4 +1,4 @@
-#include "Log.h"
+#include "pch.h"
 
 namespace Guava
 {
@@ -7,7 +7,7 @@ namespace Guava
 
 	void Log::Init()
 	{
-		spdlog::set_pattern("%^[%T] %n %v%$");
+		spdlog::set_pattern("%n %v%$");
 
 		s_CoreLogger = spdlog::stderr_color_mt("[GUAVA]");
 		s_CoreLogger->set_level(spdlog::level::trace);
