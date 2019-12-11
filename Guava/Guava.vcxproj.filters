@@ -78,9 +78,6 @@
     <ClInclude Include="src\Guava\Graphics\Renderer.h">
       <Filter>src\Guava\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Guava\Graphics\RendererData.h">
-      <Filter>src\Guava\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Guava\Graphics\Shader.h">
       <Filter>src\Guava\Graphics</Filter>
     </ClInclude>
@@ -93,6 +90,9 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Guava\Core\Input.h" />
+    <ClInclude Include="src\Guava\Core\AssetManager.h" />
+    <ClInclude Include="src\Guava\Graphics\Model.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Guava\Core\Core.cpp">
@@ -143,9 +143,6 @@
     <ClCompile Include="src\Guava\Graphics\Renderer.cpp">
       <Filter>src\Guava\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Guava\Graphics\RendererData.cpp">
-      <Filter>src\Guava\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\Guava\Graphics\Shader.cpp">
       <Filter>src\Guava\Graphics</Filter>
     </ClCompile>
@@ -161,5 +158,8 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Guava\Core\Input.cpp" />
+    <ClCompile Include="src\Guava\Core\AssetManager.cpp" />
+    <ClCompile Include="src\Guava\Graphics\Model.cpp" />
   </ItemGroup>
 </Project>

@@ -46,7 +46,7 @@ namespace Guava
 			});
 
 			m_MoveVector = glm::vec3(0.0f);
-			m_RightVector = normalize(cross(m_UpVector, m_ForwardVector));
+			m_RightVector = -normalize(cross(m_UpVector, m_ForwardVector));
 
 			if (m_MoveForwards)
 				m_MoveVector += m_ForwardVector;

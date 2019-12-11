@@ -7,8 +7,7 @@ namespace Guava::OpenGL
 	{
 	public:
 
-		glShader(const glShader::Code& shaderCode);
-		glShader(const glShader::Files& shaderFiles);
+		glShader(const std::string_view name);
 		~glShader();
 
 		void Bind() override;

@@ -1,42 +1,79 @@
 #include "pch.h"
 #include "Guava/Core/Window.h"
+#include "Guava/Core/Input.h"
 #include "Guava/Graphics/Renderer.h"
 
 using namespace Guava;
+using namespace std::chrono_literals;
 
 int main()
 {
 	Logger::Create();
-	Window::Create("", 800, 600);
+	Window::Create("OpenGL Renderer", 800, 600);
+	Input::Create();
 	Renderer::Create(RenderAPI::OpenGL);
-	Renderer::SetClearColor(Color(0.8f, 0.8f, 0.8f, 1.0f));
+	Renderer::SetClearColor(Color(0.4f, 0.4f, 0.9f, 1.0f));
 
-	Shader::Files meshShader;
-	meshShader.VertexShader		= "mesh_vertex.glsl";
-	meshShader.FragmentShader	= "mesh_fragment.glsl";
-
-	Mesh*		sphere = Mesh::Create("sphere.nff");
-	Shader*		shader = Shader::Create(meshShader);
+	Shader*		meshShader = Shader::Create("mesh");
+	Shader*		spriteShader = Shader::Create("sprite");
+	Model*		hammer = Model::Create("hammer/source/Warhammer.fbx");
 	Camera		camera;
-	Transform	transform;
+	Transform	tHammer, tPbr;
 
-	transform.SetPosition({0, 0, -10.f});
+	std::chrono::high_resolution_clock::time_point	start;
+	std::chrono::duration<float>					frameTime = 0s;
+
 	camera.SetPosition({0.0f, 0.0f, 0.0f});
+	camera.SetMoveSpeed(50.0f);
+
+	tHammer.SetPosition({ 0.0f, -10.f, -10.f });
+	tHammer.SetScale({ 0.3f, 0.3f, 0.3f });
+	tHammer.SetRotation(0.0f, { 0.0f, 0.0f, 1.0f });
 
 	while (!Window::ShouldClose())
 	{
-		Window::PollEvents();
+		start = std::chrono::high_resolution_clock::now();
 
-		camera.MoveUpwards();
-		camera.Update(0.000005f);
+		// Process input
+		Input::Update();
 
-		Renderer::ClearScreen();
-		Renderer::Draw(sphere, shader, transform, camera);
+		if (Input::KeyDown(Key::W))
+			camera.MoveForwards();
+		if (Input::KeyDown(Key::S))
+			camera.MoveBackwards();
+		if (Input::KeyDown(Key::A))
+			camera.MoveLeft();
+		if (Input::KeyDown(Key::D))
+			camera.MoveRight();
+		if (Input::KeyDown(Key::SPACE))
+			camera.MoveUpwards();
+		if (Input::KeyDown(Key::LEFT_CONTROL))
+			camera.MoveDownWards();
 
-		Window::Present();
+		if (Input::MouseDown(MouseButton::RIGHT))
+		{
+			auto& mouseDelta = Input::GetMouseMovement();
+
+			camera.Yaw(-mouseDelta.x);
+			camera.Pitch(-mouseDelta.y);
+		}
+
+		// Update
+		float dt = frameTime.count();
+		camera.Update(dt);
+		tHammer.Rotate(dt * 10.f);
+
+		// Draw
+		Renderer::BeginFrame();
+		Renderer::SetDrawMode(PolygonMode::Fill);
+		// Models ???
+		Renderer::EndFrame();
+
+		frameTime = std::chrono::high_resolution_clock::now() - start;
 	}
 
 	Renderer::Destroy();
+	Input::Destroy();
 	Window::Destroy();
 
 	std::cin.get();

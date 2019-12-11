@@ -38,7 +38,7 @@ namespace Guava
 			glm::uvec2 size = {w, h};
 
 			s_Data->Size = size;
-			Renderer::SetViewport(size);
+			Renderer::SetWindowSize(size);
 		});
 
 		glfwSetFramebufferSizeCallback(s_GlfwWindow, [](GLFWwindow* window, int w, int h) -> void
@@ -93,5 +93,10 @@ namespace Guava
 	const glm::uvec2 Window::GetSize()
 	{
 		return s_Data->Size;
+	}
+
+	void* Window::GetGLFWPointer()
+	{
+		return s_GlfwWindow;
 	}
 }

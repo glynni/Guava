@@ -2,55 +2,60 @@
 #include "Mesh.h"
 #include "Renderer.h"
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
 namespace Guava
 {
-	std::string ModelFolder = "D:/dev/Guava/Guava/src/Guava/Graphics/Models/";
-
 	const Buffer::Layout Vertex::Layout = {
 		Buffer::Attribute::Type::Vec3f,
 		Buffer::Attribute::Type::Vec3f,
+		Buffer::Attribute::Type::Vec4f
 	};
 
-	Mesh* Mesh::Create(const std::string_view meshFile)
+	Mesh* Mesh::Create(const aiMesh* mesh)
 	{
-		return Renderer::CreateMesh(meshFile);
+		return Renderer::CreateMesh(mesh);
 	}
 
-	Mesh::Mesh(const std::string_view meshFile)
+	Mesh::Mesh(const aiMesh* mesh)
 	{
-		Assimp::Importer importer;
-		auto path = ModelFolder + meshFile.data();
+		m_Vertices.reserve(mesh->mNumVertices);
+		m_Indices.reserve((size_t)mesh->mNumFaces * 3);
 
-		const aiScene* scene = importer.ReadFile(path, 
-			aiProcess_Triangulate |
-			aiProcess_JoinIdenticalVertices |
-			aiProcess_SortByPType);
-
-		GUAVA_ASSERT(scene != nullptr, importer.GetErrorString());
-
-		m_Vertices.reserve(scene->mMeshes[0]->mNumVertices);
-		m_Indices.reserve((size_t)scene->mMeshes[0]->mNumFaces * 3);
-
-		for (unsigned int i = 0; i < scene->mMeshes[0]->mNumVertices; ++i)
+		// Position, Normal, Color
+		for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
 		{
 			Vertex vertex;
-			auto aiVertex = scene->mMeshes[0]->mVertices[i];
 
+			aiVector3D& aiVertex = mesh->mVertices[i];
 			vertex.Position = { aiVertex.x , aiVertex.y , aiVertex.z };
-			vertex.Normal = glm::normalize(vertex.Position); // Only works for spheres...
+
+			// Normals
+			if (mesh->HasNormals())
+			{
+				aiVector3D& aiNormal = mesh->mNormals[i];
+				vertex.Normal = { aiNormal.x , aiNormal.y , aiNormal.z };
+			}
+			else
+			{
+				// Only works for spheres... 
+				// assimp-generated normals are ugly, or I don't understand something fundamental
+				//vertex.Normal = glm::normalize(vertex.Position);
+			}
+
+			// Colors
+			if (mesh->HasVertexColors(0))
+			{
+				aiColor4D& aiColor = mesh->mColors[0][i];
+				vertex.Col = { aiColor.r , aiColor.g , aiColor.b, aiColor.a };
+			}
 
 			m_Vertices.emplace_back(vertex);
 		}
 
-		for (unsigned int i = 0; i < scene->mMeshes[0]->mNumFaces; ++i)
+		// Indices
+		for (unsigned int i = 0; i < mesh->mNumFaces; ++i)
 		{
-			m_Indices.emplace_back(scene->mMeshes[0]->mFaces[i].mIndices[0]);
-			m_Indices.emplace_back(scene->mMeshes[0]->mFaces[i].mIndices[1]);
-			m_Indices.emplace_back(scene->mMeshes[0]->mFaces[i].mIndices[2]);
+			for (unsigned int j = 0; j < mesh->mFaces[i].mNumIndices; ++j)
+				m_Indices.emplace_back(mesh->mFaces[i].mIndices[j]);
 		}
 	}
 }

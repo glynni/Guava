@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "glRenderer.h"
 #include "Guava/Core/Log.h"
-#include "Guava/Graphics/RendererData.h"
 
 namespace Guava::OpenGL
 {
@@ -31,6 +30,17 @@ namespace Guava::OpenGL
 	void glRenderer::SetClearColor_Impl(const Color& color)
 	{
 		glClearColor(color.r, color.g, color.b, color.a);
+	}
+
+	void glRenderer::SetDrawMode_Impl(const PolygonMode drawMode)
+	{
+		switch (drawMode)
+		{
+		case PolygonMode::Fill:		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); break;
+		case PolygonMode::Wireframe:	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); break;
+		default:
+			break;
+		}
 	}
 
 	void glRenderer::Prepare()

@@ -9,7 +9,7 @@ namespace Guava::OpenGL
 	{
 	public:
 
-		glMesh(const std::string_view meshFile);
+		glMesh(const aiMesh* mesh);
 
 		void Draw() override;
 

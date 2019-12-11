@@ -57,19 +57,10 @@ namespace Guava::OpenGL
 			return result->second;
 	}
 
-	glShader::glShader(const glShader::Code& code) :
+	glShader::glShader(const std::string_view name) : Guava::Shader(name),
 		m_ShaderProgram(0), m_VertexShader(0), m_FragmentShader(0)
 	{
-		LoadFromCode(code);
-	}
-
-	glShader::glShader(const glShader::Files& files) :
-		m_ShaderProgram(0), m_VertexShader(0), m_FragmentShader(0)
-	{
-		glShader::Code code;
-		code.Load(files);
-
-		LoadFromCode(code);
+		LoadFromCode(m_Code);
 	}
 
 	glShader::~glShader()
@@ -120,5 +111,8 @@ namespace Guava::OpenGL
 		glAttachShader(m_ShaderProgram, m_FragmentShader);
 
 		glLinkProgram(m_ShaderProgram);
+
+		// Free Memory
+		m_Code = Shader::Code();
 	}
 }

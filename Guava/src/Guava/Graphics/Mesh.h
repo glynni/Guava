@@ -5,8 +5,9 @@ namespace Guava
 {
 	struct Vertex
 	{
-		glm::vec3 Position;
-		glm::vec3 Normal;
+		glm::vec3	Position;
+		glm::vec3	Normal;
+		Color		Col;
 
 		static const Buffer::Layout Layout;
 	};
@@ -18,11 +19,11 @@ namespace Guava
 		virtual ~Mesh() = default;
 		virtual void Draw() = 0;
 		
-		static Mesh* Create(const std::string_view meshFile);
+		static Mesh* Create(const aiMesh* mesh);
 
 	protected:
 
-		Mesh(const std::string_view meshFile);
+		Mesh(const aiMesh* mesh);
 
 		std::vector<Vertex>			m_Vertices;
 		std::vector<unsigned int>	m_Indices;

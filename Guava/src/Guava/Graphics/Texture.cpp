@@ -2,6 +2,7 @@
 #include "Texture.h"
 #include "stb_image.h"
 #include "Renderer.h"
+#include "Guava/Core/AssetManager.h"
 
 namespace Guava
 {
@@ -22,7 +23,7 @@ namespace Guava
 
 	Texture* Texture::Create(const Texture::Description& description, const std::string_view filePath)
 	{
-		return Renderer::CreateTexture(description, filePath);
+		return AssetManager::GetTexture(filePath, description);
 	}
 
 	Texture::Texture(const Texture::Description& info, std::string_view path)

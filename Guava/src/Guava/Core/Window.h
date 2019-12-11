@@ -27,6 +27,7 @@ namespace Guava
 
 		static const Data& GetData();
 		static const glm::uvec2 GetSize();
+		static void* GetGLFWPointer();
 	};
 }
 

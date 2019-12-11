@@ -61,7 +61,7 @@ namespace Guava
 
 	void Transform::Rotate(const float degrees)
 	{
-		m_Rotation.Degrees += degrees;
+		m_Rotation.Degrees = glm::mod(m_Rotation.Degrees + degrees, 360.f);
 		m_NeedsUpdate = true;
 	}
 

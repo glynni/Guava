@@ -3,6 +3,7 @@
 bin/
 bin-intermediate/
 vendor/
+Assets/
 
 # Files
 *.user

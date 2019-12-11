@@ -6,18 +6,10 @@ namespace Guava
 	{
 	public:
 
-		struct Files
-		{
-			std::string VertexShader;
-			std::string FragmentShader;
-		};
-
 		struct Code
 		{
 			std::string VertexShader;
 			std::string FragmentShader;
-
-			bool Load(const Shader::Files& files);
 		};
 
 		virtual ~Shader() = default;
@@ -29,7 +21,12 @@ namespace Guava
 		virtual void SetBool(const std::string_view variable, bool b) = 0;
 		virtual void SetInt(const std::string_view variable, int i) = 0;
 
-		static Shader* Create(const Shader::Files& files);
-		static Shader* Create(const Shader::Code& Code);
+		static Shader* Create(const std::string_view name);
+
+	protected:
+
+		Shader(const std::string_view name);
+
+		Shader::Code m_Code;
 	};
 }

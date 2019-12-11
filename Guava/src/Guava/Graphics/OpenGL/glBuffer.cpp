@@ -14,6 +14,7 @@ namespace Guava::OpenGL
 
 		default:
 			GUAVA_ASSERT(false, "Wrong Attributetype specified!");
+			return GL_FLOAT;
 		}
 	}
 

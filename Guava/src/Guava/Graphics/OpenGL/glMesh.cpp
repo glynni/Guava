@@ -3,7 +3,7 @@
 
 namespace Guava::OpenGL
 {
-	glMesh::glMesh(const std::string_view meshFile) : Mesh(meshFile)
+	glMesh::glMesh(const aiMesh* mesh) : Mesh(mesh)
 	{
 		m_VertexArray.Bind();
 

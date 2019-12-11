@@ -96,6 +96,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Guava\Graphics\Model.h" />
+    <ClInclude Include="src\Guava\Core\AssetManager.h" />
+    <ClInclude Include="src\Guava\Core\Input.h" />
     <ClInclude Include="src\Guava\Core\Core.h" />
     <ClInclude Include="src\Guava\Core\Log.h" />
     <ClInclude Include="src\Guava\Core\Memory\PoolVector.h" />
@@ -113,13 +116,15 @@
     <ClInclude Include="src\Guava\Graphics\OpenGL\glTexture.h" />
     <ClInclude Include="src\Guava\Graphics\OpenGL\glVertexArray.h" />
     <ClInclude Include="src\Guava\Graphics\Renderer.h" />
-    <ClInclude Include="src\Guava\Graphics\RendererData.h" />
     <ClInclude Include="src\Guava\Graphics\Shader.h" />
     <ClInclude Include="src\Guava\Graphics\Texture.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Guava\Graphics\Model.cpp" />
+    <ClCompile Include="src\Guava\Core\AssetManager.cpp" />
+    <ClCompile Include="src\Guava\Core\Input.cpp" />
     <ClCompile Include="src\Guava\Core\Core.cpp" />
     <ClCompile Include="src\Guava\Core\Log.cpp" />
     <ClCompile Include="src\Guava\Core\Transform.cpp" />
@@ -136,7 +141,6 @@
     <ClCompile Include="src\Guava\Graphics\OpenGL\glTexture.cpp" />
     <ClCompile Include="src\Guava\Graphics\OpenGL\glVertexArray.cpp" />
     <ClCompile Include="src\Guava\Graphics\Renderer.cpp" />
-    <ClCompile Include="src\Guava\Graphics\RendererData.cpp" />
     <ClCompile Include="src\Guava\Graphics\Shader.cpp" />
     <ClCompile Include="src\Guava\Graphics\Texture.cpp" />
     <ClCompile Include="src\main.cpp" />

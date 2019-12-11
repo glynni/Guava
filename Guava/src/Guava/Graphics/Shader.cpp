@@ -2,27 +2,19 @@
 #include "Shader.h"
 #include "Renderer.h"
 #include "Guava/Core/Utility.h"
+#include "Guava/Core/AssetManager.h"
 
 namespace Guava
 {
-	const char* ShaderFolder = "src/Guava/Graphics/Shaders/";
-
-	bool Shader::Code::Load(const Shader::Files& files)
+	Shader* Shader::Create(const std::string_view name)
 	{
-		VertexShader = ReadTextFile(ShaderFolder + files.VertexShader);
-		FragmentShader = ReadTextFile(ShaderFolder + files.FragmentShader);
-
-		return true;
+		return AssetManager::GetShader(name);
 	}
 
-	Shader* Shader::Create(const Shader::Files& files)
+	Shader::Shader(const std::string_view filePath)
 	{
-		return Renderer::CreateShader(files);
-	}
-
-	Shader* Shader::Create(const Shader::Code& Code)
-	{
-		return Renderer::CreateShader(Code);
+		m_Code.VertexShader = ReadTextFile(std::string(filePath) + "_vertex.glsl");
+		m_Code.FragmentShader = ReadTextFile(std::string(filePath) + "_fragment.glsl");
 	}
 }
 

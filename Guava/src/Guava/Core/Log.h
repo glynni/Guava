@@ -34,6 +34,3 @@ namespace Guava
 	#define GUAVA_CORE_INFO(...)  ::Guava::Logger::GetCoreLogger()->info(__VA_ARGS__)
 	#define GUAVA_CORE_TRACE(...) ::Guava::Logger::GetCoreLogger()->trace(__VA_ARGS__)
 #endif
-
-#define GUAVA_INVALID_RENDER_API(obj) GUAVA_ASSERT(false, "{0} could not be created: Invalied Render-API specified", obj);
-
