@@ -9,10 +9,6 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Dist|x64">
-      <Configuration>Dist</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{79A0450D-E5B4-6DBE-AE36-111E1A0A6AEF}</ProjectGuid>
@@ -23,19 +19,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
@@ -49,59 +39,47 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\bin\Debug-windows-x86_64\Guava\</OutDir>
     <IntDir>..\bin-intermediate\Debug-windows-x86_64\Guava\</IntDir>
     <TargetName>Guava</TargetName>
-    <TargetExt>.dll</TargetExt>
+    <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\bin\Release-windows-x86_64\Guava\</OutDir>
     <IntDir>..\bin-intermediate\Release-windows-x86_64\Guava\</IntDir>
     <TargetName>Guava</TargetName>
-    <TargetExt>.dll</TargetExt>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Dist-windows-x86_64\Guava\</OutDir>
-    <IntDir>..\bin-intermediate\Dist-windows-x86_64\Guava\</IntDir>
-    <TargetName>Guava</TargetName>
-    <TargetExt>.dll</TargetExt>
+    <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>GUAVA_PLATFORM_WINDOWS;GUAVA_BUILD_DLL;GLFW_INCLUDE_NONE;GUAVA_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\GLAD\include;vendor\glm\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GLFW_INCLUDE_NONE;GUAVA_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\GLAD\include;vendor\glm\glm;vendor\stb_image;vendor\assimp-5.0.0\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ImportLibrary>..\bin\Debug-windows-x86_64\Guava\Guava.lib</ImportLibrary>
+      <AdditionalDependencies>assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\dev\Guava\Guava\vendor\assimp-5.0.0\build\code\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Debug-windows-x86_64\Guava\Guava.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\Guava\Guava.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\Guava\Guava.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>GUAVA_PLATFORM_WINDOWS;GUAVA_BUILD_DLL;GLFW_INCLUDE_NONE;GUAVA_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\GLAD\include;vendor\glm\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GLFW_INCLUDE_NONE;GUAVA_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\GLAD\include;vendor\glm\glm;vendor\stb_image;vendor\assimp-5.0.0\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -112,73 +90,60 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <ImportLibrary>..\bin\Release-windows-x86_64\Guava\Guava.lib</ImportLibrary>
     </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Release-windows-x86_64\Guava\Guava.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\Guava\Guava.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\Guava\Guava.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)</Command>
-    </PostBuildEvent>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
-    <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>GUAVA_PLATFORM_WINDOWS;GUAVA_BUILD_DLL;GLFW_INCLUDE_NONE;GUAVA_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\GLAD\include;vendor\glm\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <Optimization>Full</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <MinimalRebuild>false</MinimalRebuild>
-      <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <ImportLibrary>..\bin\Dist-windows-x86_64\Guava\Guava.lib</ImportLibrary>
-    </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Dist-windows-x86_64\Guava\Guava.dll\ (xcopy /Q /E /Y /I ..\bin\Dist-windows-x86_64\Guava\Guava.dll ..\bin\Dist-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Dist-windows-x86_64\Guava\Guava.dll ..\bin\Dist-windows-x86_64\Sandbox &gt; nul)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Guava.h" />
-    <ClInclude Include="src\Guava\Core\Application.h" />
     <ClInclude Include="src\Guava\Core\Core.h" />
-    <ClInclude Include="src\Guava\Core\Entrypoint.h" />
-    <ClInclude Include="src\Guava\Core\File.h" />
     <ClInclude Include="src\Guava\Core\Log.h" />
+    <ClInclude Include="src\Guava\Core\Memory\PoolVector.h" />
+    <ClInclude Include="src\Guava\Core\Transform.h" />
+    <ClInclude Include="src\Guava\Core\Utility.h" />
     <ClInclude Include="src\Guava\Core\Window.h" />
-    <ClInclude Include="src\Guava\Platform\OpenGL\OpenGLMesh.h" />
-    <ClInclude Include="src\Guava\Platform\OpenGL\OpenGLRenderer.h" />
-    <ClInclude Include="src\Guava\Platform\OpenGL\OpenGLShader.h" />
-    <ClInclude Include="src\Guava\Platform\Windows\WindowsWindow.h" />
-    <ClInclude Include="src\Guava\Renderer\Camera.h" />
-    <ClInclude Include="src\Guava\Renderer\Mesh.h" />
-    <ClInclude Include="src\Guava\Renderer\Renderer.h" />
-    <ClInclude Include="src\Guava\Renderer\Shader.h" />
+    <ClInclude Include="src\Guava\Graphics\BufferLayout.h" />
+    <ClInclude Include="src\Guava\Graphics\Camera.h" />
+    <ClInclude Include="src\Guava\Graphics\Color.h" />
+    <ClInclude Include="src\Guava\Graphics\Mesh.h" />
+    <ClInclude Include="src\Guava\Graphics\OpenGL\glBuffer.h" />
+    <ClInclude Include="src\Guava\Graphics\OpenGL\glMesh.h" />
+    <ClInclude Include="src\Guava\Graphics\OpenGL\glRenderer.h" />
+    <ClInclude Include="src\Guava\Graphics\OpenGL\glShader.h" />
+    <ClInclude Include="src\Guava\Graphics\OpenGL\glTexture.h" />
+    <ClInclude Include="src\Guava\Graphics\OpenGL\glVertexArray.h" />
+    <ClInclude Include="src\Guava\Graphics\Renderer.h" />
+    <ClInclude Include="src\Guava\Graphics\RendererData.h" />
+    <ClInclude Include="src\Guava\Graphics\Shader.h" />
+    <ClInclude Include="src\Guava\Graphics\Texture.h" />
     <ClInclude Include="src\pch.h" />
+    <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Guava\Core\Application.cpp" />
-    <ClCompile Include="src\Guava\Core\File.cpp" />
+    <ClCompile Include="src\Guava\Core\Core.cpp" />
     <ClCompile Include="src\Guava\Core\Log.cpp" />
-    <ClCompile Include="src\Guava\Platform\OpenGL\OpenGLMesh.cpp" />
-    <ClCompile Include="src\Guava\Platform\OpenGL\OpenGLRenderer.cpp" />
-    <ClCompile Include="src\Guava\Platform\OpenGL\OpenGLShader.cpp" />
-    <ClCompile Include="src\Guava\Platform\Windows\WindowsWindow.cpp" />
-    <ClCompile Include="src\Guava\Renderer\Camera.cpp" />
-    <ClCompile Include="src\Guava\Renderer\Mesh.cpp" />
-    <ClCompile Include="src\Guava\Renderer\Renderer.cpp" />
-    <ClCompile Include="src\Guava\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Guava\Core\Transform.cpp" />
+    <ClCompile Include="src\Guava\Core\Utility.cpp" />
+    <ClCompile Include="src\Guava\Core\Window.cpp" />
+    <ClCompile Include="src\Guava\Graphics\BufferLayout.cpp" />
+    <ClCompile Include="src\Guava\Graphics\Camera.cpp" />
+    <ClCompile Include="src\Guava\Graphics\Color.cpp" />
+    <ClCompile Include="src\Guava\Graphics\Mesh.cpp" />
+    <ClCompile Include="src\Guava\Graphics\OpenGL\glBuffer.cpp" />
+    <ClCompile Include="src\Guava\Graphics\OpenGL\glMesh.cpp" />
+    <ClCompile Include="src\Guava\Graphics\OpenGL\glRenderer.cpp" />
+    <ClCompile Include="src\Guava\Graphics\OpenGL\glShader.cpp" />
+    <ClCompile Include="src\Guava\Graphics\OpenGL\glTexture.cpp" />
+    <ClCompile Include="src\Guava\Graphics\OpenGL\glVertexArray.cpp" />
+    <ClCompile Include="src\Guava\Graphics\Renderer.cpp" />
+    <ClCompile Include="src\Guava\Graphics\RendererData.cpp" />
+    <ClCompile Include="src\Guava\Graphics\Shader.cpp" />
+    <ClCompile Include="src\Guava\Graphics\Texture.cpp" />
+    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\glfw\GLFW.vcxproj">

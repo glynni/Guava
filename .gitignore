@@ -2,7 +2,7 @@
 .vs
 bin/
 bin-intermediate/
-Sandbox/files/
+vendor/
 
 # Files
 *.user
