@@ -11,7 +11,7 @@ namespace Guava::OpenGL
 
 		glMesh(const aiMesh* mesh);
 
-		void Draw() override;
+		void Draw() const override;
 
 	private:
 

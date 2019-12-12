@@ -93,9 +93,12 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>D:\dev\Guava\Guava\vendor\assimp-5.0.0\build\code\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Guava\Graphics\Light.h" />
     <ClInclude Include="src\Guava\Graphics\Model.h" />
     <ClInclude Include="src\Guava\Core\AssetManager.h" />
     <ClInclude Include="src\Guava\Core\Input.h" />
@@ -122,6 +125,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Guava\Graphics\Light.cpp" />
     <ClCompile Include="src\Guava\Graphics\Model.cpp" />
     <ClCompile Include="src\Guava\Core\AssetManager.cpp" />
     <ClCompile Include="src\Guava\Core\Input.cpp" />

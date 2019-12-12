@@ -3,13 +3,13 @@
 
 namespace Guava
 {
-	const Color Color::Red		= Color(1.0f, 0.0f, 0.0f);
-	const Color Color::Green	= Color(0.0f, 1.0f, 0.0f);
-	const Color Color::Blue		= Color(0.0f, 0.0f, 1.0f);
-	const Color Color::White	= Color(1.0f, 1.0f, 1.0f);
-	const Color Color::Black	= Color(0.0f, 0.0f, 0.0f);
+	const ColorRGBA ColorRGBA::Red		= ColorRGBA(1.0f, 0.0f, 0.0f);
+	const ColorRGBA ColorRGBA::Green	= ColorRGBA(0.0f, 1.0f, 0.0f);
+	const ColorRGBA ColorRGBA::Blue		= ColorRGBA(0.0f, 0.0f, 1.0f);
+	const ColorRGBA ColorRGBA::White	= ColorRGBA(1.0f, 1.0f, 1.0f);
+	const ColorRGBA ColorRGBA::Black	= ColorRGBA(0.0f, 0.0f, 0.0f);
 
-	Color::Color(const float r, const float g, const float b, const float a)
+	ColorRGBA::ColorRGBA(const float r, const float g, const float b, const float a)
 	{
 		x = r;
 		y = g;
@@ -17,7 +17,7 @@ namespace Guava
 		w = a;
 	}
 
-	void Color::SetColor(const float r, const float g, const float b, const float a)
+	void ColorRGBA::SetColor(const float r, const float g, const float b, const float a)
 	{
 		x = r;
 		y = g;
@@ -25,7 +25,7 @@ namespace Guava
 		w = a;
 	}
 
-	void Color::SetColor(const Color& color)
+	void ColorRGBA::SetColor(const ColorRGBA& color)
 	{
 		x = color.r;
 		y = color.g;
@@ -33,7 +33,7 @@ namespace Guava
 		w = color.a;
 	}
 
-	const Color& Color::GetColor() const
+	const ColorRGBA& ColorRGBA::GetColor() const
 	{
 		return *this;
 	}

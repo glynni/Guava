@@ -3,20 +3,20 @@
 
 namespace Guava
 {
-	struct  Color : public glm::vec4
+	struct  ColorRGBA : public glm::vec4
 	{
-		Color(const float r = 1.0f, const float g = 1.0f, const float b = 1.0f, const float a = 1.0f);
+		ColorRGBA(const float r = 1.0f, const float g = 1.0f, const float b = 1.0f, const float a = 1.0f);
 
 		void SetColor(const float r, const float g, const float b, const float a);
-		void SetColor(const Color& color);
+		void SetColor(const ColorRGBA& color);
 
-		const Color& GetColor() const;
+		const ColorRGBA& GetColor() const;
 
-		static const Color Red;
-		static const Color Green;
-		static const Color Blue;
-		static const Color White;
-		static const Color Black;
+		static const ColorRGBA Red;
+		static const ColorRGBA Green;
+		static const ColorRGBA Blue;
+		static const ColorRGBA White;
+		static const ColorRGBA Black;
 	};
 }
 

@@ -7,7 +7,6 @@ namespace Guava
 	{
 		glm::vec3	Position;
 		glm::vec3	Normal;
-		Color		Col;
 
 		static const Buffer::Layout Layout;
 	};
@@ -17,7 +16,7 @@ namespace Guava
 	public:
 
 		virtual ~Mesh() = default;
-		virtual void Draw() = 0;
+		virtual void Draw() const = 0;
 		
 		static Mesh* Create(const aiMesh* mesh);
 

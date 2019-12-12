@@ -4,20 +4,21 @@
 namespace Guava
 {
 	// Asset paths
-	const std::string TextureDir =	"Assets/Textures/";
-	const std::string ShaderDir =	"Assets/Shaders/";
-	const std::string ModelDir =	"Assets/Models/";
+	static const std::string AssetDir =		"assets/";
+	static const std::string TextureDir =	AssetDir + "textures/";
+	static const std::string ShaderDir =	AssetDir + "shaders/";
+	static const std::string ModelDir =		AssetDir + "models/";
 
 	// Asset storage
 	template<typename T>
 	using Storage = std::unordered_map<std::string, std::unique_ptr<T>>;
 
-	Storage<Texture>	Textures;
-	Storage<Shader>		Shaders;
-	Storage<Model>		Models;
+	static Storage<Texture>	Textures;
+	static Storage<Shader>	Shaders;
+	static Storage<Model>	Models;
 
 	template<typename T>
-	T* Contains(const Storage<T>& container, std::string_view key)
+	static T* Contains(const Storage<T>& container, std::string_view key)
 	{
 		auto& result = std::find_if(container.begin(), container.end(), [&](auto& pair)
 		{
@@ -45,6 +46,8 @@ namespace Guava
 		t = Renderer::CreateTexture(key, description);
 
 		Textures.emplace(key, t);
+
+		return t;
 	}
 
 	Shader* AssetManager::GetShader(const std::string_view name)
@@ -62,6 +65,8 @@ namespace Guava
 		s = Renderer::CreateShader(key);
 
 		Shaders.emplace(key, s);
+
+		return s;
 	}
 
 	Model* AssetManager::GetModel(const std::string_view file)
@@ -79,6 +84,8 @@ namespace Guava
 		m = new Model(key);
 
 		Models.emplace(key, m);
+
+		return m;
 	}
 
 	void AssetManager::ClearAssets()

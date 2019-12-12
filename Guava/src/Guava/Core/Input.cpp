@@ -5,13 +5,13 @@
 namespace Guava
 {
 	// Keyboard
-	std::vector<bool> s_KeyDown;
+	static std::vector<bool> s_KeyDown;
 
 	// Mouse
-	std::vector<bool> s_MouseButtonDown;
-	glm::vec2 s_MousePos;
-	glm::vec2 s_MousePosPrevious;
-	glm::vec2 s_MousePosChange;
+	static std::vector<bool>	s_MouseButtonDown;
+	static glm::vec2			s_MousePos;
+	static glm::vec2			s_MousePosPrevious;
+	static glm::vec2			s_MousePosChange;
 
 	void Input::Create()
 	{

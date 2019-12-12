@@ -3,7 +3,8 @@
 bin/
 bin-intermediate/
 vendor/
-Assets/
+models/
+textures/
 
 # Files
 *.user

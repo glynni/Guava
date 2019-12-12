@@ -16,7 +16,7 @@ namespace Guava::OpenGL
 
 		void ClearScreen_Impl() override;
 		void SetViewport_Impl(const glm::uvec2& size, const glm::uvec2& bottomLeft) override;
-		void SetClearColor_Impl(const Color& color) override;
+		void SetClearColor_Impl(const ColorRGBA& color) override;
 		void SetDrawMode_Impl(const PolygonMode drawMode) override;
 
 	private:

@@ -27,7 +27,7 @@ namespace Guava::OpenGL
 		glViewport(bottomLeft.x, bottomLeft.y, size.x, size.y);
 	}
 
-	void glRenderer::SetClearColor_Impl(const Color& color)
+	void glRenderer::SetClearColor_Impl(const ColorRGBA& color)
 	{
 		glClearColor(color.r, color.g, color.b, color.a);
 	}

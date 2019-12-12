@@ -12,16 +12,23 @@ int main()
 	Window::Create("OpenGL Renderer", 800, 600);
 	Input::Create();
 	Renderer::Create(RenderAPI::OpenGL);
-	Renderer::SetClearColor(Color(0.4f, 0.4f, 0.9f, 1.0f));
+	Renderer::SetDrawMode(PolygonMode::Fill);
+	Renderer::SetClearColor(ColorRGBA(0.4f, 0.4f, 0.9f, 1.0f));
 
 	Shader*		meshShader = Shader::Create("mesh");
 	Shader*		spriteShader = Shader::Create("sprite");
-	Model*		hammer = Model::Create("hammer/source/Warhammer.fbx");
+	//Model*	hammer = Model::Create("hammer/source/Warhammer.fbx");
+	Model*		pbrChart = Model::Create("pbr-chart.obj");
+	Light		redLight;
 	Camera		camera;
 	Transform	tHammer, tPbr;
 
 	std::chrono::high_resolution_clock::time_point	start;
 	std::chrono::duration<float>					frameTime = 0s;
+
+	redLight.Position = { 24.0f, -10.0f, 6.0f };
+	redLight.Color = { 1.0f, 0.3f, 0.3f, 1.0f };
+	redLight.Intensity = 1.0f;
 
 	camera.SetPosition({0.0f, 0.0f, 0.0f});
 	camera.SetMoveSpeed(50.0f);
@@ -65,8 +72,8 @@ int main()
 
 		// Draw
 		Renderer::BeginFrame();
-		Renderer::SetDrawMode(PolygonMode::Fill);
-		// Models ???
+		Renderer::Draw(redLight);
+		Renderer::Draw(pbrChart, meshShader, tPbr, camera);
 		Renderer::EndFrame();
 
 		frameTime = std::chrono::high_resolution_clock::now() - start;
@@ -76,5 +83,5 @@ int main()
 	Input::Destroy();
 	Window::Destroy();
 
-	std::cin.get();
+	//std::cin.get();
 }

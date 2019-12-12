@@ -3,7 +3,7 @@
 
 namespace Guava::OpenGL
 {
-	GLenum GetGLType(Guava::Buffer::Attribute::Type type)
+	static GLenum GetGLType(Guava::Buffer::Attribute::Type type)
 	{
 		switch (type)
 		{
@@ -18,7 +18,7 @@ namespace Guava::OpenGL
 		}
 	}
 
-	void ApplyAttribute(GLuint vaaIndex, GLenum type, GLuint numElements, size_t stride, GLuint offset, bool instanced)
+	static void ApplyAttribute(GLuint vaaIndex, GLenum type, GLuint numElements, size_t stride, GLuint offset, bool instanced)
 	{
 		glEnableVertexAttribArray(vaaIndex);
 		glVertexAttribPointer(vaaIndex, numElements, type, false, stride, (void*)offset);

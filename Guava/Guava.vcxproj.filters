@@ -93,6 +93,7 @@
     <ClInclude Include="src\Guava\Core\Input.h" />
     <ClInclude Include="src\Guava\Core\AssetManager.h" />
     <ClInclude Include="src\Guava\Graphics\Model.h" />
+    <ClInclude Include="src\Guava\Graphics\Light.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Guava\Core\Core.cpp">
@@ -161,5 +162,6 @@
     <ClCompile Include="src\Guava\Core\Input.cpp" />
     <ClCompile Include="src\Guava\Core\AssetManager.cpp" />
     <ClCompile Include="src\Guava\Graphics\Model.cpp" />
+    <ClCompile Include="src\Guava\Graphics\Light.cpp" />
   </ItemGroup>
 </Project>

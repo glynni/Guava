@@ -8,13 +8,13 @@
 namespace Guava
 {
 	// API
-	RenderAPI s_RenderAPI;
+	static RenderAPI s_RenderAPI;
 
 	// Instance
-	std::unique_ptr<Renderer> s_Instance;
+	static std::unique_ptr<Renderer> s_Instance;
 
 	// Projection
-	glm::mat4 s_Perspective;
+	static glm::mat4 s_Perspective;
 
 	Renderer::~Renderer()
 	{
@@ -65,7 +65,7 @@ namespace Guava
 		Window::Present();
 	}
 
-	void Renderer::SetClearColor(const Color& color)
+	void Renderer::SetClearColor(const ColorRGBA& color)
 	{
 		s_Instance->SetClearColor_Impl(color);
 	}
@@ -77,16 +77,27 @@ namespace Guava
 		s_Perspective = glm::perspective(glm::radians(70.f), (float)winSize.x / (float)winSize.y, 0.1f, 100.f);
 	}
 
-	void Renderer::Draw(Mesh* mesh, Shader* shader, const Transform& transform, const Camera& camera)
+	void Renderer::Draw(const Mesh* mesh, Shader* shader, const Transform& transform, const Camera& camera)
 	{
 		shader->Bind();
 
-		shader->SetMat4("u_ModelMatrix", transform.GetTransform());
-		shader->SetMat4("u_ViewMatrix", camera.GetViewMatrix());
-		shader->SetMat4("u_ProjectionMatrix", s_Perspective);
-		shader->SetVec4("u_EyePos", { camera.GetPosition() , 1.0f});
+		shader->SetMat4("u_modelMatrix", transform.GetTransform());
+		shader->SetMat4("u_viewMatrix", camera.GetViewMatrix());
+		shader->SetMat4("u_projectionMatrix", s_Perspective);
+		shader->SetVec4("u_eyePos", { camera.GetPosition() , 1.0f});
 
 		mesh->Draw();
+	}
+
+	void Renderer::Draw(const Model* model, Shader* shader, const Transform& transform, const Camera& camera)
+	{
+		for (const auto& mesh : model->GetMeshList())
+			Draw(mesh.get(), shader, transform, camera);
+
+	}
+
+	void Renderer::Draw(const Light& light)
+	{
 	}
 
 	Texture* Renderer::CreateTexture(const std::string_view file, const Texture::Description& description)

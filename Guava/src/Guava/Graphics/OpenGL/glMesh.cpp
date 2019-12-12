@@ -17,7 +17,7 @@ namespace Guava::OpenGL
 		m_Indices = std::vector<unsigned int>();
 	}
 
-	void glMesh::Draw()
+	void glMesh::Draw() const
 	{
 		m_VertexArray.Bind();
 		m_IndexBuffer.Bind();

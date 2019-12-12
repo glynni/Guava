@@ -3,9 +3,9 @@
 
 namespace Guava::OpenGL
 {
-	GLuint s_CurrentProgram = -1;
+	static GLuint s_CurrentProgram = -1;
 
-	GLuint CreateGLShader(GLenum shaderType, const std::string_view code)
+	static GLuint CreateGLShader(GLenum shaderType, const std::string_view code)
 	{
 		GLuint handle = glCreateShader(shaderType);
 		GLint status;

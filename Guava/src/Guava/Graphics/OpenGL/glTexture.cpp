@@ -3,7 +3,7 @@
 
 namespace Guava::OpenGL
 {
-	GLenum PixelFormat(const glTexture::PixelFormat pf)
+	static GLenum PixelFormat(const glTexture::PixelFormat pf)
 	{
 		switch (pf)
 		{
@@ -12,7 +12,7 @@ namespace Guava::OpenGL
 		default: GUAVA_ASSERT(false, "Unknown input-format specified.");
 		}
 	}
-	GLenum FilterMode(const glTexture::FilterMode fm)
+	static GLenum FilterMode(const glTexture::FilterMode fm)
 	{
 		switch (fm)
 		{
@@ -21,7 +21,7 @@ namespace Guava::OpenGL
 		default: GUAVA_ASSERT(false, "Unknown filter-mode format specified.");
 		}
 	}
-	GLenum WrappingMode(const glTexture::WrappingMode wm)
+	static GLenum WrappingMode(const glTexture::WrappingMode wm)
 	{
 		switch (wm)
 		{

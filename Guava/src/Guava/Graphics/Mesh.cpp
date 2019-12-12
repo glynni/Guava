@@ -6,8 +6,7 @@ namespace Guava
 {
 	const Buffer::Layout Vertex::Layout = {
 		Buffer::Attribute::Type::Vec3f,
-		Buffer::Attribute::Type::Vec3f,
-		Buffer::Attribute::Type::Vec4f
+		Buffer::Attribute::Type::Vec3f
 	};
 
 	Mesh* Mesh::Create(const aiMesh* mesh)
@@ -39,13 +38,6 @@ namespace Guava
 				// Only works for spheres... 
 				// assimp-generated normals are ugly, or I don't understand something fundamental
 				//vertex.Normal = glm::normalize(vertex.Position);
-			}
-
-			// Colors
-			if (mesh->HasVertexColors(0))
-			{
-				aiColor4D& aiColor = mesh->mColors[0][i];
-				vertex.Col = { aiColor.r , aiColor.g , aiColor.b, aiColor.a };
 			}
 
 			m_Vertices.emplace_back(vertex);

@@ -9,7 +9,7 @@ namespace Guava::OpenGL
 		glVertexArray();
 		~glVertexArray();
 
-		void Bind();
+		void Bind() const;
 
 	private:
 

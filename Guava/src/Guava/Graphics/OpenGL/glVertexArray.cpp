@@ -15,7 +15,7 @@ namespace Guava::OpenGL
 		glDeleteVertexArrays(1, &m_OpenGLHandle);
 	}
 
-	void glVertexArray::Bind()
+	void glVertexArray::Bind() const
 	{
 		if (s_CurrentArray != m_OpenGLHandle)
 		{
