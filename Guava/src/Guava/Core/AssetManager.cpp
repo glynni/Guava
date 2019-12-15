@@ -5,7 +5,7 @@ namespace Guava
 {
 	// Asset paths
 	static const std::string AssetDir =		"assets/";
-	static const std::string TextureDir =	AssetDir + "textures/";
+	static const std::string TextureDir =	"";
 	static const std::string ShaderDir =	AssetDir + "shaders/";
 	static const std::string ModelDir =		AssetDir + "models/";
 
@@ -31,7 +31,7 @@ namespace Guava
 		return nullptr;
 	}
 
-	Texture* AssetManager::GetTexture(const std::string_view file, const Texture::Description& description)
+	Texture* AssetManager::GetTexture(const std::string_view file, const TextureCreationInfo& info)
 	{
 		std::string key = TextureDir + file.data();
 
@@ -39,13 +39,15 @@ namespace Guava
 
 		if (t) 
 		{ 
-			GUAVA_CORE_TRACE("Texture \"{0}\" already exists.", file.data());
+			GUAVA_CORE_TRACE("Texture already exists: {0}", file.data());
 			return t;
 		}
 
-		t = Renderer::CreateTexture(key, description);
+		t = Renderer::CreateTexture(key, info);
 
 		Textures.emplace(key, t);
+
+		GUAVA_CORE_INFO("Loaded texture: {0}", key);
 
 		return t;
 	}
@@ -58,13 +60,15 @@ namespace Guava
 
 		if (s)
 		{
-			GUAVA_CORE_TRACE("Shader \"{0}\" already exists.", name.data());
+			GUAVA_CORE_TRACE("Shader already exists: {0}", name.data());
 			return s;
 		}
 
 		s = Renderer::CreateShader(key);
 
 		Shaders.emplace(key, s);
+
+		GUAVA_CORE_INFO("Loaded shader: {0}", key);
 
 		return s;
 	}
@@ -77,18 +81,20 @@ namespace Guava
 
 		if (m)
 		{
-			GUAVA_CORE_TRACE("Model \"{0}\" already exists.", file.data());
+			GUAVA_CORE_TRACE("Model already exists: {0}", file.data());
 			return m;
 		}
 
-		m = new Model(key);
+		m = Renderer::CreateModel(key);
 
 		Models.emplace(key, m);
+
+		GUAVA_CORE_INFO("Loaded model: {0}", key);
 
 		return m;
 	}
 
-	void AssetManager::ClearAssets()
+	void AssetManager::Destroy()
 	{
 		Textures.clear();
 		Shaders.clear();

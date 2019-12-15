@@ -1,15 +1,15 @@
 #pragma once
-#include "../Mesh.h"
+#include "../Model.h"
 #include "glVertexArray.h"
 #include "glBuffer.h"
 
 namespace Guava::OpenGL
 {
-	class glMesh : public Mesh
+	class glModel : public Model
 	{
 	public:
 
-		glMesh(const aiMesh* mesh);
+		glModel(const std::string_view filePath);
 
 		void Draw() const override;
 

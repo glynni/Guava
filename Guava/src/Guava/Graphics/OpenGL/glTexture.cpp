@@ -3,68 +3,43 @@
 
 namespace Guava::OpenGL
 {
-	static GLenum PixelFormat(const glTexture::PixelFormat pf)
+	struct GLinternalFormat
 	{
-		switch (pf)
-		{
-		case glTexture::PixelFormat::RGB: return GL_RGB;
-		case glTexture::PixelFormat::RGBA: return GL_RGBA;
-		default: GUAVA_ASSERT(false, "Unknown input-format specified.");
-		}
-	}
-	static GLenum FilterMode(const glTexture::FilterMode fm)
+		GLenum format;
+		GLenum type;
+	};
+
+	static const GLenum GetGLenum(const TextureFilterMode tfm);
+	static const GLenum GetGLenum(const TextureWrappingMode twm);
+	static const GLinternalFormat GetGLclientFormat(const TextureCreationInfo& tci);
+	static const GLenum GetGLinternalFormat(const TextureCreationInfo& tci);
+
+	glTexture::glTexture(const std::string_view path, const TextureCreationInfo& description) : Guava::Texture(path, description), m_Texture(0)
 	{
-		switch (fm)
-		{
-		case glTexture::FilterMode::Nearest: return GL_NEAREST;
-		case glTexture::FilterMode::Linear: return GL_LINEAR;
-		default: GUAVA_ASSERT(false, "Unknown filter-mode format specified.");
-		}
-	}
-	static GLenum WrappingMode(const glTexture::WrappingMode wm)
-	{
-		switch (wm)
-		{
-		case glTexture::WrappingMode::EdgeClamp: return GL_CLAMP_TO_EDGE;
-
-		default: GUAVA_ASSERT(false, "Unknown wrapping-mode format specified.");
-		}
-	}
-
-	glTexture::Info Convert(const Guava::Texture::Description& info)
-	{
-		glTexture::Info glDesc;
-
-		glDesc.MinFilter = FilterMode(info.MinFiltering);
-		glDesc.MagFilter = FilterMode(info.MagFiltering);
-
-		glDesc.WrapS = WrappingMode(info.HorizontalWrapping);
-		glDesc.WrapT = WrappingMode(info.VerticalWrapping);
-
-		glDesc.PixelFormat = PixelFormat(info.PixelFormat);
-
-		return glDesc;
-	}
-
-	glTexture::glTexture(const Guava::Texture::Description& info, const std::string_view path) : Guava::Texture(info, path), m_Texture(0)
-	{
-		glCreateTextures(GL_TEXTURE_2D, 1, &m_Texture);
+		CreateTexture();
 
 		if (m_PixelData.size())
 		{
-			glTextureStorage2D(m_Texture, 1, GL_RGBA8, m_Info.Width, m_Info.Height);
+			CreateStorage();
 
-			glTexture::Info glInfo = Convert(m_Info);
+			SetTextureParameter(GL_TEXTURE_MIN_FILTER,	GetGLenum(m_Info.MinFiltering)); 
+			SetTextureParameter(GL_TEXTURE_MAG_FILTER,	GetGLenum(m_Info.MagFiltering)); 
+			SetTextureParameter(GL_TEXTURE_WRAP_S,		GetGLenum(m_Info.HorizontalWrapping)); 
+			SetTextureParameter(GL_TEXTURE_WRAP_T,		GetGLenum(m_Info.VerticalWrapping));
 
-			glTextureParameteri(m_Texture, GL_TEXTURE_MIN_FILTER, glInfo.MinFilter); 
-			glTextureParameteri(m_Texture, GL_TEXTURE_MAG_FILTER, glInfo.MagFilter); 
-			glTextureParameteri(m_Texture, GL_TEXTURE_WRAP_S	, glInfo.WrapS); 
-			glTextureParameteri(m_Texture, GL_TEXTURE_WRAP_T	, glInfo.WrapT);
+			GLinternalFormat glif = GetGLclientFormat(m_Info);
 
-			glTextureSubImage2D(m_Texture, 0, 0, 0, m_Info.Width, m_Info.Height, glInfo.PixelFormat, GL_UNSIGNED_BYTE, m_PixelData.data());
+			glTextureSubImage2D(
+				m_Texture, 
+				0,									// Level
+				0, 0, m_Width, m_Height,			// x, y, width, height
+				glif.format, 
+				glif.type, 
+				m_PixelData.data());
 		}
 
-		ReleaseMemory();
+		// Free memory
+		m_PixelData = ByteBuffer();
 	}
 
 	glTexture::~glTexture()
@@ -75,5 +50,86 @@ namespace Guava::OpenGL
 	void glTexture::Bind()
 	{
 		glBindTextureUnit(0, m_Texture);
+	}
+
+	void glTexture::CreateTexture()
+	{
+		GLenum type;
+
+		switch (m_Info.Type)
+		{	
+		case TextureType::Texture2D: type = GL_TEXTURE_2D; break;
+
+		default: GUAVA_ASSERT(false, "Unknown texture type specified"); break;
+		}
+
+		glCreateTextures(type, 1, &m_Texture);
+	}
+
+	void glTexture::CreateStorage()
+	{
+		switch (m_Info.Type)
+		{
+		case TextureType::Texture2D:
+		{
+			glTextureStorage2D(m_Texture, 1, GetGLinternalFormat(m_Info), m_Width, m_Height);
+			break;
+		}
+		default: GUAVA_ASSERT(false, "Unknown texture type specified"); break;
+		}
+	}
+
+	void glTexture::SetTextureParameter(GLenum id, GLint parameter)
+	{
+		glTextureParameteri(m_Texture, id, parameter);
+	}
+
+	const GLenum GetGLenum(const TextureFilterMode tfm)
+	{
+		switch (tfm)
+		{
+		case Guava::TextureFilterMode::Nearest: return GL_NEAREST;
+		case Guava::TextureFilterMode::Linear:	return GL_LINEAR;
+
+		default: GUAVA_ASSERT(false, "Unknown filter mode specified"); break;
+		}
+	}
+
+	const GLenum GetGLenum(const TextureWrappingMode twm)
+	{
+		switch (twm)
+		{
+		case Guava::TextureWrappingMode::EdgeClamp: return GL_CLAMP_TO_EDGE;
+
+		default: GUAVA_ASSERT(false, "Unknown wrapping mode specified"); break;
+		}
+	}
+
+	const GLinternalFormat GetGLclientFormat(const TextureCreationInfo& tci)
+	{
+		switch (tci.ClientFormat)
+		{
+		case TexturePixelFormat::RGB8: 
+		{
+			return {GL_RGB, GL_UNSIGNED_BYTE};
+		}
+		case TexturePixelFormat::RGBA8: 
+		{
+			return { GL_RGBA, GL_UNSIGNED_BYTE };
+		}
+
+		default: GUAVA_ASSERT(false, "Unknown pixel format specified"); break;
+		}
+	}
+
+	const GLenum GetGLinternalFormat(const TextureCreationInfo& tci)
+	{
+		switch (tci.GPUFormat)
+		{
+		case TexturePixelFormat::RGB8:	return GL_RGB8;
+		case TexturePixelFormat::RGBA8: return GL_RGBA8;
+
+		default: GUAVA_ASSERT(false, "Unknown pixel format specified"); break;
+		}
 	}
 }

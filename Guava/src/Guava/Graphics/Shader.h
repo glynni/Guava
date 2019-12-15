@@ -17,9 +17,11 @@ namespace Guava
 		virtual void Bind() = 0;
 
 		virtual void SetMat4(const std::string_view variable, const glm::mat4& matrix) = 0;
+		virtual void SetMat3(const std::string_view variable, const glm::mat3& matrix) = 0;
 		virtual void SetVec4(const std::string_view variable, const glm::vec4& vec) = 0;
 		virtual void SetBool(const std::string_view variable, bool b) = 0;
 		virtual void SetInt(const std::string_view variable, int i) = 0;
+		virtual void SetFloat(const std::string_view variable, float i) = 0;
 
 		static Shader* Create(const std::string_view name);
 

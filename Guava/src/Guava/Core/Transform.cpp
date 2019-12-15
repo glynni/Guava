@@ -10,94 +10,140 @@ namespace Guava
 	constexpr glm::mat4 identity(1.0f);
 
 	Transform::Transform() : 
-		m_NeedsUpdate	 (true),
-		m_Transformation (identity),
-		m_Position		 (glm::vec3(0.0f)),
-		m_Scale			 (glm::vec3(1.0f)),
-		m_Rotation		 (Rotation())
+		m_NeedsUpdate		(true),
+		m_Transform			(identity),
+		m_Translation		(identity),
+		m_Rotation			(identity),
+		m_Scaling			(identity),
+		m_NormalTransform	(glm::transpose(glm::inverse(m_Transform)))
 	{
+	}
+
+	void Transform::SetPosition(const glm::vec3& position)
+	{
+		m_Translation = glm::translate(position);
+
+		m_NeedsUpdate = true;
+	}
+
+	void Transform::SetPosition(const float x, const float y, const float z)
+	{
+		m_Translation = glm::translate(glm::vec3(x, y ,z));
+
+		m_NeedsUpdate = true;
 	}
 
 	void Transform::SetScale(const glm::vec3& scale)
 	{
-		m_Scale = scale;
+		m_Scaling = glm::scale(scale);
+
+		m_NeedsUpdate = true;
+	}
+
+	void Transform::SetScale(const float scale)
+	{
+		m_Scaling = glm::scale(glm::vec3(scale));
+
 		m_NeedsUpdate = true;
 	}
 
 	void Transform::SetRotation(const float degrees, const glm::vec3& axis)
 	{
-		if (axis == forbAxis) return;
+		m_Rotation = glm::rotate(glm::radians(degrees), axis);
 
-		m_Rotation.Axis = axis;
-		m_Rotation.Degrees = degrees;
-		m_NeedsUpdate = true;
-	}
-
-	void Transform::SetRotation(const Rotation& rotation)
-	{
-		if (rotation.Axis == forbAxis) return;
-
-		m_Rotation = rotation;
-		m_NeedsUpdate = true;
-	}
-
-	void Transform::SetPosition(const glm::vec3& position)
-	{
-		m_Position = position;
 		m_NeedsUpdate = true;
 	}
 
 	void Transform::Move(const glm::vec3& offset)
 	{
-		m_Position += offset;
+		m_Translation = glm::translate(m_Translation, offset);
+
+		m_NeedsUpdate = true;
+	}
+
+	void Transform::Move(const float x, const float y, const float z)
+	{
+		m_Translation = glm::translate(m_Translation, glm::vec3(x, y, z));
+
 		m_NeedsUpdate = true;
 	}
 
 	void Transform::Scale(const glm::vec3& factor)
 	{
-		m_Scale *= factor;
+		m_Scaling = glm::scale(m_Scaling, factor);
+
 		m_NeedsUpdate = true;
 	}
 
-	void Transform::Rotate(const float degrees)
+	void Transform::Scale(const float factor)
 	{
-		m_Rotation.Degrees = glm::mod(m_Rotation.Degrees + degrees, 360.f);
+		m_Scaling = glm::scale(m_Scaling, glm::vec3(factor));
+
 		m_NeedsUpdate = true;
 	}
 
-	const glm::vec3& Transform::GetScale() const
+	void Transform::Rotate(const float degrees, const glm::vec3& axis)
 	{
-		return m_Scale;
+		m_Rotation = glm::rotate(m_Rotation, glm::radians(degrees), axis);
+
+		m_NeedsUpdate = true;
 	}
 
-	const Rotation& Transform::GetRotation() const
+	const glm::vec3 Transform::GetPosition() const
+	{
+		return m_Translation[3];
+	}
+
+	const glm::vec3 Transform::GetScale() const
+	{
+		return
+		{
+			m_Scaling[0][0],
+			m_Scaling[1][1],
+			m_Scaling[2][2]
+		};
+	}
+
+	const glm::mat4 Transform::GetRotation() const
 	{
 		return m_Rotation;
 	}
 
-	const glm::vec3& Transform::GetPosition() const
+	const glm::mat4& Transform::GetTransform()
 	{
-		return m_Position;
+		Update();
+
+		return m_Transform;
 	}
 
-	const glm::mat4& Transform::GetTransform() const
+	const glm::mat3& Transform::GetNormalTransform()
+	{
+		Update();
+
+		return m_NormalTransform;
+	}
+
+	void Transform::Update()
 	{
 		if (m_NeedsUpdate)
 		{
-			m_Transformation = 
-				glm::translate(identity, m_Position) *
-				glm::rotate(identity, glm::radians(m_Rotation.Degrees), m_Rotation.Axis) *
-				glm::scale(identity, m_Scale);
+			PreUpdate();
+
+			m_Transform = m_Translation * m_Rotation * m_Scaling;
+
+			m_NormalTransform = glm::transpose(glm::inverse(m_Transform));
 
 			m_NeedsUpdate = false;
-		}
 
-		return m_Transformation;
+			PostUpdate();
+		}
 	}
 
-	Rotation::Rotation() :
-		Axis	(glm::vec3(0.0f, 1.0f, 0.0f)),
-		Degrees	(0.0f)
+	void Transform::PreUpdate()
+	{
+	}
+
+	void Transform::PostUpdate()
 	{
 	}
 }

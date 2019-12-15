@@ -2,13 +2,15 @@
 
 // In
 in vec4 position_world;
-in vec4 normal_world;
+in vec3 normal_world;
+in vec2 uv_coords;
 
 // Out
 out vec4 fragColor;
 
-// Eye
+// Uniforms
 uniform vec4 u_eyePos;
+uniform sampler2D u_diffuse;
 
 // Lights
 struct PointLight
@@ -17,77 +19,68 @@ struct PointLight
 	vec4 	position_world;
 	vec4 	color;
 };
+uniform PointLight u_lights[100];
+uniform int u_numLights;
 
-uniform PointLight u_light;
+/*Vector math**************************************************************************/
+vec3 direction(vec4 from, vec4 to);
+vec3 bisector(vec3 v1, vec3 v2);
+vec3 bisector(vec4 v1, vec4 v2);
+/*Shading models***********************************************************************/
+float lambertian(vec3 n, vec3 l);
+vec4 blinn_phong(PointLight light, vec3 normal, vec4 fragPos, vec4 eyePos, float shine);
+/*Corrections**************************************************************************/
+vec4 correct_gamma(vec4 fColor);
+/**************************************************************************************/
+
+void main()
+{
+	//vec4 surfaceColor = vec4(uv_coords, 0.0f, 1.0f);
+	vec4 surfaceColor = texture(u_diffuse, uv_coords);
+	vec4 ambient = 1.0f * vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	vec4 diffuse_specular = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+	for(int i = 0; i < u_numLights; ++i)
+		;//diffuse_specular += blinn_phong(u_lights[i], normal_world, position_world, u_eyePos, 10.f);
+
+	// Gamma correction, applied at the very end / after all passes are done
+	fragColor = correct_gamma(surfaceColor * (ambient + diffuse_specular));
+}
 
 /* Vector math ************************************************************************/
-vec4 direction(vec4 from, vec4 to)
+vec3 direction(vec4 from, vec4 to)
 {
-	return normalize(to - from);
+	return normalize(to - from).xyz;
 }
-vec4 bisector(vec4 v1, vec4 v2)
+
+vec3 bisector(vec3 v1, vec3 v2)
 {
 	return normalize(v1 + v2);
 }
 
-/* Shader models ************************************************************************
+vec3 bisector(vec4 v1, vec4 v2)
+{
+	return normalize(v1 + v2).xyz;
+}
 
-	Don't forget:
-	- Intensity
-	- Light Color ?
-
-	lightDir_world:	surface ---> light
-	viewDir_world:	surface ---> eye
-*/
-
-// lambertian = max(0, dot(normal, lightDir))
-float lambertian(vec4 n, vec4 l)
+/* Shading models *********************************************************************/
+float lambertian(vec3 n, vec3 l)
 {
 	return max(0.0f, dot(n, l));
 }
 
-// blinn_phong = lambertian + max(0, dot(normal, bisector(viewDir, lightDir)))^shininess
-float blinn_phong(vec4 n, vec4 l, vec4 viewDir, float s)
+vec4 blinn_phong(PointLight light, vec3 normal, vec4 fragPos, vec4 eyePos, float shine)
 {
-	return lambertian(n, l) + pow(max(0, dot(n, bisector(l, viewDir))), s);
+	vec3 lightDir = direction(fragPos, light.position_world);
+	vec3 viewDir = direction(fragPos, eyePos);
+	float diffuse_specular = lambertian(normal, lightDir) + pow(max(0, dot(normal, bisector(lightDir, viewDir))), shine);
+
+	return light.intensity * light.color * diffuse_specular;
 }
 
-// ligthing model
-vec4 PointLightOutput(PointLight light, vec4 pos, vec4 n, vec4 viewDir, float s)
+/*Corrections**************************************************************************/
+vec4 correct_gamma(vec4 fColor)
 {
-	vec4 lightDir = direction(pos, light.position_world);
-
-	return light.color * light.intensity * blinn_phong(n, lightDir, viewDir, s);
-}
-
-/* main ************************************************************************/
-void main()
-{
-	// Surface
-	vec4 surfaceColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-
-	// Red light
-	PointLight red;
-	red.intensity = 		0.6f;
-	red.position_world = 	vec4(24.0f, 0.0f, 12.0f, 1.0f);
-	red.color = 			vec4(1.0f, 0.3f, 0.3f, 1.0f);
-
-	// Green light
-	PointLight green;
-	green.intensity = 		0.6f;
-	green.position_world = 	vec4(24.0f, -12.0f, 12.0f, 1.0f);
-	green.color = 			vec4(0.3f, 1.0f, 0.3f, 1.0f);
-
-	// Blue light
-	PointLight blue;
-	blue.intensity = 		0.6f;
-	blue.position_world = 	vec4(24.0f, -24.0f, 12.0f, 1.0f);
-	blue.color = 			vec4(0.3f, 0.3f, 1.0f, 1.0f);
-
-	vec4 viewDir_world = direction(position_world, u_eyePos);
-	
-	//fragColor = surfaceColor * lightColor * lambertian(lightIntensity, VS_Normal_World, lightDir_world);
-	fragColor  = surfaceColor * PointLightOutput(red, position_world, normal_world, viewDir_world, 10.0f);
-	fragColor += surfaceColor * PointLightOutput(blue, position_world, normal_world, viewDir_world, 10.0f);
-	fragColor += surfaceColor * PointLightOutput(green, position_world, normal_world, viewDir_world, 10.0f);
+	fColor.rgb = pow(fColor.rgb, vec3(1.0/2.2f));
+	return fColor;
 }

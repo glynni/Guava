@@ -27,7 +27,7 @@ namespace Guava::OpenGL
 		glViewport(bottomLeft.x, bottomLeft.y, size.x, size.y);
 	}
 
-	void glRenderer::SetClearColor_Impl(const ColorRGBA& color)
+	void glRenderer::SetClearColor_Impl(const Color& color)
 	{
 		glClearColor(color.r, color.g, color.b, color.a);
 	}
@@ -58,13 +58,13 @@ namespace Guava::OpenGL
 				switch (severity)
 				{
 				case GL_DEBUG_SEVERITY_HIGH:
-					GUAVA_CORE_ERROR("OpenGL error: {0}", msg); break;
+					GUAVA_CORE_ERROR("OpenGL: {0}", msg); break;
 
 				case GL_DEBUG_SEVERITY_MEDIUM:
-					GUAVA_CORE_WARN("OpenGL warning: {0}", msg); break;
+					GUAVA_CORE_WARN("OpenGL: {0}", msg); break;
 
 				case GL_DEBUG_SEVERITY_LOW:
-					GUAVA_CORE_WARN("OpenGL warning: {0}", msg); break;
+					GUAVA_CORE_WARN("OpenGL: {0}", msg); break;
 
 				case GL_DEBUG_SEVERITY_NOTIFICATION:
 					break;// GUAVA_CORE_TRACE("OpenGL: {0}", msg); break;

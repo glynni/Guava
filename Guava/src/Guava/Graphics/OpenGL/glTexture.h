@@ -7,16 +7,7 @@ namespace Guava::OpenGL
 	{
 	public:
 
-		struct Info
-		{
-			GLenum MinFilter = GL_LINEAR;
-			GLenum MagFilter = GL_LINEAR;
-			GLenum WrapS = GL_CLAMP_TO_EDGE;
-			GLenum WrapT = GL_CLAMP_TO_EDGE;
-			GLenum PixelFormat = GL_RGB;
-		};
-
-		glTexture(const Guava::Texture::Description& description, const std::string_view path);
+		glTexture(const std::string_view path, const TextureCreationInfo& description);
 		~glTexture();
 
 		void Bind() override;
@@ -24,5 +15,9 @@ namespace Guava::OpenGL
 	private:
 
 		GLuint m_Texture;
+
+		void CreateTexture();
+		void CreateStorage();
+		void SetTextureParameter(GLenum id, GLint parameter);
 	};
 }

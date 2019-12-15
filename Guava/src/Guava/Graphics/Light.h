@@ -5,9 +5,9 @@ namespace Guava
 {
 	struct Light
 	{	
-		float		Intensity = 1.0f;
-		glm::vec3	Position;
-		ColorRGBA	Color;
+		float			Intensity = 1.0f;
+		glm::vec4		Position;
+		Guava::Color	Color;
 	};
 }
 

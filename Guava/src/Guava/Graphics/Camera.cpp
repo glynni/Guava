@@ -3,164 +3,109 @@
 
 namespace Guava
 {
-	Camera::Camera() :
+	static constexpr glm::vec3 s_Up = glm::vec3(0.0f, 1.0f, 0.0f);
+	static constexpr glm::vec4 s_Forward = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
+	static constexpr glm::vec4 s_Right = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
 
-		m_Position(glm::vec3(0.0f, 0.0f, 0.0f)),
-
-		m_ForwardVector(glm::vec3(0.0f, 0.0f, -1.0f)),	// Z axis points into camera
-		m_RightVector(glm::vec3(1.0f, 0.0f, 0.0f)),
-
-		m_MoveVector(glm::vec3(0.0f)),
-
-		m_ViewMatrix(glm::lookAt(m_Position, m_Position + m_ForwardVector, m_UpVector)),
-
-		m_UnitsPerSecond(200.f),
-		m_RotationSpeed(0.2f),
-
-		m_Pitch(0.0f),
-		m_Yaw(90.0f),
-
-		m_Changed(true),
-		m_MoveLeft(false),
-		m_MoveRight(false),
-		m_MoveBackwards(false),
-		m_MoveForwards(false),
-		m_MoveUpwards(false),
-		m_MoveDownwards(false)
+	FreeFlyCamera::FreeFlyCamera(const glm::vec3& pos, const glm::vec3& lookAtDir) :
+		m_ViewMatrix(),
+		m_EyePosition(pos),
+		m_LookAtDir(lookAtDir),
+		m_PitchAngle(0.0f),
+		m_YawAngle(0.0f),
+		m_MoveVector(0.0f),
+		m_Speed(1.0f),
+		m_RotationSpeed(1.0f),
+		m_NeedsUpdate(true)
 	{
-		Update(0.0f);
+		auto xz_vector = glm::normalize(glm::vec2(lookAtDir.x, lookAtDir.z));
+		m_YawAngle = glm::mod(glm::degrees(acos(glm::dot(xz_vector, glm::vec2(0.0f, -1.0f)))), 360.f);
+
+		auto yz_vector = glm::normalize(glm::vec2(lookAtDir.y, lookAtDir.z));
+		m_PitchAngle = glm::degrees(acos(glm::dot(yz_vector, glm::vec2(1.0f, -1.0f))));
+
+		if (m_PitchAngle > 90.f)
+			m_PitchAngle = 180.f - m_PitchAngle;
+		else if (m_PitchAngle < -90.f)
+			m_PitchAngle = -180.f - m_PitchAngle;
+
+		m_PitchAngle = glm::clamp(m_PitchAngle, -89.5f, 89.5f);
+
 	}
 
-	void Camera::Update(double dt)
+	const glm::mat4& FreeFlyCamera::GetViewMatrix()
 	{
-		if (m_Changed)
-		{
-			const float pitch = glm::radians(m_Pitch);
-			const float yaw = glm::radians(m_Yaw);
+		Update();
 
-			m_ForwardVector = -glm::normalize(glm::vec3{
-
-				cos(pitch)* cos(yaw),
-				sin(pitch),
-				cos(pitch)* sin(yaw)
-			});
-
-			m_MoveVector = glm::vec3(0.0f);
-			m_RightVector = -normalize(cross(m_UpVector, m_ForwardVector));
-
-			if (m_MoveForwards)
-				m_MoveVector += m_ForwardVector;
-
-			if (m_MoveBackwards)
-				m_MoveVector -= m_ForwardVector;
-
-			if (m_MoveLeft)
-				m_MoveVector -= m_RightVector;
-
-			if (m_MoveRight)
-				m_MoveVector += m_RightVector;
-
-			if (m_MoveUpwards)
-				m_MoveVector += m_UpVector;
-
-			if (m_MoveDownwards)
-				m_MoveVector -= m_UpVector;
-
-			if(length(m_MoveVector) != 0.f)
-				m_MoveVector = normalize(m_MoveVector) * m_UnitsPerSecond * (float)dt;
-
-			m_Position += m_MoveVector;
-
-			m_ViewMatrix = lookAt(m_Position, m_Position + m_ForwardVector, m_UpVector);
-
-			m_MoveLeft = false;
-			m_MoveRight = false;
-			m_MoveBackwards = false;
-			m_MoveForwards = false;
-			m_MoveUpwards = false;
-			m_MoveDownwards = false;
-
-			m_Changed = false;
-		}
+		return m_ViewMatrix;
 	}
 
-	void Camera::SetPosition(const glm::vec3& position)
+	const glm::vec3& FreeFlyCamera::GetEyePosition()
 	{
-		m_Position = position;
-		m_Changed = true;
+		Update();
+
+		return m_EyePosition;
 	}
 
-	void Camera::SetMoveSpeed(float unitsPerSec)
+	void FreeFlyCamera::Yaw(const float degrees)
 	{
-		m_UnitsPerSecond = unitsPerSec;
+		m_YawAngle += degrees * m_RotationSpeed;
+		m_YawAngle = glm::mod(m_YawAngle, 360.f);
+
+		m_NeedsUpdate = true;
 	}
 
-	void Camera::SetRotationSpeed(float speed)
+	void FreeFlyCamera::Pitch(const float degrees)
+	{
+		m_PitchAngle += degrees * m_RotationSpeed;
+		m_PitchAngle = glm::clamp(m_PitchAngle, -89.5f, 89.5f);
+
+		m_NeedsUpdate = true;
+	}
+
+	void FreeFlyCamera::SetMoveSpeed(const float speed)
+	{
+		m_Speed = speed;
+	}
+
+	void FreeFlyCamera::SetRotationSpeed(const float speed)
 	{
 		m_RotationSpeed = speed;
 	}
 
-	void Camera::MoveLeft()
+	void FreeFlyCamera::Move(const float x, const float y, const float z)
 	{
-		m_MoveLeft = m_Changed = true;
+		m_MoveVector.x += x;
+		m_MoveVector.y += y;
+		m_MoveVector.z += z;
+
+		m_NeedsUpdate = true;
 	}
 
-	void Camera::MoveRight()
+	void FreeFlyCamera::Update()
 	{
-		m_MoveRight = m_Changed = true;
-	}
+		if (m_NeedsUpdate)
+		{
+			const glm::mat4 yawRotation = glm::rotate(glm::radians(m_YawAngle), s_Up);
+			const glm::vec3 actualRight = glm::normalize(yawRotation * s_Right);
 
-	void Camera::MoveBackwards()
-	{
-		m_MoveBackwards = m_Changed = true;
-	}
+			const glm::mat4 fullRotation = glm::rotate(glm::radians(m_PitchAngle), actualRight) * yawRotation;
+			const glm::vec3 actualForward = glm::normalize(fullRotation * s_Forward);
 
-	void Camera::MoveForwards()
-	{
-		m_MoveForwards = m_Changed = true;
-	}
+			const glm::vec3 offset = {
+				actualRight		* m_MoveVector.x +
+				s_Up			* m_MoveVector.y +
+				actualForward	* m_MoveVector.z };
 
-	void Camera::MoveUpwards()
-	{
-		m_MoveUpwards = m_Changed = true;
-	}
+			m_EyePosition += offset * m_Speed;
 
-	void Camera::MoveDownWards()
-	{
-		m_MoveDownwards = m_Changed = true;
-	}
+			m_ViewMatrix = glm::lookAt(
+				m_EyePosition,
+				m_EyePosition + actualForward,
+				s_Up );
 
-	void Camera::Pitch(float pitch)
-	{
-		if (pitch != 0.f){
-
-			m_Pitch -= (pitch * m_RotationSpeed);
-
-			// Don't touch up vector
-			if (m_Pitch > 89.f)
-				m_Pitch = 89.f;
-			else if (m_Pitch < -89.f)
-				m_Pitch = -89.f;
-
-			m_Changed = true;
+			m_MoveVector = glm::vec3(0.0f);
+			m_NeedsUpdate = false;
 		}
-	}
-
-	void Camera::Yaw(float yaw)
-	{
-		if (yaw != 0.f) {
-
-			m_Yaw = glm::mod(m_Yaw -= (yaw * m_RotationSpeed), 360.f);
-			m_Changed = true;
-		}
-	}
-
-	const glm::mat4& Camera::GetViewMatrix() const
-	{
-		return m_ViewMatrix;
-	}
-	const glm::vec3& Camera::GetPosition() const
-	{
-		return m_Position;
 	}
 }

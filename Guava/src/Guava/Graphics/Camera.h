@@ -1,5 +1,4 @@
 #pragma once
-#include <glm.hpp>
 
 namespace Guava
 {
@@ -7,52 +6,46 @@ namespace Guava
 	{
 	public:
 
-		Camera();
-		~Camera() = default;
+		virtual ~Camera() = default;
 
-		void Update(double dt);
+		virtual const glm::mat4& GetViewMatrix() = 0;
+		virtual const glm::vec3& GetEyePosition() = 0;
+	};
 
-		void SetPosition(const glm::vec3& position);
-		void SetMoveSpeed(float unitsPerSec);
-		void SetRotationSpeed(float speed);
+	class FreeFlyCamera : public Camera
+	{
+	public:
 
-		void MoveLeft();	
-		void MoveRight();	
-		void MoveBackwards();
-		void MoveForwards();
-		void MoveUpwards();
-		void MoveDownWards();
+		FreeFlyCamera(const glm::vec3& pos = glm::vec3(), const glm::vec3& lookAtDir = glm::vec3(0.0f, 0.0f, -1.0f));
 
-		void Pitch(float pitch);
-		void Yaw(float yaw);
+		const glm::mat4& GetViewMatrix() override;
+		const glm::vec3& GetEyePosition() override;
 
-		const glm::mat4& GetViewMatrix() const;
-		const glm::vec3& GetPosition() const;
+		void Yaw(const float degrees);
+		void Pitch(const float degrees);
+
+		void SetMoveSpeed(const float speed);
+		void SetRotationSpeed(const float speed);
+
+		// right, up, forward
+		void Move(const float x, const float y, const float z);
 
 	private:
 
-		bool	m_Changed;
+		glm::mat4 m_ViewMatrix;
 
-		bool	m_MoveLeft;
-		bool	m_MoveRight;
-		bool	m_MoveBackwards;
-		bool	m_MoveForwards;
-		bool	m_MoveUpwards;
-		bool	m_MoveDownwards;
+		glm::vec3 m_EyePosition;
+		glm::vec3 m_LookAtDir;
+		glm::vec3 m_MoveVector;
 
-		float	m_UnitsPerSecond;
-		float	m_RotationSpeed;
+		float m_PitchAngle;
+		float m_YawAngle;
 
-		float	m_Pitch;
-		float	m_Yaw;
+		float m_Speed;
+		float m_RotationSpeed;
 
-		glm::vec3	m_Position;			// Point
-		glm::vec3	m_MoveVector;		// Direction
-		glm::vec3	m_ForwardVector;	// Direction
-		glm::vec3	m_RightVector;		// Direction
+		bool m_NeedsUpdate;
 
-		glm::mat4	m_ViewMatrix;
-
-		constexpr static glm::vec3 m_UpVector = glm::vec3(0.0f, 1.0f, 0.0f);
+		void Update();
 	};
 }

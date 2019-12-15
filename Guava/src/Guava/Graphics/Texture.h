@@ -2,54 +2,72 @@
 
 namespace Guava
 {
+	struct PixelRGB8
+	{
+		uint8_t r, g, b;
+	};
+	struct PixelRGBA8
+	{
+		uint8_t r, g, b, a;
+	};
+
+	typedef std::vector<unsigned char>	ByteBuffer;
+	typedef std::vector<PixelRGB8>		BufferRGB8;
+	typedef std::vector<PixelRGBA8>		BufferRGBA8;
+
+	enum class TextureType
+	{
+		Texture2D
+	};
+	enum class TextureFilterMode
+	{
+		Nearest,
+		Linear
+	};
+	enum class TextureWrappingMode
+	{
+		EdgeClamp
+	};
+	enum class TexturePixelFormat
+	{
+		RGB8,
+		RGBA8
+	};
+	
+	struct TextureCreationInfo
+	{
+		TextureType Type = TextureType::Texture2D;
+
+		TextureFilterMode MinFiltering = TextureFilterMode::Linear;
+		TextureFilterMode MagFiltering = TextureFilterMode::Linear;
+
+		TextureWrappingMode HorizontalWrapping =	TextureWrappingMode::EdgeClamp;
+		TextureWrappingMode VerticalWrapping =		TextureWrappingMode::EdgeClamp;
+
+		TexturePixelFormat ClientFormat =	TexturePixelFormat::RGB8;
+		TexturePixelFormat GPUFormat =		TexturePixelFormat::RGBA8;
+
+		bool FlipVertically = true;
+	};
+
 	class Texture
 	{
 	public:
 
-		enum class FilterMode
-		{
-			Nearest,
-			Linear
-		};
-		enum class WrappingMode
-		{
-			EdgeClamp
-		};
-		enum class PixelFormat
-		{
-			RGB = 3,
-			RGBA = 4
-		};
-		struct Description
-		{
-			int Width = 0;
-			int Height = 0;
-
-			FilterMode MinFiltering = FilterMode::Linear;
-			FilterMode MagFiltering = FilterMode::Linear;
-
-			WrappingMode HorizontalWrapping = WrappingMode::EdgeClamp;
-			WrappingMode VerticalWrapping = WrappingMode::EdgeClamp;
-
-			PixelFormat PixelFormat = PixelFormat::RGBA;
-		};
-
 		virtual ~Texture() = default;
 
-		const std::vector<unsigned char>& GetPixelData() const;
-		const Description& GetTextureInfo() const;
-
-		void ReleaseMemory();
 		virtual void Bind() = 0;
 
-		static Texture* Create(const Texture::Description& desc, const std::string_view filePath);
+		static Texture* Create(const std::string_view filePath, const TextureCreationInfo& desc = TextureCreationInfo());
 
 	protected:
 
-		Texture(const Texture::Description& desc, std::string_view path);
+		Texture(const std::string_view filePath, const TextureCreationInfo& desc);
 
-		std::vector<unsigned char>	m_PixelData;
-		Description						m_Info;
+		ByteBuffer			m_PixelData;
+		TextureCreationInfo	m_Info;
+		unsigned int		m_Width;
+		unsigned int		m_Height;
 	};
 
 	class TextureBoundaries

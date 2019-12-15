@@ -20,4 +20,30 @@ namespace Guava
 			GUAVA_CORE_ERROR("Textfile could not be opened: {0}", path);
 		}
 	}
+
+	std::string GetFileDirectory(const std::string_view path)
+	{
+		if (path.empty())
+			return "";
+
+		size_t pos = path.find_last_of('/');
+
+		if (pos == std::string::npos)
+			return "";
+			
+		return std::string(path.substr(0, pos + 1));
+	}
+
+	std::string GetFileExtension(const std::string_view path)
+	{
+		if (path.empty())
+			return "";
+
+		size_t pos = path.find_last_of('.');
+
+		if (pos == std::string::npos)
+			return "";
+
+		return std::string(path.substr(pos + 1));
+	}
 }

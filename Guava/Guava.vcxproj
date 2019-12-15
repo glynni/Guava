@@ -111,9 +111,8 @@
     <ClInclude Include="src\Guava\Graphics\BufferLayout.h" />
     <ClInclude Include="src\Guava\Graphics\Camera.h" />
     <ClInclude Include="src\Guava\Graphics\Color.h" />
-    <ClInclude Include="src\Guava\Graphics\Mesh.h" />
     <ClInclude Include="src\Guava\Graphics\OpenGL\glBuffer.h" />
-    <ClInclude Include="src\Guava\Graphics\OpenGL\glMesh.h" />
+    <ClInclude Include="src\Guava\Graphics\OpenGL\glModel.h" />
     <ClInclude Include="src\Guava\Graphics\OpenGL\glRenderer.h" />
     <ClInclude Include="src\Guava\Graphics\OpenGL\glShader.h" />
     <ClInclude Include="src\Guava\Graphics\OpenGL\glTexture.h" />
@@ -122,6 +121,7 @@
     <ClInclude Include="src\Guava\Graphics\Shader.h" />
     <ClInclude Include="src\Guava\Graphics\Texture.h" />
     <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\Guava\Core\StopWatch.h" />
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
@@ -137,9 +137,8 @@
     <ClCompile Include="src\Guava\Graphics\BufferLayout.cpp" />
     <ClCompile Include="src\Guava\Graphics\Camera.cpp" />
     <ClCompile Include="src\Guava\Graphics\Color.cpp" />
-    <ClCompile Include="src\Guava\Graphics\Mesh.cpp" />
     <ClCompile Include="src\Guava\Graphics\OpenGL\glBuffer.cpp" />
-    <ClCompile Include="src\Guava\Graphics\OpenGL\glMesh.cpp" />
+    <ClCompile Include="src\Guava\Graphics\OpenGL\glModel.cpp" />
     <ClCompile Include="src\Guava\Graphics\OpenGL\glRenderer.cpp" />
     <ClCompile Include="src\Guava\Graphics\OpenGL\glShader.cpp" />
     <ClCompile Include="src\Guava\Graphics\OpenGL\glTexture.cpp" />
@@ -151,6 +150,7 @@
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Guava\Core\StopWatch.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>

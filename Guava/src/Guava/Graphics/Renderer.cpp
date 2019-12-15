@@ -1,9 +1,8 @@
 #include "pch.h"
-#include "Guava/Core/Window.h"
+#include "Renderer.h"
+#include "Model.h"
 #include "OpenGL/glRenderer.h"
-#include "OpenGL/glTexture.h"
-#include "OpenGL/glMesh.h"
-#include "Guava/Core/AssetManager.h"
+#include "Guava/Core/Window.h"
 
 namespace Guava
 {
@@ -15,6 +14,11 @@ namespace Guava
 
 	// Projection
 	static glm::mat4 s_Perspective;
+
+	// Lights
+	static int s_NumLights = 0;
+	constexpr int s_MaxLights = 100;
+	static std::string s_LightUniformArray;
 
 	Renderer::~Renderer()
 	{
@@ -46,7 +50,6 @@ namespace Guava
 
 	void Renderer::Destroy()
 	{
-		AssetManager::ClearAssets();
 		s_Instance.reset();
 	}
 
@@ -55,17 +58,12 @@ namespace Guava
 		s_Instance->ClearScreen_Impl();
 	}
 
-	void Renderer::BeginFrame()
+	void Renderer::RenderFrame()
 	{
-		ClearScreen();
+		s_NumLights = 0;
 	}
 
-	void Renderer::EndFrame()
-	{
-		Window::Present();
-	}
-
-	void Renderer::SetClearColor(const ColorRGBA& color)
+	void Renderer::SetClearColor(const Color& color)
 	{
 		s_Instance->SetClearColor_Impl(color);
 	}
@@ -74,39 +72,46 @@ namespace Guava
 	{
 		auto winSize = Window::GetSize();
 		SetViewport(winSize);
-		s_Perspective = glm::perspective(glm::radians(70.f), (float)winSize.x / (float)winSize.y, 0.1f, 100.f);
+		s_Perspective = glm::perspective(glm::radians(70.f), (float)winSize.x / (float)winSize.y, 0.1f, 1000.f);
 	}
 
-	void Renderer::Draw(const Mesh* mesh, Shader* shader, const Transform& transform, const Camera& camera)
+	void Renderer::Draw(const Model* model, Shader* shader, Transform& transform, Camera& camera)
 	{
 		shader->Bind();
 
 		shader->SetMat4("u_modelMatrix", transform.GetTransform());
+		shader->SetMat3("u_normalMatrix", transform.GetNormalTransform());
 		shader->SetMat4("u_viewMatrix", camera.GetViewMatrix());
 		shader->SetMat4("u_projectionMatrix", s_Perspective);
-		shader->SetVec4("u_eyePos", { camera.GetPosition() , 1.0f});
+		shader->SetVec4("u_eyePos", { camera.GetEyePosition(), 1.0f });
+		shader->SetInt("u_diffuse", 0);
 
-		mesh->Draw();
+		model->Draw();
 	}
 
-	void Renderer::Draw(const Model* model, Shader* shader, const Transform& transform, const Camera& camera)
+	void Renderer::Draw(const Light& light, Shader* shader)
 	{
-		for (const auto& mesh : model->GetMeshList())
-			Draw(mesh.get(), shader, transform, camera);
+		if (s_NumLights < s_MaxLights - 1)
+		{
+			s_LightUniformArray = "u_lights[" + std::to_string(s_NumLights) + "].";
 
+			shader->Bind();
+			shader->SetVec4(s_LightUniformArray + "position_world", light.Position);
+			shader->SetVec4(s_LightUniformArray + "color", light.Color);
+			shader->SetFloat(s_LightUniformArray + "intensity", light.Intensity);
+
+			s_NumLights++;
+			shader->SetInt("u_numLights", s_NumLights);
+		}
 	}
 
-	void Renderer::Draw(const Light& light)
-	{
-	}
-
-	Texture* Renderer::CreateTexture(const std::string_view file, const Texture::Description& description)
+	Texture* Renderer::CreateTexture(const std::string_view file, const TextureCreationInfo& info)
 	{
 		switch (s_RenderAPI)
 		{
 			case RenderAPI::OpenGL:
 			{
-				return new OpenGL::glTexture(description, file);
+				return new OpenGL::glTexture(file, info);
 			}
 			default:
 			{
@@ -115,17 +120,17 @@ namespace Guava
 		}
 	}
 
-	Mesh* Renderer::CreateMesh(const aiMesh* mesh)
+	Model* Renderer::CreateModel(const std::string_view filePath)
 	{
 		switch (s_RenderAPI)
 		{
 			case RenderAPI::OpenGL:
 			{
-				return new OpenGL::glMesh(mesh);
+				return new OpenGL::glModel(filePath);
 			}
 			default:
 			{
-				GUAVA_ASSERT(false, "Unknown render-API specified. Mesh was not created");
+				GUAVA_ASSERT(false, "Unknown render-API specified. Model was not created");
 			}
 		}
 	}
@@ -150,9 +155,9 @@ namespace Guava
 		s_Instance->SetViewport_Impl(size, bottomLeft);
 	}
 
-	void Renderer::SetDrawMode(const PolygonMode drawMode)
+	void Renderer::SetDrawMode(const PolygonMode polyMode)
 	{
-		s_Instance->SetDrawMode_Impl(drawMode);
+		s_Instance->SetDrawMode_Impl(polyMode);
 	}
 
 	Renderer::Renderer()

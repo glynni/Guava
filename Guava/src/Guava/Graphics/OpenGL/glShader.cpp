@@ -26,7 +26,7 @@ namespace Guava::OpenGL
 			// Delete the new line (\n)
 			infoLog[length-1] = ' ';
 
-			GUAVA_CORE_ERROR("OGL error: Shader compilation error {0}", infoLog);
+			GUAVA_CORE_ERROR("OpenGL Shader compilation error {0}", infoLog);
 			GUAVA_ASSERT(false, "Shader compilation failed");
 		}
 
@@ -49,7 +49,7 @@ namespace Guava::OpenGL
 			m_UniformLocations.emplace(uniform, location);
 
 			if (location == -1)
-				GUAVA_CORE_WARN("Uniform {0} could not be found", uniform.data());
+				GUAVA_CORE_WARN("Uniform {0} could not be found or isn't used", uniform.data());
 
 			return location;
 		}
@@ -82,22 +82,50 @@ namespace Guava::OpenGL
 
 	void glShader::SetMat4(const std::string_view variable, const glm::mat4& matrix)
 	{
-		glUniformMatrix4fv(GetUniformLocation(variable), 1, GL_FALSE, &matrix[0][0]);
+		auto location = GetUniformLocation(variable);
+
+		if(location != -1)
+			glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
+	}
+
+	void glShader::SetMat3(const std::string_view variable, const glm::mat3& matrix)
+	{
+		auto location = GetUniformLocation(variable);
+
+		if (location != -1)
+			glUniformMatrix3fv(location, 1, GL_FALSE, &matrix[0][0]);
 	}
 
 	void glShader::SetVec4(const std::string_view variable, const glm::vec4& vec)
 	{
-		glUniform4fv(GetUniformLocation(variable), 1, &vec[0]);
+		auto location = GetUniformLocation(variable);
+
+		if (location != -1)
+			glUniform4fv(location, 1, &vec[0]);
 	}
 
 	void glShader::SetBool(const std::string_view variable, bool b)
 	{
-		glUniform1i(GetUniformLocation(variable), b ? 1 : 0);
+		auto location = GetUniformLocation(variable);
+
+		if (location != -1)
+			glUniform1i(location, b ? 1 : 0);
 	}
 
 	void glShader::SetInt(const std::string_view variable, int i)
 	{
-		glUniform1i(GetUniformLocation(variable), i);
+		auto location = GetUniformLocation(variable);
+
+		if (location != -1)
+			glUniform1i(location, i);
+	}
+
+	void glShader::SetFloat(const std::string_view variable, float i)
+	{
+		auto location = GetUniformLocation(variable);
+
+		if (location != -1)
+			glUniform1f(location, i);
 	}
 
 	void glShader::LoadFromCode(const glShader::Code& code)

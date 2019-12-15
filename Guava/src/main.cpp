@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Guava/Core/Window.h"
 #include "Guava/Core/Input.h"
+#include "Guava/Core/StopWatch.h"
+#include "Guava/Core/AssetManager.h"
 #include "Guava/Graphics/Renderer.h"
 
 using namespace Guava;
@@ -12,76 +14,114 @@ int main()
 	Window::Create("OpenGL Renderer", 800, 600);
 	Input::Create();
 	Renderer::Create(RenderAPI::OpenGL);
+
+	Window::EnableVSync(true);
 	Renderer::SetDrawMode(PolygonMode::Fill);
-	Renderer::SetClearColor(ColorRGBA(0.4f, 0.4f, 0.9f, 1.0f));
+	Renderer::SetClearColor(Color(0.4f, 0.4f, 0.9f, 1.0f));
 
-	Shader*		meshShader = Shader::Create("mesh");
-	Shader*		spriteShader = Shader::Create("sprite");
-	//Model*	hammer = Model::Create("hammer/source/Warhammer.fbx");
-	Model*		pbrChart = Model::Create("pbr-chart.obj");
-	Light		redLight;
-	Camera		camera;
-	Transform	tHammer, tPbr;
+	Shader*			meshShader = Shader::Create("mesh");
+	Model*			nanosuit = Model::Create("nanosuit/nanosuit.obj");
+	Model*			cyborg = Model::Create("cyborg/cyborg.obj");
+	Light			light, lightBlue;
+	FreeFlyCamera	camera(glm::vec3(), glm::vec3(0, 0, -1));
+	Transform		nanoTransform, cyborgTransform;
+	StopWatch		timer;
+	double			numFrames = 0;
+	double			dt = 0, dt_sum = 0;
+	double			tInput = 0, tInputRender = 0;
 
-	std::chrono::high_resolution_clock::time_point	start;
-	std::chrono::duration<float>					frameTime = 0s;
+	light.Position = { 24.0f, -10.0f, 6.0f, 1.0f};
+	light.Color = Color::Red;
+	light.Intensity = 0.6f;
 
-	redLight.Position = { 24.0f, -10.0f, 6.0f };
-	redLight.Color = { 1.0f, 0.3f, 0.3f, 1.0f };
-	redLight.Intensity = 1.0f;
+	lightBlue.Position = { 24.0f, 10.0f, 6.0f, 1.0f };
+	lightBlue.Color = Color::Blue;
+	lightBlue.Intensity = 0.6f;
 
-	camera.SetPosition({0.0f, 0.0f, 0.0f});
-	camera.SetMoveSpeed(50.0f);
+	nanoTransform.SetPosition(-5.f, 0.f, 0.f);
+	nanoTransform.SetScale(1.0f);
 
-	tHammer.SetPosition({ 0.0f, -10.f, -10.f });
-	tHammer.SetScale({ 0.3f, 0.3f, 0.3f });
-	tHammer.SetRotation(0.0f, { 0.0f, 0.0f, 1.0f });
+	cyborgTransform.SetPosition(5.f, 0.f, 0.f);
+	cyborgTransform.SetScale(4.0f);
+
+	camera.SetMoveSpeed(30.f);
+	camera.SetRotationSpeed(0.2f);
 
 	while (!Window::ShouldClose())
 	{
-		start = std::chrono::high_resolution_clock::now();
+		timer.Start();
 
 		// Process input
 		Input::Update();
 
 		if (Input::KeyDown(Key::W))
-			camera.MoveForwards();
+			camera.Move(0, 0, dt);
 		if (Input::KeyDown(Key::S))
-			camera.MoveBackwards();
+			camera.Move(0, 0, -dt);
 		if (Input::KeyDown(Key::A))
-			camera.MoveLeft();
+			camera.Move(-dt, 0, 0);
 		if (Input::KeyDown(Key::D))
-			camera.MoveRight();
+			camera.Move(dt, 0, 0);
 		if (Input::KeyDown(Key::SPACE))
-			camera.MoveUpwards();
+			camera.Move(0, dt, 0);
 		if (Input::KeyDown(Key::LEFT_CONTROL))
-			camera.MoveDownWards();
+			camera.Move(0, -dt, 0);
+
+		if (Input::KeyDown(Key::LEFT))
+			light.Color = Color::Red;
+		if (Input::KeyDown(Key::RIGHT))
+			light.Color = Color::Blue;
+		if (Input::KeyDown(Key::UP))
+			light.Color = Color::White;
+		if (Input::KeyDown(Key::DOWN))
+			light.Color = Color::Green;
 
 		if (Input::MouseDown(MouseButton::RIGHT))
 		{
 			auto& mouseDelta = Input::GetMouseMovement();
 
-			camera.Yaw(-mouseDelta.x);
-			camera.Pitch(-mouseDelta.y);
+			if (mouseDelta.x)
+				camera.Yaw(-mouseDelta.x);
+
+			if (mouseDelta.y)
+				camera.Pitch(-mouseDelta.y);
 		}
 
-		// Update
-		float dt = frameTime.count();
-		camera.Update(dt);
-		tHammer.Rotate(dt * 10.f);
+		tInput += timer.GetTime();
 
 		// Draw
-		Renderer::BeginFrame();
-		Renderer::Draw(redLight);
-		Renderer::Draw(pbrChart, meshShader, tPbr, camera);
-		Renderer::EndFrame();
+		Renderer::ClearScreen();
+		Renderer::Draw(light, meshShader);
+		Renderer::Draw(lightBlue, meshShader);
+		Renderer::Draw(nanosuit, meshShader, nanoTransform, camera);
+		Renderer::Draw(cyborg, meshShader, cyborgTransform, camera);
+		Renderer::RenderFrame();
 
-		frameTime = std::chrono::high_resolution_clock::now() - start;
+		tInputRender += timer.GetTime();
+
+		// This waits for vertical sync, so don't include it in frame time
+		Window::Present();
+
+		numFrames++;
+
+		dt = timer.GetTime();
+		dt_sum += dt;
 	}
 
+	AssetManager::Destroy();
 	Renderer::Destroy();
 	Input::Destroy();
 	Window::Destroy();
 
-	//std::cin.get();
+	// Post stats
+	auto fps = numFrames / dt_sum;
+	auto tRender = (tInputRender - tInput) / numFrames;
+	auto tFrame = tInputRender / numFrames;
+
+	GUAVA_CORE_TRACE("Average stats");
+	GUAVA_CORE_TRACE("FPS:         {0}", fps);
+	GUAVA_CORE_TRACE("Render time: {0} ms", tRender * 1000.0);
+	GUAVA_CORE_TRACE("Frame time:  {0} ms", tFrame * 1000.0);
+
+	std::cin.get();
 }

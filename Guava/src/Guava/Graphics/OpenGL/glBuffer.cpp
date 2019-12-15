@@ -7,6 +7,7 @@ namespace Guava::OpenGL
 	{
 		switch (type)
 		{
+		case Guava::Buffer::Attribute::Type::Vec2f:
 		case Guava::Buffer::Attribute::Type::Vec3f:
 		case Guava::Buffer::Attribute::Type::Vec4f:
 		case Guava::Buffer::Attribute::Type::Mat4f:

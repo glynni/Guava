@@ -15,6 +15,11 @@ namespace Guava
 			{
 				switch (type)
 				{
+				case Attribute::Type::Vec2f:
+					numElements = 2;
+					size = sizeof(float) * numElements;
+					break;
+
 				case Attribute::Type::Vec3f:
 					numElements = 3;
 					size = sizeof(float) * numElements;

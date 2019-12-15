@@ -59,12 +59,12 @@ namespace Guava
 
 	const bool Input::KeyDown(const Key key)
 	{
-		return s_KeyDown[(unsigned int)key];
+		return s_KeyDown.at((unsigned int)key);
 	}
 
 	const bool Input::MouseDown(const MouseButton btn)
 	{
-		return s_MouseButtonDown[(unsigned int)btn];
+		return s_MouseButtonDown.at((unsigned int)btn);
 	}
 
 	const glm::vec2& Input::GetMousePosition()

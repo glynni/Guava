@@ -8,6 +8,7 @@
 
 // Vector math
 #include <glm.hpp>
+#include <gtx/transform.hpp>
 #include <gtc/matrix_transform.hpp>
 
 // Model import

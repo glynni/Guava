@@ -10,6 +10,7 @@ namespace Guava
 		{
 			enum class Type
 			{
+				Vec2f,
 				Vec3f,
 				Vec4f,
 				Mat4f
