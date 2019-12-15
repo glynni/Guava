@@ -33,13 +33,7 @@
     <ClInclude Include="src\Guava\Core\Log.h">
       <Filter>src\Guava\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Guava\Core\Memory\PoolVector.h">
-      <Filter>src\Guava\Core\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="src\Guava\Core\Transform.h">
-      <Filter>src\Guava\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Guava\Core\Utility.h">
       <Filter>src\Guava\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Guava\Core\Window.h">
@@ -92,6 +86,11 @@
     <ClInclude Include="src\Guava\Graphics\OpenGL\glModel.h">
       <Filter>src\Guava\Graphics\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Guava\Library\Pool.h">
+      <Filter>src\Guava\Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Guava\Library\String.h" />
+    <ClInclude Include="src\Guava\Library\File.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Guava\Core\Core.cpp">
@@ -101,9 +100,6 @@
       <Filter>src\Guava\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Guava\Core\Transform.cpp">
-      <Filter>src\Guava\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Guava\Core\Utility.cpp">
       <Filter>src\Guava\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Guava\Core\Window.cpp">
@@ -159,5 +155,7 @@
     <ClCompile Include="src\Guava\Graphics\OpenGL\glModel.cpp">
       <Filter>src\Guava\Graphics\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Guava\Library\String.cpp" />
+    <ClCompile Include="src\Guava\Library\File.cpp" />
   </ItemGroup>
 </Project>

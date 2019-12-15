@@ -20,11 +20,11 @@ namespace Guava
 		virtual ~Model() = default;
 		virtual void Draw() const = 0;
 
-		static Model* Create(const std::string_view filePath);
+		static Model* Create(const StringView filePath);
 
 	protected:
 
-		Model(const std::string_view filePath);
+		Model(const StringView filePath);
 
 		MeshBuffer		m_Meshes;
 		VertexBuffer	m_Vertices;
@@ -33,9 +33,13 @@ namespace Guava
 
 	private:
 
-		void LoadModel_Assimp(const std::string_view filePath);
+		// Assimp loading
+		void LoadModel_Assimp(const StringView filePath);
 		void LoadMesh_Assimp(const aiMesh* mesh);
-		void LoadMaterials_Assimp(const aiScene* scene, const std::string_view filePath);
+		void LoadMaterials_Assimp(const aiScene* scene, const StringView filePath);
+		
+		// Custom .obj loading
+		void LoadModel_OBJ(const StringView filePath);
 
 		void ReserveMemory(size_t numMeshes, size_t numVertices, size_t numIndices, size_t numMaterials);
 	};

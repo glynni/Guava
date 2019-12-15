@@ -6,15 +6,18 @@
 
 namespace Guava
 {
-	Shader* Shader::Create(const std::string_view name)
+	static const String s_VsEnding("_vertex.glsl");
+	static const String s_FsEnding("_fragment.glsl");
+
+	Shader* Shader::Create(const StringView name)
 	{
 		return AssetManager::GetShader(name);
 	}
 
-	Shader::Shader(const std::string_view filePath)
+	Shader::Shader(const StringView filePath)
 	{
-		m_Code.VertexShader = ReadTextFile(std::string(filePath) + "_vertex.glsl");
-		m_Code.FragmentShader = ReadTextFile(std::string(filePath) + "_fragment.glsl");
+		m_VertexFile.reset(new File::TextFile(filePath.data() + s_VsEnding));
+		m_FragmentFile.reset(new File::TextFile(filePath.data() + s_FsEnding));
 	}
 }
 

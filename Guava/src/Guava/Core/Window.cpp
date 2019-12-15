@@ -7,7 +7,7 @@ namespace Guava
 	static GLFWwindow* s_GlfwWindow = nullptr;
 	static std::unique_ptr<Window::Data> s_Data;
 
-	bool Window::Create(const std::string_view title, unsigned int width, unsigned int height)
+	bool Window::Create(const StringView title, unsigned int width, unsigned int height)
 	{
 		auto result = glfwInit();
 		GUAVA_ASSERT(result == GLFW_TRUE, "GLFW: Unable to initialize library.");

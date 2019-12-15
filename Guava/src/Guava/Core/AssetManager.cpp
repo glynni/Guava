@@ -18,7 +18,7 @@ namespace Guava
 	static Storage<Model>	Models;
 
 	template<typename T>
-	static T* Contains(const Storage<T>& container, std::string_view key)
+	static T* Contains(const Storage<T>& container, StringView key)
 	{
 		auto& result = std::find_if(container.begin(), container.end(), [&](auto& pair)
 		{
@@ -31,7 +31,7 @@ namespace Guava
 		return nullptr;
 	}
 
-	Texture* AssetManager::GetTexture(const std::string_view file, const TextureCreationInfo& info)
+	Texture* AssetManager::GetTexture(const StringView file, const TextureCreationInfo& info)
 	{
 		std::string key = TextureDir + file.data();
 
@@ -52,7 +52,7 @@ namespace Guava
 		return t;
 	}
 
-	Shader* AssetManager::GetShader(const std::string_view name)
+	Shader* AssetManager::GetShader(const StringView name)
 	{
 		std::string key = ShaderDir + name.data();
 
@@ -73,7 +73,7 @@ namespace Guava
 		return s;
 	}
 
-	Model* AssetManager::GetModel(const std::string_view file)
+	Model* AssetManager::GetModel(const StringView file)
 	{
 		std::string key = ModelDir + file.data();
 

@@ -6,12 +6,12 @@
 
 namespace Guava
 {
-	Texture* Texture::Create(const std::string_view filePath, const TextureCreationInfo& desc)
+	Texture* Texture::Create(const StringView filePath, const TextureCreationInfo& desc)
 	{
 		return AssetManager::GetTexture(filePath, desc);
 	}
 
-	Texture::Texture(const std::string_view filePath, const TextureCreationInfo& desc)
+	Texture::Texture(const StringView filePath, const TextureCreationInfo& desc)
 	{
 		m_Info = desc;
 

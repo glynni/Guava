@@ -7,7 +7,7 @@ namespace Guava::OpenGL
 	{
 	public:
 
-		glTexture(const std::string_view path, const TextureCreationInfo& description);
+		glTexture(const StringView path, const TextureCreationInfo& description);
 		~glTexture();
 
 		void Bind() override;

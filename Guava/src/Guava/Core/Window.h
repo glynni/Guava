@@ -15,7 +15,7 @@ namespace Guava
 		// This is a static class matey
 		Window() = delete;
 
-		static bool Create(const std::string_view title, unsigned int width, unsigned int height);
+		static bool Create(const StringView title, unsigned int width, unsigned int height);
 		static void Destroy();
 
 		static void PollEvents();

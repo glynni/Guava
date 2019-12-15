@@ -105,7 +105,7 @@ namespace Guava
 		}
 	}
 
-	Texture* Renderer::CreateTexture(const std::string_view file, const TextureCreationInfo& info)
+	Texture* Renderer::CreateTexture(const StringView file, const TextureCreationInfo& info)
 	{
 		switch (s_RenderAPI)
 		{
@@ -120,7 +120,7 @@ namespace Guava
 		}
 	}
 
-	Model* Renderer::CreateModel(const std::string_view filePath)
+	Model* Renderer::CreateModel(const StringView filePath)
 	{
 		switch (s_RenderAPI)
 		{
@@ -135,7 +135,7 @@ namespace Guava
 		}
 	}
 
-	Shader* Renderer::CreateShader(const std::string_view name)
+	Shader* Renderer::CreateShader(const StringView name)
 	{
 		switch (s_RenderAPI)
 		{

@@ -11,19 +11,22 @@ namespace Guava
 		Buffer::Attribute::Type::Vec2f
 	};
 
-	Model::Model(const std::string_view filePath)
+	Model::Model(const StringView filePath)
 	{
-		std::string extension = GetFileExtension(filePath);
+		Substring extension = File::GetExtension(filePath);
 
-		LoadModel_Assimp(filePath);
+		if (extension == "obj")
+			LoadModel_OBJ(filePath);
+		else
+			LoadModel_Assimp(filePath);
 	}
 
-	Model* Model::Create(const std::string_view filePath)
+	Model* Model::Create(const StringView filePath)
 	{
 		return AssetManager::GetModel(filePath);
 	}
 
-	void Model::LoadModel_Assimp(const std::string_view filePath)
+	void Model::LoadModel_Assimp(const StringView filePath)
 	{
 		Assimp::Importer importer;
 
@@ -124,9 +127,9 @@ namespace Guava
 		}
 	}
 
-	void Model::LoadMaterials_Assimp(const aiScene* scene, const std::string_view filePath)
+	void Model::LoadMaterials_Assimp(const aiScene* scene, const StringView filePath)
 	{
-		std::string fileDir = GetFileDirectory(filePath);
+		Substring fileDir = File::GetDirectory(filePath);
 
 		for (unsigned int i = 0; i < scene->mNumMaterials; ++i)
 		{
@@ -135,7 +138,59 @@ namespace Guava
 			aiString diffuseTexture;
 
 			if (AI_SUCCESS == material->Get(AI_MATKEY_TEXTURE_DIFFUSE(0), diffuseTexture))
-				newMaterial.Diffuse = Texture::Create(fileDir + diffuseTexture.C_Str());
+			{
+				String diffPath(fileDir);
+				diffPath.append(diffuseTexture.C_Str());
+
+				newMaterial.Diffuse = Texture::Create(diffPath);
+			}
+		}
+	}
+
+	void Model::LoadModel_OBJ(const StringView filePath)
+	{
+		using namespace File;
+
+		TextFile file(filePath);
+
+		if (!file.IsEmpty())
+		{
+			SubstringBuffer splitLine, splitFace;
+			auto& lines = file.ExtractLines();
+
+			for (auto line : lines)
+			{
+				SplitString(line, ' ', splitLine);
+
+				if (!splitLine.empty())
+				{
+					if ("o" == splitLine[0])
+					{
+						// mesh
+					}
+					else if ("v" == splitLine[0])
+					{
+						// vertex
+					}
+					else if ("vn" == splitLine[0])
+					{
+						// normal
+					}
+					else if ("vt" == splitLine[0])
+					{
+						// uv
+					}
+					else if ("f" == splitLine[0])
+					{
+						// faces
+					}
+					else if ("mtllib" == splitLine[0])
+					{
+						// material file
+					}
+				}
+			}
+
 		}
 	}
 

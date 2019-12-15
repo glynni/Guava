@@ -46,4 +46,6 @@
 
 // Guava
 #include "Guava/Core/Log.h"
-#include "Guava/Core/Memory/PoolVector.h"
+#include "Guava/Library/Pool.h"
+#include "Guava/Library/String.h"
+#include "Guava/Library/File.h"

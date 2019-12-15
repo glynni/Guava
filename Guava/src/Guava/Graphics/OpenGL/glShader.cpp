@@ -5,7 +5,7 @@ namespace Guava::OpenGL
 {
 	static GLuint s_CurrentProgram = -1;
 
-	static GLuint CreateGLShader(GLenum shaderType, const std::string_view code)
+	static GLuint CreateGLShader(GLenum shaderType, const StringView code)
 	{
 		GLuint handle = glCreateShader(shaderType);
 		GLint status;
@@ -33,7 +33,7 @@ namespace Guava::OpenGL
 		return handle;
 	}
 
-	GLint glShader::GetUniformLocation(const std::string_view uniform)
+	GLint glShader::GetUniformLocation(const StringView uniform)
 	{
 		GLint location;
 		const auto& result = std::find_if(m_UniformLocations.begin(), m_UniformLocations.end(),
@@ -57,10 +57,10 @@ namespace Guava::OpenGL
 			return result->second;
 	}
 
-	glShader::glShader(const std::string_view name) : Guava::Shader(name),
+	glShader::glShader(const StringView name) : Guava::Shader(name),
 		m_ShaderProgram(0), m_VertexShader(0), m_FragmentShader(0)
 	{
-		LoadFromCode(m_Code);
+		LoadFromFiles();
 	}
 
 	glShader::~glShader()
@@ -80,7 +80,7 @@ namespace Guava::OpenGL
 		}
 	}
 
-	void glShader::SetMat4(const std::string_view variable, const glm::mat4& matrix)
+	void glShader::SetMat4(const StringView variable, const glm::mat4& matrix)
 	{
 		auto location = GetUniformLocation(variable);
 
@@ -88,7 +88,7 @@ namespace Guava::OpenGL
 			glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
 	}
 
-	void glShader::SetMat3(const std::string_view variable, const glm::mat3& matrix)
+	void glShader::SetMat3(const StringView variable, const glm::mat3& matrix)
 	{
 		auto location = GetUniformLocation(variable);
 
@@ -96,7 +96,7 @@ namespace Guava::OpenGL
 			glUniformMatrix3fv(location, 1, GL_FALSE, &matrix[0][0]);
 	}
 
-	void glShader::SetVec4(const std::string_view variable, const glm::vec4& vec)
+	void glShader::SetVec4(const StringView variable, const glm::vec4& vec)
 	{
 		auto location = GetUniformLocation(variable);
 
@@ -104,7 +104,7 @@ namespace Guava::OpenGL
 			glUniform4fv(location, 1, &vec[0]);
 	}
 
-	void glShader::SetBool(const std::string_view variable, bool b)
+	void glShader::SetBool(const StringView variable, bool b)
 	{
 		auto location = GetUniformLocation(variable);
 
@@ -112,7 +112,7 @@ namespace Guava::OpenGL
 			glUniform1i(location, b ? 1 : 0);
 	}
 
-	void glShader::SetInt(const std::string_view variable, int i)
+	void glShader::SetInt(const StringView variable, int i)
 	{
 		auto location = GetUniformLocation(variable);
 
@@ -120,7 +120,7 @@ namespace Guava::OpenGL
 			glUniform1i(location, i);
 	}
 
-	void glShader::SetFloat(const std::string_view variable, float i)
+	void glShader::SetFloat(const StringView variable, float i)
 	{
 		auto location = GetUniformLocation(variable);
 
@@ -128,12 +128,12 @@ namespace Guava::OpenGL
 			glUniform1f(location, i);
 	}
 
-	void glShader::LoadFromCode(const glShader::Code& code)
+	void glShader::LoadFromFiles()
 	{
 		m_ShaderProgram = glCreateProgram();
 
-		m_VertexShader = CreateGLShader(GL_VERTEX_SHADER, code.VertexShader);
-		m_FragmentShader = CreateGLShader(GL_FRAGMENT_SHADER, code.FragmentShader);
+		m_VertexShader = CreateGLShader(GL_VERTEX_SHADER, m_VertexFile->GetContent());
+		m_FragmentShader = CreateGLShader(GL_FRAGMENT_SHADER, m_FragmentFile->GetContent());
 
 		glAttachShader(m_ShaderProgram, m_VertexShader);
 		glAttachShader(m_ShaderProgram, m_FragmentShader);
@@ -141,6 +141,7 @@ namespace Guava::OpenGL
 		glLinkProgram(m_ShaderProgram);
 
 		// Free Memory
-		m_Code = Shader::Code();
+		m_VertexFile.reset();
+		m_FragmentFile.reset();
 	}
 }

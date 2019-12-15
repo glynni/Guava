@@ -7,9 +7,9 @@ namespace Guava
 	{
 	public:
 
-		static Texture*	GetTexture(const std::string_view file, const TextureCreationInfo& info);
-		static Shader*	GetShader(const std::string_view name);
-		static Model*	GetModel(const std::string_view file);
+		static Texture*	GetTexture(const StringView file, const TextureCreationInfo& info);
+		static Shader*	GetShader(const StringView name);
+		static Model*	GetModel(const StringView file);
 
 		static void Destroy();
 	};

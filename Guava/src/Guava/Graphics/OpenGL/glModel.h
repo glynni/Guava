@@ -9,7 +9,7 @@ namespace Guava::OpenGL
 	{
 	public:
 
-		glModel(const std::string_view filePath);
+		glModel(const StringView filePath);
 
 		void Draw() const override;
 

@@ -1,13 +1,13 @@
 #pragma once
 
-namespace Guava::Memory
+namespace Guava
 {
 	template<typename T>
-	class PoolVector
+	class Pool
 	{
 	public:
 
-		PoolVector() {}
+		Pool() {}
 
 		void Reset()
 		{

@@ -14,7 +14,7 @@ namespace Guava::OpenGL
 	static const GLinternalFormat GetGLclientFormat(const TextureCreationInfo& tci);
 	static const GLenum GetGLinternalFormat(const TextureCreationInfo& tci);
 
-	glTexture::glTexture(const std::string_view path, const TextureCreationInfo& description) : Guava::Texture(path, description), m_Texture(0)
+	glTexture::glTexture(const StringView path, const TextureCreationInfo& description) : Guava::Texture(path, description), m_Texture(0)
 	{
 		CreateTexture();
 

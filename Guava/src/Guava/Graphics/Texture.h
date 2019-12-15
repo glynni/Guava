@@ -58,11 +58,11 @@ namespace Guava
 
 		virtual void Bind() = 0;
 
-		static Texture* Create(const std::string_view filePath, const TextureCreationInfo& desc = TextureCreationInfo());
+		static Texture* Create(const StringView filePath, const TextureCreationInfo& desc = TextureCreationInfo());
 
 	protected:
 
-		Texture(const std::string_view filePath, const TextureCreationInfo& desc);
+		Texture(const StringView filePath, const TextureCreationInfo& desc);
 
 		ByteBuffer			m_PixelData;
 		TextureCreationInfo	m_Info;

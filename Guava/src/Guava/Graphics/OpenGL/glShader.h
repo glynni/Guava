@@ -7,17 +7,17 @@ namespace Guava::OpenGL
 	{
 	public:
 
-		glShader(const std::string_view name);
+		glShader(const StringView name);
 		~glShader();
 
 		void Bind() override;
 
-		void SetMat4(const std::string_view variable, const glm::mat4& matrix) override;
-		void SetMat3(const std::string_view variable, const glm::mat3& matrix) override;
-		void SetVec4(const std::string_view variable, const glm::vec4& vec) override;
-		void SetBool(const std::string_view variable, bool b) override;
-		void SetInt(const std::string_view variable, int i) override;
-		void SetFloat(const std::string_view variable, float i) override;
+		void SetMat4(const StringView variable, const glm::mat4& matrix) override;
+		void SetMat3(const StringView variable, const glm::mat3& matrix) override;
+		void SetVec4(const StringView variable, const glm::vec4& vec) override;
+		void SetBool(const StringView variable, bool b) override;
+		void SetInt(const StringView variable, int i) override;
+		void SetFloat(const StringView variable, float i) override;
 
 	private:
 
@@ -27,8 +27,8 @@ namespace Guava::OpenGL
 
 		std::unordered_map<std::string, GLint> m_UniformLocations;
 
-		void LoadFromCode(const glShader::Code& code);
-		GLint GetUniformLocation(const std::string_view uniform);
+		void LoadFromFiles();
+		GLint GetUniformLocation(const StringView uniform);
 	};
 }
 

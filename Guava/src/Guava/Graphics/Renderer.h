@@ -40,9 +40,9 @@ namespace Guava
 		static void Draw(const Light& light, Shader* shader);
 
 		// Create Assets
-		static Texture* CreateTexture(const std::string_view file, const TextureCreationInfo& description);
-		static Model*	CreateModel(const std::string_view filePath);
-		static Shader*	CreateShader(const std::string_view name);
+		static Texture* CreateTexture(const StringView file, const TextureCreationInfo& description);
+		static Model*	CreateModel(const StringView filePath);
+		static Shader*	CreateShader(const StringView name);
 
 	protected:
 

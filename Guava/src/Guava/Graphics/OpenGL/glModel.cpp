@@ -3,7 +3,7 @@
 
 namespace Guava::OpenGL
 {
-	glModel::glModel(const std::string_view filePath) : Model(filePath)
+	glModel::glModel(const StringView filePath) : Model(filePath)
 	{
 		m_VertexArray.Bind();
 
