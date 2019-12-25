@@ -1,48 +1,58 @@
 #include "pch.h"
 #include "glModel.h"
+#include "glTexture2D.h"
+#include "../Material.h"
 
 namespace Guava::OpenGL
 {
-	glModel::glModel(const StringView filePath) : Model(filePath)
+	void glModel::Draw(Shader* shader, const vector<ModelInstance>& instances)
 	{
-		m_VertexArray.Bind();
+		UpdateGPU();
 
-		m_VertexBuffer.SetData(m_Vertices.data(), sizeof(Vertex), m_Vertices.size());
-		m_VertexBuffer.SetLayout(Vertex::Layout);
+		m_VertexArray->Bind();
+		m_IndexBuffer->Bind();
 
-		m_IndexBuffer.SetData(m_Indices.data(), sizeof(unsigned int), m_Indices.size());
+		m_InstanceBuffer->SetData(instances.data(), sizeof(ModelInstance), instances.size());
 
-		// Free Memory
-		m_Vertices = VertexBuffer();
-		m_Indices = IndexBuffer();
-	}
+		shader->Bind();
 
-	void glModel::Draw() const
-	{
-		m_VertexArray.Bind();
-		m_IndexBuffer.Bind();
-
-		size_t byteOffset = 0;
+		Material* prevMaterial = nullptr;
 
 		for (auto& mesh : m_Meshes)
 		{
-			Texture* diffuse = m_Materials[mesh.MaterialIndex].Diffuse;
+			// Meshes are sorted by material, shader checks if new material should be applied
+			shader->ApplyMaterial(mesh.Mat);
 
-			if(diffuse)
-				diffuse->Bind();
-			else
-			{
-				int a = 3;
-			}
-
-			glDrawElementsBaseVertex(
-				GL_TRIANGLES, 
-				mesh.NumIndices, 
-				GL_UNSIGNED_INT, 
-				(void*)byteOffset,
+			glDrawElementsInstancedBaseVertex(
+				GL_TRIANGLES,
+				mesh.NumIndices,
+				GL_UNSIGNED_INT,
+				(void*)(mesh.IndexOffset * sizeof(unsigned int)),
+				instances.size(),
 				mesh.BaseVertex);
+		}
+	}
 
-			byteOffset += (mesh.NumIndices * sizeof(unsigned int));
+	void glModel::UpdateGPU()
+	{
+		if (!m_Initialized)
+		{
+			m_VertexArray.reset(new glVertexArray());
+			m_VertexBuffer.reset(new glVertexBuffer());
+			m_IndexBuffer.reset(new glIndexBuffer());
+			m_InstanceBuffer.reset(new glInstanceBuffer());
+
+			m_VertexArray->Bind();
+
+			m_VertexBuffer->SetData(m_Vertices.data(), sizeof(ModelVertex), m_Vertices.size());
+			m_VertexBuffer->SetLayout(ModelVertex::Layout);
+
+			m_InstanceBuffer->SetLayout(ModelInstance::Layout, m_VertexBuffer.get());
+
+			m_IndexBuffer->SetData(m_Indices.data(), sizeof(unsigned int), m_Indices.size());
+
+			FreeData();
+			m_Initialized = true;
 		}
 	}
 }

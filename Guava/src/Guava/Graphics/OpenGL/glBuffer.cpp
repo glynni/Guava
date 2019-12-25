@@ -33,11 +33,6 @@ namespace Guava::OpenGL
 		glDeleteBuffers(1, &m_OpenGLHandle);
 	}
 
-	void glBuffer::Bind() const
-	{
-		glBindBuffer(m_Target, m_OpenGLHandle);
-	}
-
 	void glBuffer::SetData(const void* data, size_t elementSize, size_t elementCount)
 	{
 		// glMapBuffer, glUnmapBuffer are also worth exploring
@@ -62,6 +57,11 @@ namespace Guava::OpenGL
 	size_t glBuffer::GetElementCount() const
 	{
 		return m_ElementCount;
+	}
+
+	void glBuffer::Bind() const
+	{
+		glBindBuffer(m_Target, m_OpenGLHandle);
 	}
 
 	void glBuffer::SetLayout(const Guava::Buffer::Layout& layout, const glBuffer* previous)

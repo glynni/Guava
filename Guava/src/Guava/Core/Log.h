@@ -28,9 +28,14 @@ namespace Guava
 }
 
 // Core logger
-#if defined TRUE
-	#define GUAVA_CORE_ERROR(...) ::Guava::Logger::GetCoreLogger()->error(__VA_ARGS__)
-	#define GUAVA_CORE_WARN(...)  ::Guava::Logger::GetCoreLogger()->warn(__VA_ARGS__)
-	#define GUAVA_CORE_INFO(...)  ::Guava::Logger::GetCoreLogger()->info(__VA_ARGS__)
-	#define GUAVA_CORE_TRACE(...) ::Guava::Logger::GetCoreLogger()->trace(__VA_ARGS__)
+#if 1 or GUAVA_DEBUG
+	#define GUAVA_ERROR(...) ::Guava::Logger::GetCoreLogger()->error(__VA_ARGS__)
+	#define GUAVA_WARN(...)  ::Guava::Logger::GetCoreLogger()->warn(__VA_ARGS__)
+	#define GUAVA_INFO(...)  ::Guava::Logger::GetCoreLogger()->info(__VA_ARGS__)
+	#define GUAVA_TRACE(...) ::Guava::Logger::GetCoreLogger()->trace(__VA_ARGS__)
+#else
+	#define GUAVA_ERROR(...)
+	#define GUAVA_WARN(...) 
+	#define GUAVA_INFO(...) 
+	#define GUAVA_TRACE(...)
 #endif

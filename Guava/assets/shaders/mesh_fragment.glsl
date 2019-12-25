@@ -1,86 +1,80 @@
-#version 450 core
-
-// In
-in vec4 position_world;
-in vec3 normal_world;
-in vec2 uv_coords;
-
-// Out
+/*Out*******************************************************************************/
 out vec4 fragColor;
 
-// Uniforms
-uniform vec4 u_eyePos;
-uniform sampler2D u_diffuse;
+/*Uniforms**************************************************************************/
 
-// Lights
-struct PointLight
+// Material
+uniform vec3		u_ka;
+uniform vec3		u_kd;
+uniform vec3		u_ks;
+uniform float		u_specularStr;
+uniform float		u_shininess;		
+uniform sampler2D 	u_diffuse;
+uniform sampler2D 	u_specular;
+uniform sampler2D 	u_normalMap;
+
+/*Blinn-Phong********************************************************************/
+vec3 bp_ambient(vec3 ambientLightColor, vec3 k_ambient)
 {
-	float	intensity;
-	vec4 	position_world;
-	vec4 	color;
-};
-uniform PointLight u_lights[100];
-uniform int u_numLights;
+	return k_ambient * ambientLightColor;
+}
 
-/*Vector math**************************************************************************/
-vec3 direction(vec4 from, vec4 to);
-vec3 bisector(vec3 v1, vec3 v2);
-vec3 bisector(vec4 v1, vec4 v2);
-/*Shading models***********************************************************************/
-float lambertian(vec3 n, vec3 l);
-vec4 blinn_phong(PointLight light, vec3 normal, vec4 fragPos, vec4 eyePos, float shine);
-/*Corrections**************************************************************************/
-vec4 correct_gamma(vec4 fColor);
-/**************************************************************************************/
+vec3 bp_diffuse(vec3 lightColor, vec3 k_diff, vec3 normal, vec3 lightDir)
+{
+	return lightColor * k_diff * max(0.0f, dot(normal, lightDir));
+}
 
+vec3 bp_specular(vec3 lightColor, vec3 kspec, vec3 normal, vec3 lightDir, vec3 viewDir, float shine)
+{
+	return lightColor * kspec * pow(max(0, dot(normal, bisector(lightDir, viewDir))), shine);
+}
+
+void blinn_phong()
+{
+	vec3 bp = vec3(0.0f);
+
+	if(u_numLights > 0)
+	{
+		vec3 viewDir = direction(fs.position, fs.eyePos);
+		vec3 ks =  u_ks * texture(u_specular, fs.uv).rgb;
+		vec3 normal = GetNormalFromMap(texture(u_normalMap, fs.uv).rgb);
+		
+		for(int i = 0; i < u_numLights; ++i)
+		{
+			if(u_lights[i].intensity > 0.0f)
+			{
+				// calculate light direction
+				vec3 lightDir = direction(fs.position, fs.lightPos[i]);
+				
+				// calculate final light color
+				vec3 lightIntensity = u_lights[i].intensity * u_lights[i].color;
+
+				// add diffuse lighting
+				bp += bp_diffuse(lightIntensity, u_kd, normal, lightDir);
+
+				// add specular highlight
+				bp += u_specularStr * bp_specular(lightIntensity, ks, normal, lightDir, viewDir, u_shininess);
+			}
+		}
+	}
+
+	// add ambient component
+	bp += bp_ambient(u_ambientLight, u_ka);
+
+	// sample diffuse texture
+	fragColor = texture(u_diffuse, fs.uv) * vec4(bp, 1.0f);
+}
+
+/*Corrections********************************************************************/
+void correct_gamma()
+{
+	fragColor.rgb = pow(fragColor.rgb, vec3(1.0/2.2f));
+}
+
+/*Main**************************************************************************/
 void main()
 {
-	//vec4 surfaceColor = vec4(uv_coords, 0.0f, 1.0f);
-	vec4 surfaceColor = texture(u_diffuse, uv_coords);
-	vec4 ambient = 1.0f * vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	vec4 diffuse_specular = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-
-	for(int i = 0; i < u_numLights; ++i)
-		;//diffuse_specular += blinn_phong(u_lights[i], normal_world, position_world, u_eyePos, 10.f);
-
-	// Gamma correction, applied at the very end / after all passes are done
-	fragColor = correct_gamma(surfaceColor * (ambient + diffuse_specular));
+	blinn_phong();
+	correct_gamma();
 }
 
-/* Vector math ************************************************************************/
-vec3 direction(vec4 from, vec4 to)
-{
-	return normalize(to - from).xyz;
-}
-
-vec3 bisector(vec3 v1, vec3 v2)
-{
-	return normalize(v1 + v2);
-}
-
-vec3 bisector(vec4 v1, vec4 v2)
-{
-	return normalize(v1 + v2).xyz;
-}
-
-/* Shading models *********************************************************************/
-float lambertian(vec3 n, vec3 l)
-{
-	return max(0.0f, dot(n, l));
-}
-
-vec4 blinn_phong(PointLight light, vec3 normal, vec4 fragPos, vec4 eyePos, float shine)
-{
-	vec3 lightDir = direction(fragPos, light.position_world);
-	vec3 viewDir = direction(fragPos, eyePos);
-	float diffuse_specular = lambertian(normal, lightDir) + pow(max(0, dot(normal, bisector(lightDir, viewDir))), shine);
-
-	return light.intensity * light.color * diffuse_specular;
-}
-
-/*Corrections**************************************************************************/
-vec4 correct_gamma(vec4 fColor)
-{
-	fColor.rgb = pow(fColor.rgb, vec3(1.0/2.2f));
-	return fColor;
-}

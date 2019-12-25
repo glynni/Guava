@@ -9,15 +9,19 @@ namespace Guava::OpenGL
 	{
 	public:
 
-		glModel(const StringView filePath);
+		glModel() = default;
 
-		void Draw() const override;
+		void Draw(Shader* shader, const vector<ModelInstance>& instances) override;
 
 	private:
 
-		glVertexArray	m_VertexArray;
-		glVertexBuffer	m_VertexBuffer;
-		glIndexBuffer	m_IndexBuffer;
+		scope<glVertexArray>	m_VertexArray;
+		scope<glVertexBuffer>	m_VertexBuffer;
+		scope<glIndexBuffer>	m_IndexBuffer;
+		scope<glInstanceBuffer>	m_InstanceBuffer;
+		bool					m_Initialized;
+
+		void UpdateGPU() override;
 	};
 }
 

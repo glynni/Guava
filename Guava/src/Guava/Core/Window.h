@@ -9,13 +9,13 @@ namespace Guava
 		
 		struct Data
 		{
-			glm::uvec2 Size;
+			uvec2 Size;
 		};
 
 		// This is a static class matey
 		Window() = delete;
 
-		static bool Create(const StringView title, unsigned int width, unsigned int height);
+		static bool Create(const string_view title, unsigned int width, unsigned int height);
 		static void Destroy();
 
 		static void PollEvents();
@@ -26,7 +26,7 @@ namespace Guava
 		static bool ShouldClose();
 
 		static const Data& GetData();
-		static const glm::uvec2 GetSize();
+		static const uvec2 GetSize();
 		static void* GetGLFWPointer();
 	};
 }

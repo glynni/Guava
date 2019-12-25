@@ -8,13 +8,13 @@ namespace Guava::OpenGL
 	{
 		Prepare();
 
-		GUAVA_CORE_INFO("Created OpenGL renderer.");
+		GUAVA_INFO("Created OpenGL renderer");
 		glEnable(GL_DEPTH_TEST);
 	}
 
 	glRenderer::~glRenderer()
 	{
-		GUAVA_CORE_INFO("Destroyed OpenGL renderer.");
+		GUAVA_INFO("Destroyed OpenGL renderer");
 	}
 
 	void glRenderer::ClearScreen_Impl()
@@ -22,7 +22,7 @@ namespace Guava::OpenGL
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void glRenderer::SetViewport_Impl(const glm::uvec2& size, const glm::uvec2& bottomLeft)
+	void glRenderer::SetViewport_Impl(const uvec2& size, const uvec2& bottomLeft)
 	{
 		glViewport(bottomLeft.x, bottomLeft.y, size.x, size.y);
 	}
@@ -32,15 +32,30 @@ namespace Guava::OpenGL
 		glClearColor(color.r, color.g, color.b, color.a);
 	}
 
-	void glRenderer::SetDrawMode_Impl(const PolygonMode drawMode)
+	void glRenderer::SetDrawMode_Impl(const FillMode drawMode)
 	{
 		switch (drawMode)
 		{
-		case PolygonMode::Fill:		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); break;
-		case PolygonMode::Wireframe:	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); break;
+		case FillMode::Polygon:			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); break;
+		case FillMode::Wireframe:	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); break;
 		default:
 			break;
 		}
+	}
+
+	Model* glRenderer::CreateModel_Impl()
+	{
+		return new glModel();
+	}
+
+	Texture2D* glRenderer::CreateTexture_Impl(const Texture2DCreateInfo& tci)
+	{
+		return new glTexture2D(tci);
+	}
+
+	Shader* glRenderer::CreateShader_Impl()
+	{
+		return new glShader();
 	}
 
 	void glRenderer::Prepare()
@@ -58,16 +73,16 @@ namespace Guava::OpenGL
 				switch (severity)
 				{
 				case GL_DEBUG_SEVERITY_HIGH:
-					GUAVA_CORE_ERROR("OpenGL: {0}", msg); break;
+					GUAVA_ERROR("OpenGL: {0}", msg); break;
 
 				case GL_DEBUG_SEVERITY_MEDIUM:
-					GUAVA_CORE_WARN("OpenGL: {0}", msg); break;
+					GUAVA_WARN("OpenGL: {0}", msg); break;
 
 				case GL_DEBUG_SEVERITY_LOW:
-					GUAVA_CORE_WARN("OpenGL: {0}", msg); break;
+					GUAVA_WARN("OpenGL: {0}", msg); break;
 
 				case GL_DEBUG_SEVERITY_NOTIFICATION:
-					break;// GUAVA_CORE_TRACE("OpenGL: {0}", msg); break;
+					break;// GUAVA_TRACE("OpenGL: {0}", msg); break;
 
 				default: break;
 				}

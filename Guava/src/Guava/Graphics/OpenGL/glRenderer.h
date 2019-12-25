@@ -3,7 +3,7 @@
 #include "glShader.h"
 #include "glBuffer.h"
 #include "glVertexArray.h"
-#include "glTexture.h"
+#include "glTexture2D.h"
 #include "glModel.h"
 
 namespace Guava::OpenGL
@@ -16,9 +16,13 @@ namespace Guava::OpenGL
 		~glRenderer();
 
 		void ClearScreen_Impl() override;
-		void SetViewport_Impl(const glm::uvec2& size, const glm::uvec2& bottomLeft) override;
+		void SetViewport_Impl(const uvec2& size, const uvec2& bottomLeft) override;
 		void SetClearColor_Impl(const Color& color) override;
-		void SetDrawMode_Impl(const PolygonMode drawMode) override;
+		void SetDrawMode_Impl(const FillMode drawMode) override;
+
+		Model* CreateModel_Impl();
+		Texture2D* CreateTexture_Impl(const Texture2DCreateInfo& tci);
+		Shader* CreateShader_Impl();
 
 	private:
 

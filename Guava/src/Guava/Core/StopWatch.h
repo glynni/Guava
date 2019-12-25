@@ -3,7 +3,6 @@ namespace Guava
 {
 	class StopWatch
 	{
-		using time_type = double;
 
 	public:
 
@@ -12,15 +11,13 @@ namespace Guava
 		void Start();
 		void Stop();
 
-		time_type GetTime();
+		double GetTime();
 
 	private:
 
-		using Clock = std::chrono::high_resolution_clock;
-
-		Clock::time_point					m_Start, m_End;
-		std::chrono::duration<time_type>	m_Duration;
-		bool								m_Running;
+		time_point	m_Start, m_End;
+		duration	m_Duration;
+		bool		m_Running;
 	};
 }
 

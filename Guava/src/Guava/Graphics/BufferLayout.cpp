@@ -5,7 +5,7 @@ namespace Guava
 {
 	namespace Buffer
 	{
-		Layout::Layout(std::initializer_list<Attribute::Type> TypesInOrder) :
+		Layout::Layout(AttributeList TypesInOrder) :
 			Stride(0)
 		{
 			size_t offset = 0, size = 0;

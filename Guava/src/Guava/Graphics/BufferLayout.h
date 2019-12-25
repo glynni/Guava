@@ -1,5 +1,4 @@
 #pragma once
-#include "Texture.h"
 #include "Color.h"
 
 namespace Guava
@@ -24,13 +23,15 @@ namespace Guava
 			size_t Offset;
 		};
 
+		using AttributeList = std::initializer_list<Attribute::Type>;
+
 		struct Layout
 		{
-			Layout(std::initializer_list<Attribute::Type> typesInOrder);
+			Layout(AttributeList typesInOrder);
 
 			size_t Stride;
 
-			std::vector<Attribute> Attributes;
+			vector<Attribute> Attributes;
 		};
 	};
 }

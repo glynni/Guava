@@ -1,42 +1,79 @@
 #include "pch.h"
 #include "Model.h"
-#include "Guava/Core/AssetManager.h"
-#include "Guava/Core/Utility.h"
+#include "Material.h"
+#include "Guava/Core/ResourceManager.h"
+#include "Guava/Graphics/Renderer.h"
 
 namespace Guava
 {
-	const Buffer::Layout Vertex::Layout = {
-		Buffer::Attribute::Type::Vec3f,
-		Buffer::Attribute::Type::Vec3f,
-		Buffer::Attribute::Type::Vec2f
+	const Buffer::Layout ModelVertex::Layout = {
+		Buffer::Attribute::Type::Vec3f, // Pos
+		Buffer::Attribute::Type::Vec3f, // Normal
+		Buffer::Attribute::Type::Vec3f, // Tangent
+		Buffer::Attribute::Type::Vec3f, // Bitangent
+		Buffer::Attribute::Type::Vec2f  // UV
 	};
 
-	Model::Model(const StringView filePath)
-	{
-		Substring extension = File::GetExtension(filePath);
+	const Buffer::Layout ModelInstance::Layout = {
+		Buffer::Attribute::Type::Mat4f // ModelMatrix
+	};
 
-		if (extension == "obj")
-			LoadModel_OBJ(filePath);
-		else
-			LoadModel_Assimp(filePath);
+	Model* Model::LoadFromData(const vector<ModelVertex>& vb, const vector<unsigned int>& ib, Material* mtl)
+	{
+		if (vb.empty())
+			return nullptr;
+
+		Model* m = Renderer::CreateModel();
+
+		m->m_Vertices = vb;
+		m->m_Indices = ib;
+
+		auto& mesh = m->m_Meshes.emplace_back();
+		mesh.NumIndices = ib.size();
+		mesh.Mat = mtl;
+
+		ResourceManager::RegisterModel(m);
+
+		return m;
 	}
 
-	Model* Model::Create(const StringView filePath)
+	Model* Model::LoadFromFile(const string_view path)
 	{
-		return AssetManager::GetModel(filePath);
+		Model* m = ResourceManager::GetModel(path);
+
+		if (m) return m;
+
+		m = Renderer::CreateModel();
+
+		if (!m->LoadModel_Assimp(path))
+		{
+			delete m;
+			return nullptr;
+		}
+
+		ResourceManager::RegisterModel(m, path);
+
+		return m;
 	}
 
-	void Model::LoadModel_Assimp(const StringView filePath)
+	void Model::FreeData()
+	{
+		m_Vertices = vector<ModelVertex>();
+		m_Indices = vector<unsigned int>();
+	}
+
+	bool Model::LoadModel_Assimp(const string_view filePath)
 	{
 		Assimp::Importer importer;
 
 		const aiScene* scene = importer.ReadFile(filePath.data(),
-			aiProcess_GenNormals |
+			aiProcess_GenSmoothNormals |
+			aiProcess_CalcTangentSpace |
 			aiProcess_Triangulate |
-			aiProcess_JoinIdenticalVertices |
-			aiProcess_SortByPType);
+			aiProcess_JoinIdenticalVertices
+		);
 
-		GUAVA_ASSERT(scene != nullptr, std::string("Model could not be loaded: ") + filePath.data());
+		GUAVA_ASSERT(scene != nullptr, string("Model could not be loaded: ") + filePath.data());
 
 		// Reserve Memory
 		size_t numVertices = 0;
@@ -55,45 +92,46 @@ namespace Guava
 			numMeshes++;
 		}
 
-		ReserveMemory(numMeshes, numVertices, numIndices, scene->mNumMeshes);
+		ReserveMemory(numMeshes, numVertices, numIndices);
+
+		// Materials
+		auto materials = Material::LoadAll(filePath, scene);
 
 		// Meshes
+		numIndices = 0;
 		for (unsigned int i = 0; i < scene->mNumMeshes; i++)
 		{
 			aiMesh* mesh = scene->mMeshes[i];
 
 			if (mesh->mPrimitiveTypes != aiPrimitiveType_TRIANGLE)
 			{
-				GUAVA_CORE_WARN("{0} in {1} was not loaded: Unsupported primitive types", mesh->mName.C_Str(), filePath.data());
+				GUAVA_WARN("{0} in {1} was not loaded: Unsupported primitive types", mesh->mName.C_Str(), filePath.data());
 				continue;
 			}
 
-			LoadMesh_Assimp(mesh);
+			LoadMesh_Assimp(mesh, materials);
 		}
 
-		// Materials
-		LoadMaterials_Assimp(scene, filePath);
+		// Sort Meshes by material index to reduce shader calls
+		std::sort(m_Meshes.begin(), m_Meshes.end(), [](ModelMesh& m1, ModelMesh& m2)
+		{
+			return m1.Mat < m2.Mat;
+		});
 
-		//GUAVA_CORE_TRACE(" meshes: {0}", m_Meshes.size());
-		//GUAVA_CORE_TRACE(" vertices: {0}", m_Vertices.size());
-		//GUAVA_CORE_TRACE(" indices: {0}", m_Indices.size());
-		//GUAVA_CORE_TRACE(" materials: {0}", scene->mNumMaterials);
+		return true;
 	}
 
-	void Model::LoadMesh_Assimp(const aiMesh* mesh)
+	void Model::LoadMesh_Assimp(const aiMesh* mesh, vector<Material*>& materials)
 	{
-		if (mesh->mPrimitiveTypes != aiPrimitiveType_TRIANGLE)
-			return;
-
-		Mesh& newMesh = m_Meshes.emplace_back();
+		ModelMesh& newMesh = m_Meshes.emplace_back();
 		newMesh.BaseVertex = m_Vertices.size();
-		newMesh.NumIndices = size_t(mesh->mNumFaces) * 3;
-		newMesh.MaterialIndex = mesh->mMaterialIndex;
+		newMesh.NumIndices = 0;
+		newMesh.Mat = materials[mesh->mMaterialIndex];
 
-		// Position, Normal, UV
+		// Position, Normal, Tangent, Bitangent, UV
 		for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
 		{
-			Vertex vertex;
+			ModelVertex vertex;
 
 			// Position
 			aiVector3D& aiVertex = mesh->mVertices[i];
@@ -105,7 +143,27 @@ namespace Guava
 			if (mesh->HasNormals())
 			{
 				aiVector3D& aiNormal = mesh->mNormals[i];
-				vertex.Normal = glm::normalize(glm::vec3{ aiNormal.x , aiNormal.y , aiNormal.z });
+				vertex.Normal.x = aiNormal.x;
+				vertex.Normal.y = aiNormal.y;
+				vertex.Normal.z = aiNormal.z;
+			}
+
+			// Tangents & Bitangents
+			if (mesh->HasTangentsAndBitangents())
+			{
+				aiVector3D& bitangent = mesh->mBitangents[i];
+				vertex.Bitangent.x = bitangent.x;
+				vertex.Bitangent.y = bitangent.y;
+				vertex.Bitangent.z = bitangent.z;
+
+				aiVector3D& tangent = mesh->mTangents[i];
+				vertex.Tangent.x = tangent.x;
+				vertex.Tangent.y = tangent.y;
+				vertex.Tangent.z = tangent.z;
+
+				// Fix for symmetric models ?
+				//if(dot(cross(vertex.Normal, vertex.Tangent), vertex.Bitangent) < 0.0f)
+					//vertex.Tangent = vertex.Tangent * -1.0f;
 			}
 
 			// UV
@@ -122,32 +180,36 @@ namespace Guava
 		// Indices
 		for (unsigned int i = 0; i < mesh->mNumFaces; ++i)
 		{
+			newMesh.NumIndices += mesh->mFaces[i].mNumIndices;
+
 			for (unsigned int j = 0; j < mesh->mFaces[i].mNumIndices; ++j)
-				m_Indices.emplace_back(mesh->mFaces[i].mIndices[j]);
-		}
-	}
-
-	void Model::LoadMaterials_Assimp(const aiScene* scene, const StringView filePath)
-	{
-		Substring fileDir = File::GetDirectory(filePath);
-
-		for (unsigned int i = 0; i < scene->mNumMaterials; ++i)
-		{
-			aiMaterial* material = scene->mMaterials[i];
-			Material& newMaterial = m_Materials.emplace_back();
-			aiString diffuseTexture;
-
-			if (AI_SUCCESS == material->Get(AI_MATKEY_TEXTURE_DIFFUSE(0), diffuseTexture))
 			{
-				String diffPath(fileDir);
-				diffPath.append(diffuseTexture.C_Str());
-
-				newMaterial.Diffuse = Texture::Create(diffPath);
+				m_Indices.emplace_back(mesh->mFaces[i].mIndices[j]);
 			}
 		}
+
+		size_t numMeshes = m_Meshes.size();
+		if (numMeshes > 1)
+		{
+			auto& mesh = m_Meshes[numMeshes - 1];
+			auto& prevMesh = m_Meshes[numMeshes - 2];
+
+			mesh.IndexOffset = prevMesh.NumIndices + prevMesh.IndexOffset;
+		}
 	}
 
-	void Model::LoadModel_OBJ(const StringView filePath)
+	void Model::ReserveMemory(size_t numMeshes, size_t numVertices, size_t numIndices)
+	{
+		m_Meshes = vector<ModelMesh>();
+		m_Vertices = vector<ModelVertex>();
+		m_Indices = vector<unsigned int>();
+
+		m_Meshes.reserve(numMeshes);
+		m_Vertices.reserve(numVertices);
+		m_Indices.reserve(numIndices);
+	}
+
+	/*void Model::LoadModel_OBJ(const string_view filePath)
 	{
 		using namespace File;
 
@@ -158,31 +220,99 @@ namespace Guava
 			SubstringBuffer splitLine, splitFace;
 			auto& lines = file.ExtractLines();
 
-			for (auto line : lines)
+			constexpr size_t res = 20000;
+			vector<vec3> positions;
+			vector<vec3> normals;
+			vector<vec2> uvs;
+			positions.reserve(res);
+			normals.reserve(res);
+			uvs.reserve(res);
+			m_Indices.reserve(res * 3);
+			m_Vertices.reserve(res);
+
+			size_t indexOffset = 0, indexStart = 0;
+			Mesh* currentMesh = nullptr;
+			string buf1, buf2, buf3;
+
+			for (auto& line : lines)
 			{
 				SplitString(line, ' ', splitLine);
 
 				if (!splitLine.empty())
 				{
-					if ("o" == splitLine[0])
+					if ('o' == splitLine[0][0])
 					{
 						// mesh
+						if (currentMesh)
+						{
+							currentMesh->NumIndices = m_Indices.size() - indexStart;
+							indexStart = m_Indices.size();
+						}
+
+						currentMesh = &m_Meshes.emplace_back();
+						currentMesh->BaseVertex = positions.size();
+						currentMesh->Name = splitLine[1];
+						indexOffset = positions.size();
 					}
-					else if ("v" == splitLine[0])
+					else if ('v' == splitLine[0][0])
 					{
 						// vertex
+						buf1 = splitLine[1];
+						buf2 = splitLine[2];
+						buf3 = splitLine[3];
+						positions.emplace_back(
+							stof(buf1),
+							stof(buf2),
+							stof(buf3));
 					}
 					else if ("vn" == splitLine[0])
 					{
 						// normal
+						buf1 = splitLine[1];
+						buf2 = splitLine[2];
+						buf3 = splitLine[3];
+						normals.emplace_back(normalize(vec3(
+							stof(buf1),
+							stof(buf2),
+							stof(buf3))));
 					}
 					else if ("vt" == splitLine[0])
 					{
 						// uv
+						buf1 = splitLine[1];
+						buf2 = splitLine[2];
+						uvs.emplace_back(
+							stof(buf1),
+							stof(buf2));
 					}
-					else if ("f" == splitLine[0])
+					else if ('f' == splitLine[0][0])
 					{
 						// faces
+						size_t posIndex, uvIndex, normalIndex;
+						SubstringBuffer splitFace;
+
+						for (unsigned int i = 1; i <= 3; ++i)
+						{
+							SplitString(splitLine[i], '/', splitFace);
+
+							buf1 = splitFace[0];
+							buf2 = splitFace[1];
+							buf3 = splitFace[2];
+
+							posIndex =		(size_t)stoi(buf1) - 1;
+							uvIndex =		(size_t)stoi(buf2) - 1;
+							normalIndex =	(size_t)stoi(buf3) - 1;
+
+							m_Indices.emplace_back(posIndex - indexOffset);
+
+							if (posIndex >= m_Vertices.size())
+							{
+								m_Vertices.emplace_back(
+									positions[posIndex],
+									normals[normalIndex],
+									uvs[uvIndex]);
+							}
+						}
 					}
 					else if ("mtllib" == splitLine[0])
 					{
@@ -191,19 +321,10 @@ namespace Guava
 				}
 			}
 
+			// process last mesh
+			if (currentMesh)
+				currentMesh->NumIndices = m_Indices.size() - indexStart;
 		}
 	}
-
-	void Model::ReserveMemory(size_t numMeshes, size_t numVertices, size_t numIndices, size_t numMaterials)
-	{
-		m_Meshes = MeshBuffer();
-		m_Vertices = VertexBuffer();
-		m_Indices = IndexBuffer();
-		m_Materials = MaterialBuffer();
-
-		m_Meshes.reserve(numMeshes);
-		m_Materials.reserve(numMaterials);
-		m_Vertices.reserve(numVertices);
-		m_Indices.reserve(numIndices);
-	}
+	*/
 }

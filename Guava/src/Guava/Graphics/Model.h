@@ -1,69 +1,83 @@
 #pragma once
-#include "BufferLayout.h"
-#include "Texture.h"
+#include "Guava/Graphics/BufferLayout.h"
+#include "Texture2D.h"
+#include "Shader.h"
 
 namespace Guava
 {
-	struct Vertex;
-	struct Mesh;
-	struct Material;
-
-	using MeshBuffer =		std::vector<Mesh>;
-	using VertexBuffer =	std::vector<Vertex>;
-	using IndexBuffer =		std::vector<unsigned int>;
-	using MaterialBuffer =  std::vector<Material>;
+	struct ModelVertex;
+	struct ModelMesh;
+	struct ModelInstance;
+	class Material;
 
 	class Model
 	{
 	public:
 
 		virtual ~Model() = default;
-		virtual void Draw() const = 0;
+		virtual void Draw(Shader* shader, const vector<ModelInstance>& instances) = 0;
 
-		static Model* Create(const StringView filePath);
+		static Model* LoadFromData(const vector<ModelVertex>& vb, const vector<unsigned int>& ib, Material* mtl = nullptr);
+		static Model* LoadFromFile(const string_view path);
 
 	protected:
 
-		Model(const StringView filePath);
+		vector<ModelMesh>		m_Meshes;
+		vector<ModelVertex>		m_Vertices;
+		vector<unsigned int>	m_Indices;
 
-		MeshBuffer		m_Meshes;
-		VertexBuffer	m_Vertices;
-		IndexBuffer		m_Indices;
-		MaterialBuffer	m_Materials;
+		Model() = default;
+
+		void FreeData();
+		virtual void UpdateGPU() = 0;
 
 	private:
 
 		// Assimp loading
-		void LoadModel_Assimp(const StringView filePath);
-		void LoadMesh_Assimp(const aiMesh* mesh);
-		void LoadMaterials_Assimp(const aiScene* scene, const StringView filePath);
-		
-		// Custom .obj loading
-		void LoadModel_OBJ(const StringView filePath);
+		bool LoadModel_Assimp(const string_view filePath);
+		void LoadMesh_Assimp(const aiMesh* mesh, vector<Material*>& materials);
 
-		void ReserveMemory(size_t numMeshes, size_t numVertices, size_t numIndices, size_t numMaterials);
+		void ReserveMemory(size_t numMeshes, size_t numVertices, size_t numIndices);
 	};
 
-	struct Vertex
+	struct ModelVertex
 	{
-		glm::vec3	Position;
-		glm::vec3	Normal;
-		glm::vec2	UV_Coords;
+		ModelVertex(
+			const vec3& p = vec3(), 
+			const vec3& n = vec3(),
+			const vec3& t = vec3(),
+			const vec3& b = vec3(),
+			const vec2& uv = vec2()) :
+
+			Position(p),
+			Normal(n),
+			Tangent(t),
+			Bitangent(b),
+			UV_Coords(uv)
+		{}
+
+		vec3 Position;
+		vec3 Normal;
+		vec3 Tangent;
+		vec3 Bitangent;
+		vec2 UV_Coords;
 
 		static const Buffer::Layout Layout;
 	};
 
-	struct Mesh
+	struct ModelInstance
+	{
+		mat4 ModelMatrix;
+
+		static const Buffer::Layout Layout;
+	};
+
+	struct ModelMesh
 	{
 		size_t BaseVertex = 0;
 		size_t NumIndices = 0;
-
-		unsigned int MaterialIndex;
-	};
-
-	struct Material
-	{
-		Texture* Diffuse = nullptr;
+		size_t IndexOffset = 0;
+		Material* Mat;
 	};
 }
 

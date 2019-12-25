@@ -7,35 +7,28 @@
 namespace Guava
 {
 	// API
-	static RenderAPI s_RenderAPI;
+	static RenderAPI API;
 
 	// Instance
-	static std::unique_ptr<Renderer> s_Instance;
+	static scope<Renderer> Instance;
 
-	// Projection
-	static glm::mat4 s_Perspective;
+	// Camera
+	static mat4 Perspective;
 
 	// Lights
-	static int s_NumLights = 0;
-	constexpr int s_MaxLights = 100;
-	static std::string s_LightUniformArray;
-
-	Renderer::~Renderer()
-	{
-		
-	}
+	static int NumLights = 0;
 
 	void Renderer::Create(RenderAPI api)
 	{
 		Destroy();
 
-		s_RenderAPI = api;
+		API = api;
 
 		switch (api)
 		{
 			case RenderAPI::OpenGL: 
 			{
-				s_Instance.reset(new OpenGL::glRenderer());
+				Instance.reset(new OpenGL::glRenderer());
 				break;
 			}
 			default:
@@ -50,117 +43,119 @@ namespace Guava
 
 	void Renderer::Destroy()
 	{
-		s_Instance.reset();
+		Instance.reset();
 	}
 
 	void Renderer::ClearScreen()
 	{
-		s_Instance->ClearScreen_Impl();
+		Instance->ClearScreen_Impl();
 	}
 
 	void Renderer::RenderFrame()
 	{
-		s_NumLights = 0;
+		NumLights = 0;
 	}
 
 	void Renderer::SetClearColor(const Color& color)
 	{
-		s_Instance->SetClearColor_Impl(color);
+		Instance->SetClearColor_Impl(color);
 	}
 
-	void Renderer::SetWindowSize(const glm::uvec2& size)
+	void Renderer::SetWindowSize(const uvec2& size)
 	{
-		auto winSize = Window::GetSize();
-		SetViewport(winSize);
-		s_Perspective = glm::perspective(glm::radians(70.f), (float)winSize.x / (float)winSize.y, 0.1f, 1000.f);
+		SetViewport(size);
+
+		if (size.y > 0)
+			Perspective = perspective(radians(70.f), (float)size.x / (float)size.y, 0.1f, 1000.f);
 	}
 
-	void Renderer::Draw(const Model* model, Shader* shader, Transform& transform, Camera& camera)
+	void Renderer::Draw(Model* model, Transform& transform)
 	{
+		static Shader* shader = Shader::LoadFromFiles("mesh_vertex.glsl", "mesh_fragment.glsl");
+		static vector<ModelInstance> instance(1);
+
+		instance[0].ModelMatrix = transform.GetTransform();
+
 		shader->Bind();
 
-		shader->SetMat4("u_modelMatrix", transform.GetTransform());
-		shader->SetMat3("u_normalMatrix", transform.GetNormalTransform());
-		shader->SetMat4("u_viewMatrix", camera.GetViewMatrix());
-		shader->SetMat4("u_projectionMatrix", s_Perspective);
-		shader->SetVec4("u_eyePos", { camera.GetEyePosition(), 1.0f });
-		shader->SetInt("u_diffuse", 0);
-
-		model->Draw();
+		model->Draw(shader, instance);
 	}
 
-	void Renderer::Draw(const Light& light, Shader* shader)
+	void Renderer::Draw(Model* model, vector<Transform>& transforms)
 	{
-		if (s_NumLights < s_MaxLights - 1)
+		static Shader* shader = Shader::LoadFromFiles("mesh_vertex.glsl", "mesh_fragment.glsl");
+		static vector<ModelInstance> instances;
+
+		instances.resize(transforms.size());
+
+		std::transform(GUAVA_EXECUTION_POLICY, transforms.begin(), transforms.end(), instances.begin(), [](Transform& t) -> ModelInstance
 		{
-			s_LightUniformArray = "u_lights[" + std::to_string(s_NumLights) + "].";
+			return { t.GetTransform() };
+		});
+
+		shader->Bind();
+
+		model->Draw(shader, instances);
+	}
+
+	void Renderer::PointLight(const vec3& lightPos, const Color& lightColor, const float intensity)
+	{
+		static constexpr unsigned int numMaxLights = 10;
+		static Shader* shader = Shader::LoadFromFiles("mesh_vertex.glsl", "mesh_fragment.glsl");
+		static string uniform, arrayPos; // avoid string reallocations
+
+		if (NumLights < numMaxLights - 1)
+		{
+			arrayPos = "u_lights[" + std::to_string(NumLights) + "].";
 
 			shader->Bind();
-			shader->SetVec4(s_LightUniformArray + "position_world", light.Position);
-			shader->SetVec4(s_LightUniformArray + "color", light.Color);
-			shader->SetFloat(s_LightUniformArray + "intensity", light.Intensity);
 
-			s_NumLights++;
-			shader->SetInt("u_numLights", s_NumLights);
-		}
-	}
+			uniform = arrayPos + "position";
+			shader->SetVec3(uniform, lightPos);
 
-	Texture* Renderer::CreateTexture(const StringView file, const TextureCreationInfo& info)
-	{
-		switch (s_RenderAPI)
-		{
-			case RenderAPI::OpenGL:
-			{
-				return new OpenGL::glTexture(file, info);
-			}
-			default:
-			{
-				GUAVA_ASSERT(false, "Unknown render-API specified. Texture was not created");
-			}
-		}
-	}
+			uniform = arrayPos + "color";
+			shader->SetVec3(uniform, vec3(lightColor));
 
-	Model* Renderer::CreateModel(const StringView filePath)
-	{
-		switch (s_RenderAPI)
-		{
-			case RenderAPI::OpenGL:
-			{
-				return new OpenGL::glModel(filePath);
-			}
-			default:
-			{
-				GUAVA_ASSERT(false, "Unknown render-API specified. Model was not created");
-			}
-		}
-	}
+			uniform = arrayPos + "intensity";
+			shader->SetFloat(uniform, intensity);
 
-	Shader* Renderer::CreateShader(const StringView name)
-	{
-		switch (s_RenderAPI)
-		{
-			case RenderAPI::OpenGL:
-			{
-				return new OpenGL::glShader(name);
-			}
-			default:
-			{
-				GUAVA_ASSERT(false, "Unknown render-API specified. Shader was not created");
-			}
+			NumLights++;
+			shader->SetInt("u_numLights", NumLights);
 		}
 	}
 	
-	void Renderer::SetViewport(const glm::uvec2& size, const glm::uvec2& bottomLeft)
+	void Renderer::SetViewport(const uvec2& size, const uvec2& bottomLeft)
 	{
-		s_Instance->SetViewport_Impl(size, bottomLeft);
+		Instance->SetViewport_Impl(size, bottomLeft);
 	}
 
-	void Renderer::SetDrawMode(const PolygonMode polyMode)
+	void Renderer::SetFillMode(const FillMode polyMode)
 	{
-		s_Instance->SetDrawMode_Impl(polyMode);
+		Instance->SetDrawMode_Impl(polyMode);
 	}
 
-	Renderer::Renderer()
+	void Renderer::SetCamera(Camera& camera)
 	{
+		static Shader* shader = Shader::LoadFromFiles("mesh_vertex.glsl", "mesh_fragment.glsl");
+
+		shader->Bind();
+		shader->SetMat4("u_viewMatrix", camera.GetViewMatrix());
+		shader->SetMat4("u_projectionMatrix", Perspective);
+		shader->SetVec3("u_eyePos", camera.GetEyePosition());
+	}
+
+	Model* Renderer::CreateModel()
+	{
+		return Instance->CreateModel_Impl();
+	}
+
+	Texture2D* Renderer::CreateTexture(const Texture2DCreateInfo& tci)
+	{
+		return Instance->CreateTexture_Impl(tci);
+	}
+
+	Shader* Renderer::CreateShader()
+	{
+		return Instance->CreateShader_Impl();
 	}
 }

@@ -8,18 +8,18 @@ namespace Guava
 
 		virtual ~Camera() = default;
 
-		virtual const glm::mat4& GetViewMatrix() = 0;
-		virtual const glm::vec3& GetEyePosition() = 0;
+		virtual const mat4& GetViewMatrix() = 0;
+		virtual const vec3& GetEyePosition() = 0;
 	};
 
 	class FreeFlyCamera : public Camera
 	{
 	public:
 
-		FreeFlyCamera(const glm::vec3& pos = glm::vec3(), const glm::vec3& lookAtDir = glm::vec3(0.0f, 0.0f, -1.0f));
+		FreeFlyCamera(const vec3& pos = vec3(), const vec3& lookAtDir = vec3(0.0f, 0.0f, -1.0f));
 
-		const glm::mat4& GetViewMatrix() override;
-		const glm::vec3& GetEyePosition() override;
+		const mat4& GetViewMatrix() override;
+		const vec3& GetEyePosition() override;
 
 		void Yaw(const float degrees);
 		void Pitch(const float degrees);
@@ -32,11 +32,11 @@ namespace Guava
 
 	private:
 
-		glm::mat4 m_ViewMatrix;
+		mat4 m_ViewMatrix;
 
-		glm::vec3 m_EyePosition;
-		glm::vec3 m_LookAtDir;
-		glm::vec3 m_MoveVector;
+		vec3 m_EyePosition;
+		vec3 m_LookAtDir;
+		vec3 m_MoveVector;
 
 		float m_PitchAngle;
 		float m_YawAngle;

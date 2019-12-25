@@ -3,11 +3,11 @@
 
 namespace Guava
 {
-	static constexpr glm::vec3 s_Up = glm::vec3(0.0f, 1.0f, 0.0f);
-	static constexpr glm::vec4 s_Forward = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
-	static constexpr glm::vec4 s_Right = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
+	static constexpr vec3 s_Up = vec3(0.0f, 1.0f, 0.0f);
+	static constexpr vec4 s_Forward = vec4(0.0f, 0.0f, -1.0f, 0.0f);
+	static constexpr vec4 s_Right = vec4(1.0f, 0.0f, 0.0f, 0.0f);
 
-	FreeFlyCamera::FreeFlyCamera(const glm::vec3& pos, const glm::vec3& lookAtDir) :
+	FreeFlyCamera::FreeFlyCamera(const vec3& pos, const vec3& lookAtDir) :
 		m_ViewMatrix(),
 		m_EyePosition(pos),
 		m_LookAtDir(lookAtDir),
@@ -18,29 +18,29 @@ namespace Guava
 		m_RotationSpeed(1.0f),
 		m_NeedsUpdate(true)
 	{
-		auto xz_vector = glm::normalize(glm::vec2(lookAtDir.x, lookAtDir.z));
-		m_YawAngle = glm::mod(glm::degrees(acos(glm::dot(xz_vector, glm::vec2(0.0f, -1.0f)))), 360.f);
+		auto xz_vector = normalize(vec2(lookAtDir.x, lookAtDir.z));
+		m_YawAngle = mod(degrees(acos(dot(xz_vector, vec2(0.0f, -1.0f)))), 360.f);
 
-		auto yz_vector = glm::normalize(glm::vec2(lookAtDir.y, lookAtDir.z));
-		m_PitchAngle = glm::degrees(acos(glm::dot(yz_vector, glm::vec2(1.0f, -1.0f))));
+		auto yz_vector = normalize(vec2(lookAtDir.y, lookAtDir.z));
+		m_PitchAngle = degrees(acos(dot(yz_vector, vec2(1.0f, -1.0f))));
 
 		if (m_PitchAngle > 90.f)
 			m_PitchAngle = 180.f - m_PitchAngle;
 		else if (m_PitchAngle < -90.f)
 			m_PitchAngle = -180.f - m_PitchAngle;
 
-		m_PitchAngle = glm::clamp(m_PitchAngle, -89.5f, 89.5f);
+		m_PitchAngle = clamp(m_PitchAngle, -89.5f, 89.5f);
 
 	}
 
-	const glm::mat4& FreeFlyCamera::GetViewMatrix()
+	const mat4& FreeFlyCamera::GetViewMatrix()
 	{
 		Update();
 
 		return m_ViewMatrix;
 	}
 
-	const glm::vec3& FreeFlyCamera::GetEyePosition()
+	const vec3& FreeFlyCamera::GetEyePosition()
 	{
 		Update();
 
@@ -50,7 +50,7 @@ namespace Guava
 	void FreeFlyCamera::Yaw(const float degrees)
 	{
 		m_YawAngle += degrees * m_RotationSpeed;
-		m_YawAngle = glm::mod(m_YawAngle, 360.f);
+		m_YawAngle = mod(m_YawAngle, 360.f);
 
 		m_NeedsUpdate = true;
 	}
@@ -58,7 +58,7 @@ namespace Guava
 	void FreeFlyCamera::Pitch(const float degrees)
 	{
 		m_PitchAngle += degrees * m_RotationSpeed;
-		m_PitchAngle = glm::clamp(m_PitchAngle, -89.5f, 89.5f);
+		m_PitchAngle = clamp(m_PitchAngle, -89.5f, 89.5f);
 
 		m_NeedsUpdate = true;
 	}
@@ -86,26 +86,28 @@ namespace Guava
 	{
 		if (m_NeedsUpdate)
 		{
-			const glm::mat4 yawRotation = glm::rotate(glm::radians(m_YawAngle), s_Up);
-			const glm::vec3 actualRight = glm::normalize(yawRotation * s_Right);
+			const mat4 yawRotation = rotate(radians(m_YawAngle), s_Up);
+			const vec3 actualRight = normalize(yawRotation * s_Right);
 
-			const glm::mat4 fullRotation = glm::rotate(glm::radians(m_PitchAngle), actualRight) * yawRotation;
-			const glm::vec3 actualForward = glm::normalize(fullRotation * s_Forward);
+			const mat4 fullRotation = rotate(radians(m_PitchAngle), actualRight) * yawRotation;
+			const vec3 actualForward = normalize(fullRotation * s_Forward);
 
-			const glm::vec3 offset = {
+			const vec3 offset = {
 				actualRight		* m_MoveVector.x +
 				s_Up			* m_MoveVector.y +
 				actualForward	* m_MoveVector.z };
 
 			m_EyePosition += offset * m_Speed;
 
-			m_ViewMatrix = glm::lookAt(
+			m_ViewMatrix = lookAt(
 				m_EyePosition,
 				m_EyePosition + actualForward,
 				s_Up );
 
-			m_MoveVector = glm::vec3(0.0f);
+			m_MoveVector = vec3(0.0f);
 			m_NeedsUpdate = false;
+
+			//GUAVA_TRACE("Camera: {0}, {1}, {2}", m_EyePosition.x, m_EyePosition.y, m_EyePosition.z);
 		}
 	}
 }

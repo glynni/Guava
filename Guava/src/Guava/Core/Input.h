@@ -152,9 +152,13 @@ namespace Guava
 		static void Update(const bool waitForInput = false);
 
 		static const bool KeyDown(const Key key);
+		static const bool KeyPress(const Key key);
+		static const bool KeyRelease(const Key key);
 		static const bool MouseDown(const MouseButton btn);
-		static const glm::vec2& GetMousePosition();
-		static const glm::vec2& GetMouseMovement();
+		static const bool MousePress(const MouseButton btn);
+		static const bool MouseRelease(const MouseButton btn);
+		static const vec2& GetMousePosition();
+		static const vec2& GetMouseMovement();
 	};
 }
 

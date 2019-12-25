@@ -5,16 +5,16 @@
 namespace Guava
 {
 	static GLFWwindow* s_GlfwWindow = nullptr;
-	static std::unique_ptr<Window::Data> s_Data;
+	static scope<Window::Data> s_Data;
 
-	bool Window::Create(const StringView title, unsigned int width, unsigned int height)
+	bool Window::Create(const string_view title, unsigned int width, unsigned int height)
 	{
 		auto result = glfwInit();
 		GUAVA_ASSERT(result == GLFW_TRUE, "GLFW: Unable to initialize library.");
 
 		glfwSetErrorCallback([](int code, const char* msg)
 		{
-			GUAVA_CORE_ERROR("GLFW error {0}: {1}", code, msg);
+			GUAVA_ERROR("GLFW error {0}: {1}", code, msg);
 		});
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -24,7 +24,7 @@ namespace Guava
 		s_GlfwWindow = glfwCreateWindow(width, height, title.data(), nullptr, nullptr);
 
 		GUAVA_ASSERT(s_GlfwWindow != nullptr, "GLFW: Window could not be opened.");
-		GUAVA_CORE_INFO("GLFW: Opened Window");
+		GUAVA_INFO("GLFW: Opened Window");
 
 		s_Data.reset(new Window::Data());
 		s_Data->Size = { width, height };
@@ -33,9 +33,9 @@ namespace Guava
 
 		glfwSetWindowSizeCallback(s_GlfwWindow, [](GLFWwindow* window, int w, int h) -> void
 		{
-			GUAVA_CORE_INFO("Window size changed. {0}x{1}", w, h);
+			GUAVA_INFO("Window size changed. {0}x{1}", w, h);
 
-			glm::uvec2 size = {w, h};
+			uvec2 size = {w, h};
 
 			s_Data->Size = size;
 			Renderer::SetWindowSize(size);
@@ -51,7 +51,7 @@ namespace Guava
 
 	void Window::Destroy()
 	{
-		GUAVA_CORE_INFO("GLFW: Closed Window");
+		GUAVA_INFO("GLFW: Closed Window");
 
 		glfwDestroyWindow(s_GlfwWindow);
 
@@ -90,7 +90,7 @@ namespace Guava
 		return *s_Data.get();
 	}
 
-	const glm::uvec2 Window::GetSize()
+	const uvec2 Window::GetSize()
 	{
 		return s_Data->Size;
 	}

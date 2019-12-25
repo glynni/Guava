@@ -1,6 +1,5 @@
 #pragma once
 #include "Guava/Graphics/BufferLayout.h"
-#include "Guava/Core/Utility.h"
 
 namespace Guava::OpenGL
 {

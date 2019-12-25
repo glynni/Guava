@@ -3,7 +3,7 @@
 
 namespace Guava
 {
-	struct Color : public glm::vec4
+	struct Color : public vec4
 	{
 		Color(const float r = 1.0f, const float g = 1.0f, const float b = 1.0f, const float a = 1.0f);
 

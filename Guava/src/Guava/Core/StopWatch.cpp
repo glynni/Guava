@@ -10,20 +10,20 @@ namespace Guava
 
 	void StopWatch::Start()
 	{
-		m_Start = Clock::now();
+		m_Start = hr_clock::now();
 		m_Running = true;
 	}
 
 	void StopWatch::Stop()
 	{
-		m_End = Clock::now();
+		m_End = hr_clock::now();
 		m_Running = false;
 	}
 
-	StopWatch::time_type StopWatch::GetTime()
+	double StopWatch::GetTime()
 	{
 		if (m_Running)
-			m_Duration = Clock::now() - m_Start;
+			m_Duration = hr_clock::now() - m_Start;
 		else
 			m_Duration = m_End - m_Start;
 
