@@ -8,3 +8,9 @@
 [submodule "Guava/vendor/glm"]
 	path = Guava/vendor/glm
 	url = https://github.com/g-truc/glm
+[submodule "IMGUI"]
+	path = IMGUI
+	url = https://github.com/ocornut/imgui
+[submodule "Guava/vendor/IMGUI"]
+	path = Guava/vendor/IMGUI
+	url = https://github.com/ocornut/imgui
