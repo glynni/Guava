@@ -1,10 +1,19 @@
 #pragma once
 
+/*Logging*******************************************************/
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
+
 /*OpenGL********************************************************/
 #include <glad/glad.h>
 
 /*Window********************************************************/
 #include <GLFW/glfw3.h>
+
+/*ImGUI********************************************************/
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 /*Math********************************************************/
 #include <glm.hpp>
@@ -55,7 +64,7 @@ constexpr scope<T> CreateRef(Args&& ... args)
 /*Time********************************************************/
 #include <chrono>
 using namespace		std::chrono_literals;
-using hr_clock =		std::chrono::high_resolution_clock;
+using hr_clock =	std::chrono::high_resolution_clock;
 using time_point =	std::chrono::high_resolution_clock::time_point;
 using duration =	std::chrono::duration<double>;
 
@@ -92,7 +101,6 @@ using std::map;
 using std::set;
 
 /*Engine********************************************************/
-#include "Guava/Core/Log.h"
-#include "Guava/Core/String.h"
-#include "Guava/Core/File.h"
+#include "Engine/Core/Core.h"
+#include "Engine/Core/Log.h"
 using Byte = unsigned char;

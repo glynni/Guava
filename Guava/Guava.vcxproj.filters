@@ -4,155 +4,228 @@
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Guava">
-      <UniqueIdentifier>{D0AE02B3-3C19-B729-8557-68CFF100957E}</UniqueIdentifier>
+    <Filter Include="src\Engine">
+      <UniqueIdentifier>{12A1320E-FE58-745B-6760-4DB753370F4C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Guava\Core">
-      <UniqueIdentifier>{289589AE-1463-7DB4-FDF6-EDDAE9635919}</UniqueIdentifier>
+    <Filter Include="src\Engine\Core">
+      <UniqueIdentifier>{AA407579-16CC-E23D-1FDD-65328BE73E3E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Guava\Core\Memory">
-      <UniqueIdentifier>{90EF88F2-FC5B-44ED-C54F-DC4A317B6655}</UniqueIdentifier>
+    <Filter Include="src\Engine\Graphics">
+      <UniqueIdentifier>{92BD692F-FE1E-473D-878C-8DEFF3EC7DFC}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Guava\Graphics">
-      <UniqueIdentifier>{102170C7-FC04-311D-6565-2B7051681B9F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Guava\Graphics\OpenGL">
-      <UniqueIdentifier>{44F85A2C-B0BA-8EB6-F96A-1D43656C6794}</UniqueIdentifier>
+    <Filter Include="src\Engine\Graphics\OpenGL">
+      <UniqueIdentifier>{862E5BD9-723E-07AA-DBF7-6BC8C726F642}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\IMGUI">
+      <UniqueIdentifier>{BD127BEE-A975-0A93-52FB-42493E3DD615}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\IMGUI\imgui">
+      <UniqueIdentifier>{E7790B81-D35D-CCD6-3CBE-C62928C1B658}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor\stb_image">
       <UniqueIdentifier>{0DA0BA59-F998-D9AB-22CB-BE300E23B9B7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Guava\Core\Core.h">
-      <Filter>src\Guava\Core</Filter>
+    <ClInclude Include="src\Engine\Application.h">
+      <Filter>src\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\Guava\Core\Log.h">
-      <Filter>src\Guava\Core</Filter>
+    <ClInclude Include="src\Engine\Core\Core.h">
+      <Filter>src\Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Guava\Core\Transform.h">
-      <Filter>src\Guava\Core</Filter>
+    <ClInclude Include="src\Engine\Core\Input.h">
+      <Filter>src\Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Guava\Core\Window.h">
-      <Filter>src\Guava\Core</Filter>
+    <ClInclude Include="src\Engine\Core\Log.h">
+      <Filter>src\Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Guava\Graphics\BufferLayout.h">
-      <Filter>src\Guava\Graphics</Filter>
+    <ClInclude Include="src\Engine\Core\ResourceManager.h">
+      <Filter>src\Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Guava\Graphics\Camera.h">
-      <Filter>src\Guava\Graphics</Filter>
+    <ClInclude Include="src\Engine\Core\StopWatch.h">
+      <Filter>src\Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Guava\Graphics\Color.h">
-      <Filter>src\Guava\Graphics</Filter>
+    <ClInclude Include="src\Engine\Core\TextFile.h">
+      <Filter>src\Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Guava\Graphics\OpenGL\glBuffer.h">
-      <Filter>src\Guava\Graphics\OpenGL</Filter>
+    <ClInclude Include="src\Engine\Core\Transform.h">
+      <Filter>src\Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Guava\Graphics\OpenGL\glRenderer.h">
-      <Filter>src\Guava\Graphics\OpenGL</Filter>
+    <ClInclude Include="src\Engine\Core\Window.h">
+      <Filter>src\Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Guava\Graphics\OpenGL\glShader.h">
-      <Filter>src\Guava\Graphics\OpenGL</Filter>
+    <ClInclude Include="src\Engine\Graphics\BufferLayout.h">
+      <Filter>src\Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Guava\Graphics\OpenGL\glVertexArray.h">
-      <Filter>src\Guava\Graphics\OpenGL</Filter>
+    <ClInclude Include="src\Engine\Graphics\Camera.h">
+      <Filter>src\Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Guava\Graphics\Renderer.h">
-      <Filter>src\Guava\Graphics</Filter>
+    <ClInclude Include="src\Engine\Graphics\Color.h">
+      <Filter>src\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\Material.h">
+      <Filter>src\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\Model.h">
+      <Filter>src\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\OpenGL\glBuffer.h">
+      <Filter>src\Engine\Graphics\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\OpenGL\glModel.h">
+      <Filter>src\Engine\Graphics\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\OpenGL\glRenderer.h">
+      <Filter>src\Engine\Graphics\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\OpenGL\glShader.h">
+      <Filter>src\Engine\Graphics\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\OpenGL\glTexture2D.h">
+      <Filter>src\Engine\Graphics\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\OpenGL\glVertexArray.h">
+      <Filter>src\Engine\Graphics\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\Renderer.h">
+      <Filter>src\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\Shader.h">
+      <Filter>src\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\Texture2D.h">
+      <Filter>src\Engine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="vendor\IMGUI\imgui\imconfig.h">
+      <Filter>vendor\IMGUI\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\IMGUI\imgui\imgui.h">
+      <Filter>vendor\IMGUI\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\IMGUI\imgui\imgui_impl_glfw.h">
+      <Filter>vendor\IMGUI\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\IMGUI\imgui\imgui_impl_opengl3.h">
+      <Filter>vendor\IMGUI\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\IMGUI\imgui\imgui_internal.h">
+      <Filter>vendor\IMGUI\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\IMGUI\imgui\imstb_rectpack.h">
+      <Filter>vendor\IMGUI\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\IMGUI\imgui\imstb_textedit.h">
+      <Filter>vendor\IMGUI\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\IMGUI\imgui\imstb_truetype.h">
+      <Filter>vendor\IMGUI\imgui</Filter>
+    </ClInclude>
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Guava\Core\Input.h" />
-    <ClInclude Include="src\Guava\Core\StopWatch.h" />
-    <ClInclude Include="src\Guava\Graphics\OpenGL\glModel.h">
-      <Filter>src\Guava\Graphics\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Guava\Graphics\Model.h" />
-    <ClInclude Include="src\Guava\Graphics\Shader.h">
-      <Filter>src\Guava\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Guava\Graphics\Material.h" />
-    <ClInclude Include="src\Guava\Core\ResourceManager.h" />
-    <ClInclude Include="src\Guava\Core\TextFile.h" />
-    <ClInclude Include="src\Guava\Graphics\OpenGL\glTexture2D.h">
-      <Filter>src\Guava\Graphics\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Guava\Graphics\Texture2D.h">
-      <Filter>src\Guava\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Guava\Core\String.h" />
-    <ClInclude Include="src\Guava\Core\File.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Guava\Core\Core.cpp">
-      <Filter>src\Guava\Core</Filter>
+    <ClCompile Include="src\Engine\Application.cpp">
+      <Filter>src\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\Guava\Core\Log.cpp">
-      <Filter>src\Guava\Core</Filter>
+    <ClCompile Include="src\Engine\Core\Core.cpp">
+      <Filter>src\Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Guava\Core\Transform.cpp">
-      <Filter>src\Guava\Core</Filter>
+    <ClCompile Include="src\Engine\Core\Input.cpp">
+      <Filter>src\Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Guava\Core\Window.cpp">
-      <Filter>src\Guava\Core</Filter>
+    <ClCompile Include="src\Engine\Core\Log.cpp">
+      <Filter>src\Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Guava\Graphics\BufferLayout.cpp">
-      <Filter>src\Guava\Graphics</Filter>
+    <ClCompile Include="src\Engine\Core\ResourceManager.cpp">
+      <Filter>src\Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Guava\Graphics\Camera.cpp">
-      <Filter>src\Guava\Graphics</Filter>
+    <ClCompile Include="src\Engine\Core\StopWatch.cpp">
+      <Filter>src\Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Guava\Graphics\Color.cpp">
-      <Filter>src\Guava\Graphics</Filter>
+    <ClCompile Include="src\Engine\Core\TextFile.cpp">
+      <Filter>src\Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Guava\Graphics\OpenGL\glBuffer.cpp">
-      <Filter>src\Guava\Graphics\OpenGL</Filter>
+    <ClCompile Include="src\Engine\Core\Transform.cpp">
+      <Filter>src\Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Guava\Graphics\OpenGL\glRenderer.cpp">
-      <Filter>src\Guava\Graphics\OpenGL</Filter>
+    <ClCompile Include="src\Engine\Core\Window.cpp">
+      <Filter>src\Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Guava\Graphics\OpenGL\glShader.cpp">
-      <Filter>src\Guava\Graphics\OpenGL</Filter>
+    <ClCompile Include="src\Engine\Graphics\BufferLayout.cpp">
+      <Filter>src\Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Guava\Graphics\OpenGL\glVertexArray.cpp">
-      <Filter>src\Guava\Graphics\OpenGL</Filter>
+    <ClCompile Include="src\Engine\Graphics\Camera.cpp">
+      <Filter>src\Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Guava\Graphics\Renderer.cpp">
-      <Filter>src\Guava\Graphics</Filter>
+    <ClCompile Include="src\Engine\Graphics\Color.cpp">
+      <Filter>src\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\Material.cpp">
+      <Filter>src\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\Model.cpp">
+      <Filter>src\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\OpenGL\glBuffer.cpp">
+      <Filter>src\Engine\Graphics\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\OpenGL\glModel.cpp">
+      <Filter>src\Engine\Graphics\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\OpenGL\glRenderer.cpp">
+      <Filter>src\Engine\Graphics\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\OpenGL\glShader.cpp">
+      <Filter>src\Engine\Graphics\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\OpenGL\glTexture2D.cpp">
+      <Filter>src\Engine\Graphics\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\OpenGL\glVertexArray.cpp">
+      <Filter>src\Engine\Graphics\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\Renderer.cpp">
+      <Filter>src\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\Shader.cpp">
+      <Filter>src\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\Texture2D.cpp">
+      <Filter>src\Engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\stb_image\stb_image.cpp">
-      <Filter>vendor\stb_image</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Guava\Core\Input.cpp" />
-    <ClCompile Include="src\Guava\Core\StopWatch.cpp" />
-    <ClCompile Include="src\Guava\Graphics\OpenGL\glModel.cpp">
-      <Filter>src\Guava\Graphics\OpenGL</Filter>
-    </ClCompile>
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Guava\Graphics\Model.cpp" />
-    <ClCompile Include="src\Guava\Graphics\Shader.cpp">
-      <Filter>src\Guava\Graphics</Filter>
+    <ClCompile Include="vendor\IMGUI\imgui\imgui.cpp">
+      <Filter>vendor\IMGUI\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Guava\Graphics\Material.cpp" />
-    <ClCompile Include="src\Guava\Core\ResourceManager.cpp" />
-    <ClCompile Include="src\Guava\Core\TextFile.cpp" />
-    <ClCompile Include="src\Guava\Graphics\OpenGL\glTexture2D.cpp">
-      <Filter>src\Guava\Graphics\OpenGL</Filter>
+    <ClCompile Include="vendor\IMGUI\imgui\imgui_demo.cpp">
+      <Filter>vendor\IMGUI\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Guava\Graphics\Texture2D.cpp" />
-    <ClCompile Include="src\Guava\Core\File.cpp" />
-    <ClCompile Include="src\Guava\Core\String.cpp" />
+    <ClCompile Include="vendor\IMGUI\imgui\imgui_draw.cpp">
+      <Filter>vendor\IMGUI\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\IMGUI\imgui\imgui_impl_glfw.cpp">
+      <Filter>vendor\IMGUI\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\IMGUI\imgui\imgui_impl_opengl3.cpp">
+      <Filter>vendor\IMGUI\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\IMGUI\imgui\imgui_widgets.cpp">
+      <Filter>vendor\IMGUI\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\stb_image\stb_image.cpp">
+      <Filter>vendor\stb_image</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

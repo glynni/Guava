@@ -13,7 +13,8 @@ IncludeDir["GLFW"] = "%{prj.name}/vendor/glfw/include"
 IncludeDir["GLAD"] = "%{prj.name}/vendor/GLAD/include"
 IncludeDir["GLM"] = "%{prj.name}/vendor/glm/glm"
 IncludeDir["STBI"] = "%{prj.name}/vendor/stb_image"
-IncludeDir["ASSIMP"] = "%{prj.name}/vendor/assimp-5.0.0/build/include"
+IncludeDir["ASSIMP"] = "%{prj.name}/vendor/assimp-5.0.0/build"
+IncludeDir["IMGUI"] = "%{prj.name}/vendor/IMGUI"
 
 -- Include another premake5.lua file
 include "Guava/vendor/glfw"
@@ -35,7 +36,9 @@ project "Guava"
 	"%{prj.name}/src/**.h", 
 	"%{prj.name}/src/**.cpp",
 	"%{IncludeDir.STBI}/**.cpp",
-	"%{IncludeDir.STBI}/**.h" } 
+	"%{IncludeDir.STBI}/**.h",
+	"%{IncludeDir.IMGUI}/imgui/**.h",
+	"%{IncludeDir.IMGUI}/imgui/**.cpp"} 
 
 	-- Include paths
 	includedirs { 
@@ -45,7 +48,8 @@ project "Guava"
 	"%{IncludeDir.GLAD}",
 	"%{IncludeDir.GLM}",
 	"%{IncludeDir.STBI}",
-	"%{IncludeDir.ASSIMP}" }
+	"%{IncludeDir.ASSIMP}/include",
+	"%{IncludeDir.IMGUI}" }
 
 	links
 	{
@@ -67,10 +71,16 @@ project "Guava"
 		defines "GUAVA_DEBUG"
 		symbols "On"
 
+		libdirs {"%{IncludeDir.ASSIMP}/code/Debug"}
+		links {"assimp-vc142-mtd.lib"}
+
 	-- Release Builds on all platforms/systems
 	filter "configurations:Release"
 		defines "GUAVA_RELEASE"
 		optimize "On"
+
+		libdirs {"%{IncludeDir.ASSIMP}/code/Release"}
+		links {"assimp-vc142-mt.lib"}
 
 	-- Windows release builds
 	filter { "system:windows", "configurations:Release" }

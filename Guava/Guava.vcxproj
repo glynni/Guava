@@ -60,7 +60,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GLFW_INCLUDE_NONE;GUAVA_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\GLAD\include;vendor\glm\glm;vendor\stb_image;vendor\assimp-5.0.0\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\GLAD\include;vendor\glm\glm;vendor\stb_image;vendor\assimp-5.0.0\build\include;vendor\IMGUI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -70,7 +70,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\dev\Guava\Guava\vendor\assimp-5.0.0\build\code\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>vendor\assimp-5.0.0\build\code\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -79,7 +79,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GLFW_INCLUDE_NONE;GUAVA_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\GLAD\include;vendor\glm\glm;vendor\stb_image;vendor\assimp-5.0.0\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\glfw\include;vendor\GLAD\include;vendor\glm\glm;vendor\stb_image;vendor\assimp-5.0.0\build\include;vendor\IMGUI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -93,67 +93,79 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>D:\dev\Guava\Guava\vendor\assimp-5.0.0\build\code\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\assimp-5.0.0\build\code\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Guava\Graphics\Material.h" />
-    <ClInclude Include="src\Guava\Core\ResourceManager.h" />
-    <ClInclude Include="src\Guava\Graphics\Model.h" />
-    <ClInclude Include="src\Guava\Core\Input.h" />
-    <ClInclude Include="src\Guava\Core\Core.h" />
-    <ClInclude Include="src\Guava\Core\Log.h" />
-    <ClInclude Include="src\Guava\Core\Transform.h" />
-    <ClInclude Include="src\Guava\Core\Window.h" />
-    <ClInclude Include="src\Guava\Graphics\BufferLayout.h" />
-    <ClInclude Include="src\Guava\Graphics\Camera.h" />
-    <ClInclude Include="src\Guava\Graphics\Color.h" />
-    <ClInclude Include="src\Guava\Graphics\OpenGL\glBuffer.h" />
-    <ClInclude Include="src\Guava\Graphics\OpenGL\glModel.h" />
-    <ClInclude Include="src\Guava\Graphics\OpenGL\glRenderer.h" />
-    <ClInclude Include="src\Guava\Graphics\OpenGL\glShader.h" />
-    <ClInclude Include="src\Guava\Graphics\OpenGL\glTexture2D.h" />
-    <ClInclude Include="src\Guava\Graphics\OpenGL\glVertexArray.h" />
-    <ClInclude Include="src\Guava\Graphics\Renderer.h" />
-    <ClInclude Include="src\Guava\Graphics\Shader.h" />
-    <ClInclude Include="src\Guava\Graphics\Texture2D.h" />
+    <ClInclude Include="src\Engine\Application.h" />
+    <ClInclude Include="src\Engine\Core\Core.h" />
+    <ClInclude Include="src\Engine\Core\Input.h" />
+    <ClInclude Include="src\Engine\Core\Log.h" />
+    <ClInclude Include="src\Engine\Core\ResourceManager.h" />
+    <ClInclude Include="src\Engine\Core\StopWatch.h" />
+    <ClInclude Include="src\Engine\Core\TextFile.h" />
+    <ClInclude Include="src\Engine\Core\Transform.h" />
+    <ClInclude Include="src\Engine\Core\Window.h" />
+    <ClInclude Include="src\Engine\Graphics\BufferLayout.h" />
+    <ClInclude Include="src\Engine\Graphics\Camera.h" />
+    <ClInclude Include="src\Engine\Graphics\Color.h" />
+    <ClInclude Include="src\Engine\Graphics\Material.h" />
+    <ClInclude Include="src\Engine\Graphics\Model.h" />
+    <ClInclude Include="src\Engine\Graphics\OpenGL\glBuffer.h" />
+    <ClInclude Include="src\Engine\Graphics\OpenGL\glModel.h" />
+    <ClInclude Include="src\Engine\Graphics\OpenGL\glRenderer.h" />
+    <ClInclude Include="src\Engine\Graphics\OpenGL\glShader.h" />
+    <ClInclude Include="src\Engine\Graphics\OpenGL\glTexture2D.h" />
+    <ClInclude Include="src\Engine\Graphics\OpenGL\glVertexArray.h" />
+    <ClInclude Include="src\Engine\Graphics\Renderer.h" />
+    <ClInclude Include="src\Engine\Graphics\Shader.h" />
+    <ClInclude Include="src\Engine\Graphics\Texture2D.h" />
     <ClInclude Include="src\pch.h" />
-    <ClInclude Include="src\Guava\Core\StopWatch.h" />
-    <ClInclude Include="src\Guava\Core\File.h" />
-    <ClInclude Include="src\Guava\Core\String.h" />
-    <ClInclude Include="src\Guava\Core\TextFile.h" />
+    <ClInclude Include="vendor\IMGUI\imgui\imconfig.h" />
+    <ClInclude Include="vendor\IMGUI\imgui\imgui.h" />
+    <ClInclude Include="vendor\IMGUI\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="vendor\IMGUI\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="vendor\IMGUI\imgui\imgui_internal.h" />
+    <ClInclude Include="vendor\IMGUI\imgui\imstb_rectpack.h" />
+    <ClInclude Include="vendor\IMGUI\imgui\imstb_textedit.h" />
+    <ClInclude Include="vendor\IMGUI\imgui\imstb_truetype.h" />
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Guava\Graphics\Material.cpp" />
-    <ClCompile Include="src\Guava\Core\ResourceManager.cpp" />
-    <ClCompile Include="src\Guava\Graphics\Model.cpp" />
-    <ClCompile Include="src\Guava\Core\Input.cpp" />
-    <ClCompile Include="src\Guava\Core\Core.cpp" />
-    <ClCompile Include="src\Guava\Core\Log.cpp" />
-    <ClCompile Include="src\Guava\Core\Transform.cpp" />
-    <ClCompile Include="src\Guava\Core\Window.cpp" />
-    <ClCompile Include="src\Guava\Graphics\BufferLayout.cpp" />
-    <ClCompile Include="src\Guava\Graphics\Camera.cpp" />
-    <ClCompile Include="src\Guava\Graphics\Color.cpp" />
-    <ClCompile Include="src\Guava\Graphics\OpenGL\glBuffer.cpp" />
-    <ClCompile Include="src\Guava\Graphics\OpenGL\glModel.cpp" />
-    <ClCompile Include="src\Guava\Graphics\OpenGL\glRenderer.cpp" />
-    <ClCompile Include="src\Guava\Graphics\OpenGL\glShader.cpp" />
-    <ClCompile Include="src\Guava\Graphics\OpenGL\glTexture2D.cpp" />
-    <ClCompile Include="src\Guava\Graphics\OpenGL\glVertexArray.cpp" />
-    <ClCompile Include="src\Guava\Graphics\Renderer.cpp" />
-    <ClCompile Include="src\Guava\Graphics\Shader.cpp" />
-    <ClCompile Include="src\Guava\Graphics\Texture2D.cpp" />
+    <ClCompile Include="src\Engine\Application.cpp" />
+    <ClCompile Include="src\Engine\Core\Core.cpp" />
+    <ClCompile Include="src\Engine\Core\Input.cpp" />
+    <ClCompile Include="src\Engine\Core\Log.cpp" />
+    <ClCompile Include="src\Engine\Core\ResourceManager.cpp" />
+    <ClCompile Include="src\Engine\Core\StopWatch.cpp" />
+    <ClCompile Include="src\Engine\Core\TextFile.cpp" />
+    <ClCompile Include="src\Engine\Core\Transform.cpp" />
+    <ClCompile Include="src\Engine\Core\Window.cpp" />
+    <ClCompile Include="src\Engine\Graphics\BufferLayout.cpp" />
+    <ClCompile Include="src\Engine\Graphics\Camera.cpp" />
+    <ClCompile Include="src\Engine\Graphics\Color.cpp" />
+    <ClCompile Include="src\Engine\Graphics\Material.cpp" />
+    <ClCompile Include="src\Engine\Graphics\Model.cpp" />
+    <ClCompile Include="src\Engine\Graphics\OpenGL\glBuffer.cpp" />
+    <ClCompile Include="src\Engine\Graphics\OpenGL\glModel.cpp" />
+    <ClCompile Include="src\Engine\Graphics\OpenGL\glRenderer.cpp" />
+    <ClCompile Include="src\Engine\Graphics\OpenGL\glShader.cpp" />
+    <ClCompile Include="src\Engine\Graphics\OpenGL\glTexture2D.cpp" />
+    <ClCompile Include="src\Engine\Graphics\OpenGL\glVertexArray.cpp" />
+    <ClCompile Include="src\Engine\Graphics\Renderer.cpp" />
+    <ClCompile Include="src\Engine\Graphics\Shader.cpp" />
+    <ClCompile Include="src\Engine\Graphics\Texture2D.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Guava\Core\StopWatch.cpp" />
-    <ClCompile Include="src\Guava\Core\File.cpp" />
-    <ClCompile Include="src\Guava\Core\String.cpp" />
-    <ClCompile Include="src\Guava\Core\TextFile.cpp" />
+    <ClCompile Include="vendor\IMGUI\imgui\imgui.cpp" />
+    <ClCompile Include="vendor\IMGUI\imgui\imgui_demo.cpp" />
+    <ClCompile Include="vendor\IMGUI\imgui\imgui_draw.cpp" />
+    <ClCompile Include="vendor\IMGUI\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="vendor\IMGUI\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="vendor\IMGUI\imgui\imgui_widgets.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
